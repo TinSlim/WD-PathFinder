@@ -2,12 +2,13 @@ package com.rdfpath.graph.model;
 
 import java.io.IOException;
 import java.util.HashMap;
+
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
 
-import graph.main.ParseExample;
-import graph.utils.StatementCounter;
+import com.rdfpath.graph.main.ParseExample;
+import com.rdfpath.graph.utils.StatementCounter;
 
 public class Graph {
 
