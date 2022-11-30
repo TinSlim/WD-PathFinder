@@ -1,10 +1,15 @@
 import React from 'react';
 import { render } from "react-dom"
+import Navbar from "./Navbar"
+import Content from "./Content"
+import Footer from "./Footer"
 
 export default function App() {
     return (
         <div>
-            <h1> Resultado OK </h1>
+            <Navbar></Navbar>
+            <Content></Content>
+            <Footer></Footer>
         </div>
     );
 }

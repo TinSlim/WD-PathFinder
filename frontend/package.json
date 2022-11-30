@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --watch --mode development --entry ./src/index.js --output-path ./static/frontend",
-    "build": "webpack --mode production --entry ./src/index.js --output-path ./static/frontend"
+    "css-build": "sass --no-source-map _sass/main.scss:css/main.css",
+    "dev": "webpack --watch --mode development --entry ./src/index.js --output-path ./static/frontend & npm run css-build -- --watch",
+    "build": "webpack --mode production --entry ./src/index.js --output-path ./static/frontend && sass --no-source-map _sass/main.scss:css/main.css"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "sass": "^1.51.0",
     "@babel/core": "^7.17.9",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
@@ -32,6 +34,7 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "bulma": "^0.9.3",
     "@babel/runtime": "^7.17.9",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
