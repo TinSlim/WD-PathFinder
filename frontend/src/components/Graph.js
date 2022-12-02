@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import {connect, makeGraph} from './grafo.js'
 
-export default function Graph() {
+export default function Graph(props) {
     return (
-        <div className='column has-background-primary'>
-            <button onClick={makeGraph}>makeGraph</button>
-            <h1> TEST </h1>
+        <div className='column mt-5 ml-3 has-background-secondary'>
             <div id="mynetwork"></div>
         </div>
     );

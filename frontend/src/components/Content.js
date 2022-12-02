@@ -3,13 +3,13 @@ import Graph from './Graph';
 import Search from './Search';
 
 export default function Content() {
-    const [actualWords, setActualWords] = useState([]);
+    const [words, setWords] = useState([]);
 
     
     return (
-        <div className='columns'> 
-            <Search></Search>
-            <Graph></Graph>
+        <div style={{height:'80vh', display: 'inline-flex'}} className='ml-3 mr-3 columns'> 
+            <Search words={words} setWords={setWords}></Search>
+            <Graph words={words}></Graph>
         </div>
     );
 }

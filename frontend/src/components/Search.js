@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import List from "./List"
+import {connect, makeGraph, startGraph} from './../script/grafo.js'
 
 export default function Search(props) {
     const [entity, setEntity] = useState('');
-    const [words, setWords] = useState([]);
 
     const handleEntitySubmit = async e => {
         e.preventDefault();
@@ -15,35 +15,54 @@ export default function Search(props) {
     }
 
     const addWord = (newWord) => {
-        setWords(prevArray => [...prevArray, newWord]);
-        console.log(words);
+        props.setWords(prevArray => [...prevArray, newWord]);
+        console.log(props.words);
     }
 
     const deleteWord = (index) => {
-        let copyActualWords = words;
+        let copyActualWords = props.words;
         copyActualWords.pop(index);
-        setWords(copyActualWords);
-        console.log(words);
+        props.setWords(copyActualWords);
+        console.log(props.words);
+    }
+
+    const clearWords = () => {
+        props.setWords([]);
+    }
+
+    const launchGraph = () => {
+        startGraph(props.words);
+        console.log(props.words);
     }
 
     return (
-        <div className='column is-one-quarter has-background-warning'>
-            <form onSubmit={handleEntitySubmit}>
-                <label className="label">Name</label>
-                <div className="field is-grouped">
-                    <div className="control">
-                        <input className="input" type="text" placeholder="Text input" value={entity} onChange={e => setEntity(e.target.value)}/>
+        <div className='column is-3 mt-5 mr-3 has-background-secondary'>
+            <div className='mb-4'>
+                <button onClick={launchGraph} className='button is-fullwidth is-info'> BUSCAR </button>
+            </div>
+            <div className='mb-3'>
+                <form onSubmit={handleEntitySubmit}>
+                    <div className="field is-grouped">
+                        <div className="control has-icons-left has-icons-right is-expanded">
+                            <input type="text" className="input fullwidth" placeholder="Text input" value={entity} onChange={e => setEntity(e.target.value)}/>
+                            <span className="icon is-medium is-left">
+                            <i className="fa fa-futbol-o"></i>
+                            </span>
+                        </div>
+                        <p className="control">
+                            <button className="button is-info"><i className="fa fa-futbol-o"></i></button>
+                        </p>
                     </div>
-                    <div className="control">
-                        <button className="button control"> AÑADIR </button>
-                    </div>
-                </div>
-            </form>
-            <List entities={words} deleteEntity={
+                </form>
+            </div>
+            <List entities={props.words} deleteEntity={
                 (indEnt) => {
-                    const newWords = words.filter((_, index) => index !== indEnt);
-                    setWords(newWords);}}
+                    const newWords = props.words.filter((_, index) => index !== indEnt);
+                    props.setWords(newWords);}}
             />
+            <div>
+                <button onClick={clearWords} className='button is-fullwidth is-danger'> CLEAR </button>
+            </div>
         </div>
     );
 }
