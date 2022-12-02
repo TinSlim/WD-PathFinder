@@ -1,16 +1,15 @@
 # RDF-Path-server
 
-### Java
+## Lanzar Servidor desde `.jar`
 
-Compilar: `.\mvnw package`
-Correr Servidor: `java -jar .\target\rdf-entity-path-0.0.1-SNAPSHOT.jar`
+Primero se debe compilar front, luego lanzar el sevidor:
 
-### Frontend
+```
+cd .\frontend\
+npm run prod-build
+cd ..\rdf-entity-path\
+.\mvnw package
+cd .\target\
+java -jar .\rdf-entity-path-0.0.1-SNAPSHOT.jar
+```
 
-
-Instalar: `npm i`
-
-> Se instala una sola vez
-
-Correr: `npm run dev`
-Compilar: `npm run build`
