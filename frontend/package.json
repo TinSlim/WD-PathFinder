@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "css-build": "sass --no-source-map _sass/main.scss:./../rdf-entity-path/src/main/resources/static/css/main.css",
-    "js-dev": "webpack --watch --mode development --entry ./src/index.js --output-path ./../rdf-entity-path/src/main/resources/static/js",
+    "css-build": "sass --no-source-map ./_sass/main.scss:./css/main.css",
+    "js-dev": "webpack --watch --mode development --entry ./src/index.js --output-path ./static/frontend",
     "css-dev": "npm run css-build -- --watch",
     "dev-build": "webpack --mode production --entry ./src/index.js --output-path ./static/frontend && sass --no-source-map _sass/main.scss:css/main.css",
     "prod-build": "webpack --mode production --entry ./src/index.js --output-path ./../rdf-entity-path/src/main/resources/static/js && sass --no-source-map _sass/main.scss:./../rdf-entity-path/src/main/resources/static/css/main.css"
