@@ -15,7 +15,7 @@ import com.rdfpath.graph.model.Vertex;
 public class RdfRestApi {
 	Graph graph = null;
 
-	@RequestMapping("/doce")
+	@RequestMapping("/querylol")
 	public String home() throws IOException {//throws IOException {
 		Vertex a = new Vertex (2);
 		System.out.println(a);
