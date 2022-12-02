@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head> 
+        <title>RDF Path</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- visjs-->
+        <script type="text/javascript" src="https://unpkg.com/vis-data@latest/peer/umd/vis-data.min.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/vis-network@latest/peer/umd/vis-network.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/vis-network/styles/vis-network.min.css" />
+
+        <link rel="stylesheet" th:href="@{/css/main.css}">
+    </head>
+
+    <body>
+        <h1> ok 223</h1>
+        <p th:text="'Hello, ' + ${name} + '!'" />
+        <div id="root">
+        </div>
+        <script th:src="@{/js/main.js}"></script>
+    </body>
+
+</html>
