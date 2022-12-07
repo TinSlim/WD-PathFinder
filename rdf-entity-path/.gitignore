@@ -33,5 +33,7 @@ build/
 .vscode/
 
 ### StaticFiles ###
-*.css
-*.js
+src/main/resources/static/js
+src/main/resources/static/css
+#*.css
+#*.js
