@@ -4,17 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "css-build": "sass --no-source-map ./_sass/main.scss:./css/main.css",
-    "js-dev": "webpack --watch --mode development --entry ./src/index.js --output-path ./static/frontend",
+    "css-build": "sass --no-source-map ./_sass/main.scss:./public/static/css/main.css",
+    "js-dev": "webpack --watch --mode development --entry ./src/index.js --output-path ./public/static/js",
     "css-dev": "npm run css-build -- --watch",
-    "dev-build": "webpack --mode production --entry ./src/index.js --output-path ./static/frontend && sass --no-source-map _sass/main.scss:css/main.css",
-    "prod-build": "webpack --mode production --entry ./src/index.js --output-path ./../rdf-entity-path/src/main/resources/static/js && sass --no-source-map _sass/main.scss:./../rdf-entity-path/src/main/resources/static/css/main.css"
+    "dev": "npm-run-all --parallel js-dev css-dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "react-scripts start",
+    "build-css": "sass --no-source-map ./_sass/main.scss:./public/static/css/main.css",
+    "build-js": "webpack --mode production --entry ./src/index.js --output-path ./public/static/js",
+    "build-react": "react-scripts build",
+    "build": "npm run build-css && npm run build-js && npm run build-react",
+    "serve": "serve -s build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "npm-run-all":"4.1.5",
     "sass": "^1.51.0",
     "@babel/core": "^7.17.9",
     "@babel/plugin-transform-runtime": "^7.17.0",
@@ -48,6 +54,20 @@
     "react-bootstrap": "^2.4.0",
     "react-export-excel": "^0.5.3",
     "react-router-dom": "^5.2.0",
-    "react-select": "^5.3.1"
+    "react-select": "^5.3.1",
+    "react-scripts": "5.0.1",
+    "serve": "14.1.2"
+  },
+  "browserslist": {
+    "production" : [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
