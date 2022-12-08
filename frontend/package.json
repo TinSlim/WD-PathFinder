@@ -10,10 +10,9 @@
     "dev": "npm-run-all --parallel js-dev css-dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "react-scripts start",
-    "build-css": "sass --no-source-map ./_sass/main.scss:./public/static/css/main.css",
-    "build-js": "webpack --mode production --entry ./src/index.js --output-path ./public/static/js",
-    "build-react": "react-scripts build",
-    "build": "npm run build-css && npm run build-js && npm run build-react",
+    "build-css": "sass --no-source-map ./_sass/main.scss:./../rdf-entity-path/src/main/resources/static/css/main.css",
+    "build-js": "webpack --mode production --entry ./src/index.js --output-path ./../rdf-entity-path/src/main/resources/static/js",
+    "build": "npm run build-css && npm run build-js",
     "serve": "serve -s build"
   },
   "keywords": [],
