@@ -50,17 +50,12 @@ public class RdfRestApi {
 	
 	@RequestMapping("/autocomplete")
 	public ResponseEntity<String> autocomplete(@RequestParam String entity) {
-		System.out.println("test");
 		String entityEncod = URLEncoder.encode(entity, StandardCharsets.UTF_8);
 		String uri = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search="
 			+ entityEncod
 			+ "&language=en&formatversion=2";
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> answer = restTemplate.getForEntity(uri, String.class);
-
-		//JSONObject jsonObject = new JSONObject(answer);
-		//System.out.println(jsonObject.get("search"));
-		System.out.println(answer);
 		return answer;
 	}
 }
