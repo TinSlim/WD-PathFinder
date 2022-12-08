@@ -2,16 +2,6 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-
-const top5Songs = [
-  { label: 'Organise'},
-  { label: 'Joha'},
-  { label: 'Terminator'},
-  { label: 'Dull'},
-  { label: 'Nzaza'},
-];
-
-
 export default function Autocom(props) {
   const [options, setOptions] = React.useState([]);
   const [value, setValue] = React.useState("");
@@ -20,13 +10,17 @@ export default function Autocom(props) {
   const handleOpt = async (word) => {
     // TODO PROBLEMA DE COOKIE AQUI
     setInputValue(word);
-    let url = `http://localhost:8080/autocomplete?entity=${word}`
-    fetch(url)
+    if (word != "" && word != null) {
+      let url = `http://localhost:8080/autocomplete?entity=${word}`
+      fetch(url)
         .then(response => response.json())
-        .then(data => setOptions(data.search.map((x) => ({label: x.label,id: x.id,url: x.concepturi})))); // 
+        .then(data => setOptions(data.search.map((x) => ({label: x.label,id: x.id,url: x.concepturi}))));
     }
+  }
+    
   
   return (
+    <div className='mb-3'>
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
@@ -44,6 +38,7 @@ export default function Autocom(props) {
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Songs" />}
       />
+    </div>
     );
   }
   

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import List from "./List"
 import ListT from "./ListT"
 import Autocom from "./Autocom"
 //import Prediction from "./Prediction"
@@ -40,12 +39,13 @@ export default function Search(props) {
     }
 
     const clearWords = () => {
-        props.setWords([]);
+        props.setValues([]);
     }
 
     const launchGraph = () => {
-        startGraph(props.words);
-        console.log(props.words);
+        let ids = props.values.map((entity) => (entity.id).replace("Q", ""));//})
+        startGraph(ids);
+        console.log(ids);
     }
 
     return (
@@ -53,29 +53,8 @@ export default function Search(props) {
             <div className='mb-4'>
                 <button onClick={launchGraph} className='button is-fullwidth is-info'> BUSCAR </button>
             </div>
-            <div className='mb-3'>
-                <form onSubmit={handleEntitySubmit}>
-                    <div className="field is-grouped">
-                        <div className="control has-icons-left has-icons-right is-expanded">
-                            <input type="text" className="input fullwidth" placeholder="Text input" value={entity} onChange={e => handleEntityChange(e.target.value)}/>
-                            <span className="icon is-medium is-left">
-                            <i className="fa fa-futbol-o"></i>
-                            </span>
-                        </div>
-                        <p className="control">
-                            <button className="button is-info"><i className="fa fa-futbol-o"></i></button>
-                        </p>
-                    </div>
-                </form>
-            </div>
             <Autocom addEntity={(newWord) => props.setValues(prevArray => [...prevArray, newWord])}></Autocom>
-            
-            <List entities={props.words} deleteEntity={
-                (indEnt) => {
-                    const newWords = props.words.filter((_, index) => index !== indEnt);
-                    props.setWords(newWords);}}
-            />
-            
+
             <ListT entities={props.values} deleteEntity={
                 (indEnt) => {
                     const newWords = props.values.filter((_, index) => index !== indEnt);
