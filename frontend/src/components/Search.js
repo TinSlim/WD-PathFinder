@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import List from "./List"
+import ListT from "./ListT"
+import Autocom from "./Autocom"
+//import Prediction from "./Prediction"
 import {connect, makeGraph, startGraph} from './../script/grafo.js'
 
 export default function Search(props) {
     const [entity, setEntity] = useState('');
-
+    const [ansEntity, setAnsEntity] = useState([]);
+    
     const handleEntitySubmit = async e => {
         e.preventDefault();
         if (entity != '') {
@@ -12,6 +16,15 @@ export default function Search(props) {
             setEntity('');
         }
         
+    }
+
+    const handleEntityChange = async (word) => {
+        setEntity(word);
+        // TODO PROBLEMA DE COOKIE AQUI
+        let url = `http://localhost:8080/autocomplete?entity=${word}`
+        fetch(url)
+            .then(response => response.json())
+            .then(data => setAnsEntity(data.search.map((x) => ({id: x.id, label: x.label, url: x.concepturi}))));
     }
 
     const addWord = (newWord) => {
@@ -44,7 +57,7 @@ export default function Search(props) {
                 <form onSubmit={handleEntitySubmit}>
                     <div className="field is-grouped">
                         <div className="control has-icons-left has-icons-right is-expanded">
-                            <input type="text" className="input fullwidth" placeholder="Text input" value={entity} onChange={e => setEntity(e.target.value)}/>
+                            <input type="text" className="input fullwidth" placeholder="Text input" value={entity} onChange={e => handleEntityChange(e.target.value)}/>
                             <span className="icon is-medium is-left">
                             <i className="fa fa-futbol-o"></i>
                             </span>
@@ -55,14 +68,23 @@ export default function Search(props) {
                     </div>
                 </form>
             </div>
+            <Autocom addEntity={(newWord) => props.setValues(prevArray => [...prevArray, newWord])}></Autocom>
+            
             <List entities={props.words} deleteEntity={
                 (indEnt) => {
                     const newWords = props.words.filter((_, index) => index !== indEnt);
                     props.setWords(newWords);}}
             />
+            
+            <ListT entities={props.values} deleteEntity={
+                (indEnt) => {
+                    const newWords = props.values.filter((_, index) => index !== indEnt);
+                    props.setValues(newWords);}}
+            />
             <div>
                 <button onClick={clearWords} className='button is-fullwidth is-danger'> CLEAR </button>
             </div>
+
         </div>
     );
 }

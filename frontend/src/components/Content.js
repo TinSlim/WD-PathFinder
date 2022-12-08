@@ -4,11 +4,11 @@ import Search from './Search';
 
 export default function Content() {
     const [words, setWords] = useState([]);
-
+    const [values, setValues] = useState([]);
     
     return (
         <div style={{height:'80vh', display: 'inline-flex'}} className='ml-3 mr-3 columns'> 
-            <Search words={words} setWords={setWords}></Search>
+            <Search words={words} setWords={setWords} values={values} setValues={setValues}></Search>
             <Graph words={words}></Graph>
         </div>
     );
