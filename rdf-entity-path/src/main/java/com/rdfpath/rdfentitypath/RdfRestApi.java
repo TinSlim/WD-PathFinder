@@ -1,10 +1,17 @@
 package com.rdfpath.rdfentitypath;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.rdfpath.graph.algorithms.BFSMix;
 import com.rdfpath.graph.model.Edge;
@@ -39,5 +46,21 @@ public class RdfRestApi {
 		System.out.println(edges);
 		System.out.println("-------------");
 	    return "---beser--";
+	}
+	
+	@RequestMapping("/autocomplete")
+	public ResponseEntity<String> autocomplete(@RequestParam String entity) {
+		System.out.println("test");
+		String entityEncod = URLEncoder.encode(entity, StandardCharsets.UTF_8);
+		String uri = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search="
+			+ entityEncod
+			+ "&language=en&formatversion=2";
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> answer = restTemplate.getForEntity(uri, String.class);
+
+		//JSONObject jsonObject = new JSONObject(answer);
+		//System.out.println(jsonObject.get("search"));
+		System.out.println(answer);
+		return answer;
 	}
 }
