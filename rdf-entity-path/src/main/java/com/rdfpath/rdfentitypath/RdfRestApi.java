@@ -58,4 +58,15 @@ public class RdfRestApi {
 		ResponseEntity<String> answer = restTemplate.getForEntity(uri, String.class);
 		return answer;
 	}
+	
+	@RequestMapping("/info")
+	public ResponseEntity<String> info(@RequestParam String entity) {
+		String entityEncod = URLEncoder.encode(entity, StandardCharsets.UTF_8);
+		String uri = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids="
+			+ entityEncod
+			+ "&languages=en&formatversion=2";
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> answer = restTemplate.getForEntity(uri, String.class);
+		return answer;
+	}
 }

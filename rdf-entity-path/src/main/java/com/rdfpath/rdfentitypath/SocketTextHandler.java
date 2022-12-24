@@ -40,7 +40,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		}
 		
 		bfsAlg.setSearchNodes(listNodes);
-		ArrayList<Edge> edges = bfsAlg.getRoadsOnlineServer(2,session);//5,session);
+		ArrayList<Edge> edges = bfsAlg.getRoadsOnlineServer(2,session);//5,session,);
 	}
 
 }
