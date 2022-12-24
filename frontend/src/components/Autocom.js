@@ -16,6 +16,9 @@ export default function Autocom(props) {
         .then(response => response.json())
         .then(data => setOptions(data.search.map((x) => ({label: x.label,id: x.id,url: x.concepturi}))));
     }
+    else {
+      setOptions([]);
+    }
   }
     
   
@@ -24,8 +27,9 @@ export default function Autocom(props) {
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
-            console.log(newValue);
-            props.addEntity(newValue);
+            if (newValue != null) {
+              props.addEntity(newValue);
+            }
             setInputValue("");
           }}
         inputValue={inputValue}
