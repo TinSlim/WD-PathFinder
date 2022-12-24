@@ -37,3 +37,6 @@ src/main/resources/static/js
 src/main/resources/static/css
 #*.css
 #*.js
+
+### nt ###
+src/main/resources/nt/subset100000.nt

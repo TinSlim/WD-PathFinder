@@ -84,9 +84,17 @@ export function startGraph (values) {
       //console.log(`[message] Data received from server: ${event.data}`);
       let newData = JSON.parse(event.data);
       for (let newVertex of newData.vertex) {
+          let ans = null;
+          let ent = "Q" + newVertex.label;
+          let url = `http://localhost:8080/info?entity=${ent}`
+          fetch(url)
+              .then(response => response.json())
+              .then(data => newVertex.label =  data.entities[ent].labels.en.value)
+                //ans = {desc : data.entities[ent].descriptions.en.value, label : data.entities[ent].labels.en.value});
+          //newVertex.label = ans.label;
           nodes.add(newVertex);
       }
-      console.log(newData.edge);
+      //console.log(newData.edge);
       edges.add(newData.edge);
     };
 

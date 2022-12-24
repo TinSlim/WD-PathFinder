@@ -25,7 +25,8 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		
 		String response = message.getPayload();
 		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
-		String filename = "/nt/star.nt";
+		System.out.println(nodesNumbers);
+		String filename = "/nt/subset100000.nt";//star.nt";
 		Graph graph = new Graph(filename);
 		BFSMix bfsAlg = new BFSMix(graph);
 		HashMap<Integer, Vertex> nodes = graph.getNodes();
@@ -39,7 +40,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		}
 		
 		bfsAlg.setSearchNodes(listNodes);
-		ArrayList<Edge> edges = bfsAlg.getRoadsOnlineServer(5,session);
+		ArrayList<Edge> edges = bfsAlg.getRoadsOnlineServer(2,session);//5,session,);
 	}
 
 }
