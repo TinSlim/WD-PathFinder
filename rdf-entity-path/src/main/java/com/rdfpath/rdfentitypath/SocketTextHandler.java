@@ -13,34 +13,32 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.rdfpath.graph.algorithms.BFSMix;
 import com.rdfpath.graph.model.Edge;
 import com.rdfpath.graph.model.Graph;
+import com.rdfpath.graph.model.GraphWrapper;
 import com.rdfpath.graph.model.Vertex;
 
 
 @Component
 public class SocketTextHandler extends TextWebSocketHandler {
-
+	public Graph graph;
+	
+	public SocketTextHandler () throws IOException {
+		super();
+		System.out.println("== Cargando Grafo ==\n");
+		String filename = "/nt/subset100000.nt";// star.nt"
+		System.out.println("--"+filename+"\n");
+		graph = new Graph(filename);
+		System.out.println("== Grafo Cargado ==\n");		
+	}
+	
 	@Override
 	public void handleTextMessage(WebSocketSession session, TextMessage message)
 			throws InterruptedException, IOException {
 		
 		String response = message.getPayload();
 		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
-		System.out.println(nodesNumbers);
-		String filename = "/nt/subset100000.nt";//star.nt";
-		Graph graph = new Graph(filename);
-		BFSMix bfsAlg = new BFSMix(graph);
-		HashMap<Integer, Vertex> nodes = graph.getNodes();
-		
-		//Integer[] nodesNumbers = {12,25};//{4,31,22};
-		ArrayList<Vertex> listNodes = new ArrayList<Vertex> ();
-		String newName = "";
-		for (Integer i : nodesNumbers) {
-			listNodes.add(nodes.get(i));
-			newName = String.join("_",newName,Integer.toString(i));
-		}
-		
-		bfsAlg.setSearchNodes(listNodes);
-		ArrayList<Edge> edges = bfsAlg.getRoadsOnlineServer(2,session);//5,session,);
+		GraphWrapper graphWrapper = new GraphWrapper(graph);
+		graphWrapper.setSession(session);
+		graphWrapper.search(nodesNumbers, 2);
 	}
 
 }

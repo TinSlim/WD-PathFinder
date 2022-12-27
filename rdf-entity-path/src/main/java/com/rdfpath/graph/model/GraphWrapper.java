@@ -1,7 +1,11 @@
 package com.rdfpath.graph.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 public class GraphWrapper {
 	private HashMap<Vertex, VertexWrapper> nodes;
@@ -11,16 +15,23 @@ public class GraphWrapper {
 	private ArrayList <VertexWrapper> toSearch;
 
 	private ArrayList<Vertex> road;
-
+	
+	private WebSocketSession session;
+	
 	public GraphWrapper (Graph graph) {
 		this.nodes = new HashMap<Vertex, VertexWrapper>();
 		this.graph = graph;
 		this.nodesSearch = 0;
 		this.toSearch = new ArrayList<VertexWrapper>();
 		this.road = new ArrayList<Vertex>();
+		this.session = null;
 	}
 	
-	public void search (Integer [] nodesNumbers, int size) {
+	public void setSession (WebSocketSession session) {
+		this.session = session;
+	}
+	
+	public void search (int [] nodesNumbers, int size) throws IOException {
 		// Obtiene nodos para caminos
 		ArrayList<Vertex> listNodes = new ArrayList<Vertex> ();
 		for (Integer i : nodesNumbers) {
@@ -72,7 +83,7 @@ public class GraphWrapper {
 							// añadir Edge actualVW-adjVW
 							ArrayList<Edge> edges = actualVW.node.getEdges(adjVW.node);
 							for (Edge e : edges) {
-								System.out.println(e);
+								sendEdge(e);
 							}
 							
 							// BACKTRACKING actualVW
@@ -92,7 +103,7 @@ public class GraphWrapper {
 						// añadir Edge actualVW-adjVW
 						ArrayList<Edge> edges = actualVW.node.getEdges(adjVW.node);
 						for (Edge e : edges) {
-							System.out.println(e);
+							sendEdge(e);
 						}
 						
 						// BACKTRACKING actualVW
@@ -106,26 +117,43 @@ public class GraphWrapper {
 		}
 	}
 
-	public void backTracking (VertexWrapper vw) {
+	public void backTracking (VertexWrapper vw) throws IOException {
 		ArrayList<VertexWrapper> toCheck = new ArrayList<VertexWrapper>();
 		toCheck.add(vw);
 		while (toCheck.size() > 0) {
 			VertexWrapper actualVW = toCheck.remove(0);
 			if (! road.contains(actualVW.node)) {
-				
+				road.add(actualVW.node);
 				for (VertexWrapper adjVW : actualVW.from) {
 					// Imprime aristas
 					ArrayList<Edge> edges = actualVW.node.getEdges(adjVW.node);
 					for (Edge e : edges) {
-						System.out.println(e);
+						sendEdge(e);
 					}
 					// Añade nodos
 					toCheck.add(adjVW);
 				}
-				road.add(actualVW.node);
+				
 			}
 		}
 		
 	}
-
+	
+	public void sendEdge(Edge e) throws IOException {
+		if (session == null) {
+			System.out.println(e);
+		}
+		else {
+			ArrayList<Vertex> vList = new ArrayList<Vertex>();
+			if (!road.contains(e.getOrigin())) {
+				vList.add(e.getOrigin());
+			}
+			if (!road.contains(e.getDestination())) {
+				vList.add(e.getDestination());
+			}
+			session.sendMessage(new TextMessage(e.toJson(vList)));
+		}
+		
+		
+	}
 }

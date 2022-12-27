@@ -8,10 +8,10 @@ import com.rdfpath.graph.model.GraphWrapper;
 
 public class AlgorithmTest {
 	public static void main(String[] args) throws IOException {
-		Integer[] nodesNumbers = {8,10,2};
+		int[] nodesNumbers = {10,7};
 		System.out.println("1===================");
 		System.out.println(nodesNumbers);
-		String filename = "/nt/star.nt";
+		String filename = "/nt/star.nt";// subset100000.nt";//
 		Graph graph = new Graph(filename);
 		System.out.println("2=====================");
 		GraphWrapper wrap1 = new GraphWrapper(graph);
