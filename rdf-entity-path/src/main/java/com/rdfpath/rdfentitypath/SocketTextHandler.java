@@ -24,7 +24,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 	public SocketTextHandler () throws IOException {
 		super();
 		System.out.println("== Cargando Grafo ==\n");
-		String filename = "/nt/subset100000.nt";// star.nt"
+		String filename = "/nt/subset100000.nt";//myGraph.nt;//star.nt";// subset100000.nt"
 		System.out.println("--"+filename+"\n");
 		graph = new Graph(filename);
 		System.out.println("== Grafo Cargado ==\n");		
@@ -33,12 +33,12 @@ public class SocketTextHandler extends TextWebSocketHandler {
 	@Override
 	public void handleTextMessage(WebSocketSession session, TextMessage message)
 			throws InterruptedException, IOException {
-		
 		String response = message.getPayload();
 		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
 		GraphWrapper graphWrapper = new GraphWrapper(graph);
 		graphWrapper.setSession(session);
 		graphWrapper.search(nodesNumbers, 2);
+		System.out.println("end");
 	}
 
 }

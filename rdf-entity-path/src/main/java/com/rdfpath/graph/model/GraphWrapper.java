@@ -17,6 +17,8 @@ public class GraphWrapper {
 	private ArrayList<Vertex> road;
 	
 	private WebSocketSession session;
+	private ArrayList<Edge> edges;
+	private ArrayList<Vertex> sentVertex;
 	
 	public GraphWrapper (Graph graph) {
 		this.nodes = new HashMap<Vertex, VertexWrapper>();
@@ -25,6 +27,8 @@ public class GraphWrapper {
 		this.toSearch = new ArrayList<VertexWrapper>();
 		this.road = new ArrayList<Vertex>();
 		this.session = null;
+		this.edges = new ArrayList<Edge>();
+		this.sentVertex = new ArrayList<Vertex>();
 	}
 	
 	public void setSession (WebSocketSession session) {
@@ -100,6 +104,7 @@ public class GraphWrapper {
 					
 					// DISTINTO COLOR
 					else if (!actualVW.from.contains(adjVW) && !adjVW.from.contains(actualVW)) {
+						
 						// añadir Edge actualVW-adjVW
 						ArrayList<Edge> edges = actualVW.node.getEdges(adjVW.node);
 						for (Edge e : edges) {
@@ -108,6 +113,7 @@ public class GraphWrapper {
 						
 						// BACKTRACKING actualVW
 						backTracking(actualVW);
+						
 						// BACKTRACKING adjVW
 						backTracking(adjVW);
 						adjVW.from.add(actualVW);
@@ -133,27 +139,29 @@ public class GraphWrapper {
 					// Añade nodos
 					toCheck.add(adjVW);
 				}
-				
 			}
 		}
 		
 	}
 	
 	public void sendEdge(Edge e) throws IOException {
+		if (edges.contains(e)) {return;};
+		
 		if (session == null) {
 			System.out.println(e);
 		}
 		else {
 			ArrayList<Vertex> vList = new ArrayList<Vertex>();
-			if (!road.contains(e.getOrigin())) {
+			if (!sentVertex.contains(e.getOrigin())) {
+				sentVertex.add(e.getOrigin());
 				vList.add(e.getOrigin());
 			}
-			if (!road.contains(e.getDestination())) {
+			if (!sentVertex.contains(e.getDestination())) {
 				vList.add(e.getDestination());
+				sentVertex.add(e.getDestination());
 			}
 			session.sendMessage(new TextMessage(e.toJson(vList)));
 		}
-		
-		
+		edges.add(e);
 	}
 }
