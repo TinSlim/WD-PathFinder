@@ -19,5 +19,6 @@
 <http://www.wikidata.org/entity/Q16> <http://www.wikidata.org/prop/direct/P18> <http://www.wikidata.org/entity/Q15> .
 <http://www.wikidata.org/entity/Q16> <http://www.wikidata.org/prop/direct/P17> <http://www.wikidata.org/entity/Q17> .
 <http://www.wikidata.org/entity/Q16> <http://www.wikidata.org/prop/direct/P19> <http://www.wikidata.org/entity/Q18> .
+<http://www.wikidata.org/entity/Q18> <http://www.wikidata.org/prop/direct/P19> <http://www.wikidata.org/entity/Q16> .
 <http://www.wikidata.org/entity/Q18> <http://www.wikidata.org/prop/direct/P17> <http://www.wikidata.org/entity/Q17> .
 <http://www.wikidata.org/entity/Q10> <http://www.wikidata.org/prop/direct/P20> <http://www.wikidata.org/entity/Q18> .

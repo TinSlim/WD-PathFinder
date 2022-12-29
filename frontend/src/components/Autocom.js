@@ -41,8 +41,51 @@ export default function Autocom(props) {
         options={options}
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Songs" />}
+        
+
+        renderOption={(props, option) => { return <h2> ok2</h2>}}
+          /*
+          const matches = option.structured_formatting.main_text_matched_substrings;
+          const parts = parse(
+            option.structured_formatting.main_text,
+            matches.map((match: any) => [match.offset, match.offset + match.length]),
+          );
+  
+          return (
+            <li {...props}>
+              <Grid container alignItems="center">
+                <Grid item>
+                  <Box
+                    component={LocationOnIcon}
+                    sx={{ color: 'text.secondary', mr: 2 }}
+                  />
+                </Grid>
+                <Grid item xs>
+                  {parts.map((part, index) => (
+                    <span
+                      key={index}
+                      style={{
+                        fontWeight: part.highlight ? 700 : 400,
+                      }}
+                    >
+                      {part.text}
+                    </span>
+                  ))}
+                  <Typography variant="body2" color="text.secondary">
+                    {option.structured_formatting.secondary_text}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </li>
+          );
+        }}*/
+
       />
     </div>
     );
   }
+  
+
+
+
   

@@ -17,48 +17,59 @@ public class StatementCounter extends AbstractRDFHandler {
 	private int countedStatements = 0;
 	HashMap<Integer, Vertex> nodes = null;
   
-	private Graph graph = new Graph();
-	
 	public StatementCounter () {
 		nodes = new HashMap<Integer, Vertex>();
 	}
 	
 	public void handleStatement(Statement st) {
+		// Obtiene IRI
 		Value object = st.getObject();
 		IRI subject = (IRI) st.getSubject();
 		IRI predicate = st.getPredicate();
-
 		
+		// Transforma a String
 		String strSubject = subject.toString();
 		String strPredicate = predicate.toString();
 		String strObject = object.toString();
-
-		int subjectKey = getObjectId(strSubject);
-		Vertex subjectNode;
-		Vertex objectNode;
+		
+		// Obtiene IDs de Sujeto, Objeto, Predicado
+		int subjectKey;
+		int ObjectKey;
+		Integer PredicateKey;
+		try {
+			subjectKey = getObjectId(strSubject);
+			ObjectKey = getObjectId(strObject);
+			PredicateKey = getPredicateId(strPredicate);
+		}
+		catch (Exception e) {
+			return;
+		}
 		
 		countedStatements++;
+		Vertex subjectNode;
+		Vertex objectNode;	
 		
+		// Obtiene nodos si existen, sino los crea
 		if(nodes.containsKey(subjectKey)){
 			subjectNode = nodes.get(subjectKey);
 		} else {
 			subjectNode = new Vertex(subjectKey);
+			nodes.put(subjectKey, subjectNode);
 		}
-		
-		int ObjectKey = getObjectId(strObject);
+
 		if(nodes.containsKey(ObjectKey)){
 			objectNode = nodes.get(ObjectKey);
 		} else {
 			objectNode = new Vertex(ObjectKey);
+			nodes.put(ObjectKey, objectNode);
 		}
 		
 		//double weight = 1.0 + (double) edgesCount.get(getPredicateId(strPredicate))/maxEdgeCount;
-
-		Edge edge = new Edge(getPredicateId(strPredicate), subjectNode, objectNode, 0);
+		
+		// Añade arista
+		Edge edge = new Edge(PredicateKey, subjectNode, objectNode, 0);
 		subjectNode.addEdge(edge);
 		objectNode.addEdge(edge);
-		nodes.put(subjectKey, subjectNode);
-		nodes.put(ObjectKey, objectNode);
 		
 		if (debug) System.out.println(subjectKey + "->" + getPredicateId(strPredicate) + "->" + ObjectKey);
 	}
