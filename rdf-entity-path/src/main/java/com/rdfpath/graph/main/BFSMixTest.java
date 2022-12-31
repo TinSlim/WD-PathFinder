@@ -24,7 +24,7 @@ public class BFSMixTest {
 		String filename = "/nt/star.nt";//"/nt/myGraph.nt";
 		String savePath = "src/main/resources";
 		
-		Graph graph = new Graph(filename);
+		Graph graph = new Graph(filename,false);
 		
 		long endTimeCreatingGraph = System.currentTimeMillis();
 		long durationCreatingGraph = (endTimeCreatingGraph - startTimeCreatingGraph);

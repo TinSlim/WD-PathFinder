@@ -15,17 +15,44 @@ public class StatementCounter extends AbstractRDFHandler {
 	
 	private Boolean debug = false;
 	private int countedStatements = 0;
+	private int countedLines = 0;
 	HashMap<Integer, Vertex> nodes = null;
-  
+	private long startTime;
+	private long actualTime;
+	private int minute;
+	
 	public StatementCounter () {
 		nodes = new HashMap<Integer, Vertex>();
+		startTime = System.currentTimeMillis();
+		actualTime = System.currentTimeMillis();
+		minute = 0;
 	}
 	
 	public void handleStatement(Statement st) {
+		countedLines += 1;
+		
+		if ((((System.currentTimeMillis() - actualTime)/1000) / 60) > 10) { // Minutos
+			actualTime = System.currentTimeMillis();
+			minute += 10;
+			System.out.println("Minutos: " + minute);
+			System.out.println("Fila: " + countedLines);
+		}
+		
 		// Obtiene IRI
-		Value object = st.getObject();
-		IRI subject = (IRI) st.getSubject();
-		IRI predicate = st.getPredicate();
+		Value object;
+		IRI subject;
+		IRI predicate;
+		try {
+			object = st.getObject();
+			subject = (IRI) st.getSubject();
+			predicate = st.getPredicate();
+		}
+		catch (Exception e) {
+			//throw new IOException(e);
+			System.out.println("EXCEPTION IN:");
+			System.out.println(countedLines);
+			return;
+		}
 		
 		// Transforma a String
 		String strSubject = subject.toString();
@@ -87,6 +114,10 @@ public class StatementCounter extends AbstractRDFHandler {
 
 	 public int getCountedStatements() {
 	   return countedStatements;
+	 }
+	 
+	 public int getCountedLines () {
+		 return countedLines;
 	 }
 	 
 	 public HashMap<Integer, Vertex> getNodes () {
