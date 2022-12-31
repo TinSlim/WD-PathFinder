@@ -4,12 +4,39 @@
 
 Primero se debe compilar front, luego lanzar el sevidor:
 
+### Compilar Front
+
+- En archivo `.env` asignar las direcciones `http` y `ws`. En caso de usar cerificado `SSL`, direcciones deben ser `https` y `wss`.
+
+- Compilar archivos, estos se guardarán en la carpeta resources del proyecto en Java.
 ```
 cd .\frontend\
-npm run prod-build
+npm run build
+```
+
+### Construir archivo Jar
+
+- Ejecutar lo siguiente para armar el archivo `.jar`. Este se almacenará en `\rdf-entity-path\target`.
+```
 cd ..\rdf-entity-path\
 .\mvnw package
-cd .\target\
+```
+
+### Lanzar
+
+Se tienen dos opciones.
+
+- El compilado incluye un archivo de grafos, si se quiere usar ese, ejecutar:
+```
 java -jar .\rdf-entity-path-0.0.1-SNAPSHOT.jar
+```
+
+- Usar un archivo `.gz` externo al archivo jar. Se debe tener este al lado del archivo.
+
+```
+java -jar -Dgraph-path="{nombre archivo}" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
+
+#EJEMPLO:
+java -jar -Dgraph-path="delete.nt.gz" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
 ```
 
