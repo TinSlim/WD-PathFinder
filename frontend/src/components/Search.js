@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import ListT from "./ListT"
 import Autocom from "./Autocom"
-//import Prediction from "./Prediction"
 import {connect, makeGraph, startGraph} from './../script/grafo.js'
+const { baseURL } = require('config');
 
 export default function Search(props) {
     const [entity, setEntity] = useState('');
@@ -20,7 +20,7 @@ export default function Search(props) {
     const handleEntityChange = async (word) => {
         setEntity(word);
         // TODO PROBLEMA DE COOKIE AQUI
-        let url = `http://localhost:8080/autocomplete?entity=${word}`
+        let url = `${baseURL}/autocomplete?entity=${word}`
         fetch(url)
             .then(response => response.json())
             .then(data => setAnsEntity(data.search.map((x) => ({id: x.id, label: x.label, url: x.concepturi}))));

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+const { baseURL } = require('config');
 
 export default function Autocom(props) {
   const [options, setOptions] = React.useState([]);
@@ -11,7 +12,7 @@ export default function Autocom(props) {
     // TODO PROBLEMA DE COOKIE AQUI
     setInputValue(word);
     if (word != "" && word != null) {
-      let url = `http://localhost:8080/autocomplete?entity=${word}`
+      let url = `${baseURL}/autocomplete?entity=${word}`
       fetch(url)
         .then(response => response.json())
         .then(data => setOptions(data.search.map((x) => ({label: x.label,id: x.id,url: x.concepturi}))));
@@ -42,9 +43,9 @@ export default function Autocom(props) {
         sx={{ width: 300 }}
         renderInput={(params) => <TextField {...params} label="Songs" />}
         
-
+        /*
         renderOption={(props, option) => { return <h2> ok2</h2>}}
-          /*
+          
           const matches = option.structured_formatting.main_text_matched_substrings;
           const parts = parse(
             option.structured_formatting.main_text,
