@@ -40,3 +40,17 @@ java -jar -Dgraph-path="{nombre archivo}" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
 java -jar -Dgraph-path="delete.nt.gz" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
 ```
 
+
+## Ejecución Tests
+
+### Armar conjuntos
+
+En la carpeta `python` crear archivo `items.csv` que tenga id de entidades y su agrupación.
+
+Ejecutar `python combinations.py`.
+
+Con esto almacenará combinaciones en `rdf-entity-path/src/main/resuorces/test`.
+
+### Ejecutar tests de tiempo
+
+Con los archivos creados ejecutar `TimeTest.java`. Creara resultados en la carpeta `rdf-entity-path/src/main/resuorces/test/results`.
