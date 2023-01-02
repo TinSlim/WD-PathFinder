@@ -1,5 +1,14 @@
 # RDF-Path-server
 
+## Información
+
+- Lanzar en el servidor demora **80 minutos**.
+- Parámetros extra, se agregan con **-D{lo de abajo}**:
+	
+	- Archivo grafo externo a `.jar`: `graph-path="{nombre archivo}"`
+	- Token de Telegram para recibir mensajes de carga de grafo: `tg-token="{token}"`
+
+
 ## Lanzar Servidor desde `.jar`
 
 Primero se debe compilar front, luego lanzar el sevidor:
