@@ -20,6 +20,11 @@ public class GraphWrapper {
 	private ArrayList<Edge> edges;
 	private ArrayList<Vertex> sentVertex;
 	
+	private long startTime;
+	private long firstTime;
+	private long lastTime;
+	private Boolean started;
+	
 	public GraphWrapper (Graph graph) {
 		this.nodes = new HashMap<Vertex, VertexWrapper>();
 		this.graph = graph;
@@ -35,8 +40,19 @@ public class GraphWrapper {
 		this.session = session;
 	}
 	
+	public long[] getTimes () {
+		long[] ans = {startTime, firstTime, lastTime};
+		return ans;
+	}
+	
 	public void search (int [] nodesNumbers, int size) throws IOException {
 		// Obtiene nodos para caminos
+		started = false;
+		startTime = System.currentTimeMillis();
+		firstTime = startTime;
+		lastTime = startTime;
+		
+		
 		ArrayList<Vertex> listNodes = new ArrayList<Vertex> ();
 		for (Integer i : nodesNumbers) {
 			listNodes.add(graph.getNodes().get(i));
@@ -121,6 +137,7 @@ public class GraphWrapper {
 				}
 			}
 		}
+		lastTime = System.currentTimeMillis();
 	}
 
 	public void backTracking (VertexWrapper vw) throws IOException {
@@ -147,6 +164,12 @@ public class GraphWrapper {
 	public void sendEdge(Edge e) throws IOException {
 		if (edges.contains(e)) {return;};
 		
+		//
+		if (!started) {
+			firstTime = System.currentTimeMillis();
+		}
+		
+		//
 		if (session == null) {
 			System.out.println(e);
 		}

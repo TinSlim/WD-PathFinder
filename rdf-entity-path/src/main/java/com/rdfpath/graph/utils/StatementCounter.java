@@ -30,12 +30,20 @@ public class StatementCounter extends AbstractRDFHandler {
 	
 	public void handleStatement(Statement st) {
 		countedLines += 1;
-		
-		if ((((System.currentTimeMillis() - actualTime)/1000) / 60) > 10) { // Minutos
-			actualTime = System.currentTimeMillis();
+		long timeA = System.currentTimeMillis();
+		if ((((timeA - actualTime)/1000) / 60) >= 10) { // Minutos
+			actualTime = timeA;
 			minute += 10;
 			System.out.println("Minutos: " + minute);
 			System.out.println("Fila: " + countedLines);
+			if (System.getProperty("tg-token") != null) {
+				try {
+					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=Minutos:"+minute+"_Fila:"+countedLines);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
+			}
 		}
 		
 		// Obtiene IRI
