@@ -59,9 +59,9 @@ for size in range(max_size + 1)[2:]:
 
 #------------------------------------------------
 # Genera Archivos
-with open("json_same_group.json", "w") as outfile:
+with open("../rdf-entity-path/src/main/resources/test/json_same_group.json", "w") as outfile:
 	json.dump(same_group, outfile)
 
-with open("json_dif_group.json", "w") as outfile:
+with open("../rdf-entity-path/src/main/resources/test/json_dif_group.json", "w") as outfile:
 	json.dump(dif_group, outfile)
 #------------------------------------------------
