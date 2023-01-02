@@ -167,6 +167,7 @@ public class GraphWrapper {
 		//
 		if (!started) {
 			firstTime = System.currentTimeMillis();
+			started = true;
 		}
 		
 		//
