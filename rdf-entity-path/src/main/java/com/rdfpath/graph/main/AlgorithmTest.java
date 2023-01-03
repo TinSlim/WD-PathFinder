@@ -12,7 +12,7 @@ public class AlgorithmTest {
 		System.out.println("1===================");
 		System.out.println(nodesNumbers);
 		String filename = "/nt/star.nt";// subset100000.nt";//
-		Graph graph = new Graph(filename);
+		Graph graph = new Graph(filename,false);
 		System.out.println("2=====================");
 		GraphWrapper wrap1 = new GraphWrapper(graph);
 		System.out.println("3=====================");

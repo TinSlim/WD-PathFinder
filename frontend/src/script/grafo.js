@@ -1,3 +1,5 @@
+const { socketUrl,  baseURL} = require('config');
+
 // create an array with nodes and edges
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
@@ -62,16 +64,19 @@ export function makeGraph() {
     })
 }
 
-
 function resetGraph () {
     nodes.clear();
     edges.clear();
 }
 
+let socket = null;
 
 export function startGraph (values) {
-    const socket = new WebSocket("ws://localhost:8080/query");
-    console.log ("empezando");
+    if (socket != null) {
+        socket.close();
+    }
+    socket = new WebSocket(`${socketUrl}/query`);
+
     socket.onopen = function(e) {
       console.log("[open] Connection established");
       console.log("Sending to server");
@@ -84,17 +89,8 @@ export function startGraph (values) {
       //console.log(`[message] Data received from server: ${event.data}`);
       let newData = JSON.parse(event.data);
       for (let newVertex of newData.vertex) {
-          let ans = null;
-          let ent = "Q" + newVertex.label;
-          let url = `http://localhost:8080/info?entity=${ent}`
-          fetch(url)
-              .then(response => response.json())
-              .then(data => newVertex.label =  data.entities[ent].labels.en.value)
-                //ans = {desc : data.entities[ent].descriptions.en.value, label : data.entities[ent].labels.en.value});
-          //newVertex.label = ans.label;
           nodes.add(newVertex);
       }
-      //console.log(newData.edge);
       edges.add(newData.edge);
     };
 
@@ -102,8 +98,6 @@ export function startGraph (values) {
       if (event.wasClean) {
         console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
       } else {
-        // e.g. server process killed or network down
-        // event.code is usually 1006 in this case
         console.log('[close] Connection died');
       }
     };

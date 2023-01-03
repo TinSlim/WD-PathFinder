@@ -19,7 +19,7 @@ public class DijkstraTest {
 		long startTimeCreatingGraph = System.currentTimeMillis();
 		
 		String filename = "/test.nt";//"./resources/subset100000.nt";
-		Graph graph = new Graph(filename);
+		Graph graph = new Graph(filename,false);
 		
 		long endTimeCreatingGraph = System.currentTimeMillis();
 		long durationCreatingGraph = (endTimeCreatingGraph - startTimeCreatingGraph);

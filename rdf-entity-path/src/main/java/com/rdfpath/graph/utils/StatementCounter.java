@@ -15,17 +15,52 @@ public class StatementCounter extends AbstractRDFHandler {
 	
 	private Boolean debug = false;
 	private int countedStatements = 0;
+	private int countedLines = 0;
 	HashMap<Integer, Vertex> nodes = null;
-  
+	private long startTime;
+	private long actualTime;
+	private int minute;
+	
 	public StatementCounter () {
 		nodes = new HashMap<Integer, Vertex>();
+		startTime = System.currentTimeMillis();
+		actualTime = System.currentTimeMillis();
+		minute = 0;
 	}
 	
 	public void handleStatement(Statement st) {
+		countedLines += 1;
+		long timeA = System.currentTimeMillis();
+		if ((((timeA - actualTime)/1000) / 60) >= 10) { // Minutos
+			actualTime = timeA;
+			minute += 10;
+			System.out.println("Minutos: " + minute);
+			System.out.println("Fila: " + countedLines);
+			if (System.getProperty("tg-token") != null) {
+				try {
+					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=Minutos:"+minute+"_Fila:"+countedLines);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
+			}
+		}
+		
 		// Obtiene IRI
-		Value object = st.getObject();
-		IRI subject = (IRI) st.getSubject();
-		IRI predicate = st.getPredicate();
+		Value object;
+		IRI subject;
+		IRI predicate;
+		try {
+			object = st.getObject();
+			subject = (IRI) st.getSubject();
+			predicate = st.getPredicate();
+		}
+		catch (Exception e) {
+			//throw new IOException(e);
+			System.out.println("EXCEPTION IN:");
+			System.out.println(countedLines);
+			return;
+		}
 		
 		// Transforma a String
 		String strSubject = subject.toString();
@@ -87,6 +122,10 @@ public class StatementCounter extends AbstractRDFHandler {
 
 	 public int getCountedStatements() {
 	   return countedStatements;
+	 }
+	 
+	 public int getCountedLines () {
+		 return countedLines;
 	 }
 	 
 	 public HashMap<Integer, Vertex> getNodes () {

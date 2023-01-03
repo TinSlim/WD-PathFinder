@@ -31,7 +31,7 @@ public class RdfRestApi {
 		Vertex a = new Vertex (2);
 		System.out.println(a);
 		String filename = "/nt/star.nt";//"/nt/myGraph.nt";
-		graph = new Graph(filename); // TODO esta linea pide IOExcept
+		graph = new Graph(filename,false); // TODO esta linea pide IOExcept
 		System.out.println(graph.getNodes().get(1).myFather);
 		System.out.println("graph2");
 		
@@ -76,7 +76,6 @@ public class RdfRestApi {
 	
 	@RequestMapping(value="/autocomplete",produces = MediaType.APPLICATION_JSON_VALUE)
 	public String autocomplete (@RequestParam String entity) {
-		// URL y parámetro
 		String entityEncod = URLEncoder.encode(entity, StandardCharsets.UTF_8);
 		String url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search="
 			+ entityEncod

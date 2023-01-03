@@ -13,5 +13,5 @@ const List = ({ entities, deleteEntity }) => (
         ))}
     </div>
   );
-  
-  export default List;
+
+export default List;

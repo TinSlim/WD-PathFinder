@@ -12,7 +12,7 @@ import com.rdfpath.graph.model.Vertex;
 public class EdgeJsonEx {
 	public static void main(String[] args) throws IOException{
 		String filename = "/nt/star.nt";//"/nt/myGraph.nt";
-		Graph graph = new Graph(filename);
+		Graph graph = new Graph(filename,false);
 		HashMap<Integer, Vertex> nodes = graph.getNodes();
 		BFSMix bfsAlg = new BFSMix(graph);
 		

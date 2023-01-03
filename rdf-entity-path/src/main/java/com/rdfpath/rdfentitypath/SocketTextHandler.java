@@ -1,10 +1,18 @@
 package com.rdfpath.rdfentitypath;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.zip.GZIPInputStream;
 
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.Rio;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,6 +23,7 @@ import com.rdfpath.graph.model.Edge;
 import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.GraphWrapper;
 import com.rdfpath.graph.model.Vertex;
+import com.rdfpath.graph.utils.StatementCounter;
 
 
 @Component
@@ -24,9 +33,19 @@ public class SocketTextHandler extends TextWebSocketHandler {
 	public SocketTextHandler () throws IOException {
 		super();
 		System.out.println("== Cargando Grafo ==\n");
-		String filename = "/nt/subset100000.nt";//myGraph.nt;//star.nt";// subset100000.nt"
+		String filename = "/nt/subset100000.nt";
+		if (System.getProperty("graph-path") != null) {
+			System.out.println("USING GRAPH FROM VAR\n\n");
+			//System.out.println(System.getProperty("graph-path"));
+			filename = System.getProperty("graph-path");
+			graph = new Graph(filename, true);
+		}
+		else {
+			graph = new Graph(filename, false);
+		}
+		//String filename = "/nt/subset100000.nt"; //myGraph.nt;//star.nt";// subset100000.nt"
 		System.out.println("--"+filename+"\n");
-		graph = new Graph(filename);
+		
 		System.out.println("== Grafo Cargado ==\n");		
 	}
 	
