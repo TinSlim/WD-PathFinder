@@ -8,6 +8,12 @@
 	- Archivo grafo externo a `.jar`: `graph-path="{nombre archivo}"`
 	- Token de Telegram para recibir mensajes de carga de grafo: `tg-token="{token}"`
 
+## Desarrollo
+
+### Frontend
+
+- Lanzar `npm run dev` desde `/frontend`.
+- Ver `public\index.html`
 
 ## Lanzar Servidor desde `.jar`
 
