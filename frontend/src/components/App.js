@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Drawer from '@mui/material/Drawer';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
 
 import Graph from './Graph';
@@ -50,7 +51,7 @@ export default function App() {
 
             <Graph words={words} values={values} ></Graph>
             
-            <Drawer
+            <SwipeableDrawer
                 open={drawerState}
                 onClose={closeDrawer}>
                 <div>
@@ -63,7 +64,7 @@ export default function App() {
                     </Search>
                 </div>
                  
-            </Drawer>
+            </SwipeableDrawer>
 
         </div>
     );
