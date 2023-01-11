@@ -1,31 +1,53 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import InputAdornment from '@mui/material/InputAdornment';
+import CircularProgress from '@mui/material/CircularProgress';
+
 const { baseURL } = require('config');
 
 export default function Autocom(props) {
   const [options, setOptions] = React.useState([]);
   const [value, setValue] = React.useState("");
   const [inputValue, setInputValue] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleOpt = async (word) => {
-    // TODO PROBLEMA DE COOKIE AQUI
-    setInputValue(word);
+  const timeoutIdRef = React.useRef();
+  
+  const handleNewData = (data) => {
+    setOptions([]);
+    setOptions(data.search.map((x) => ({label: x.label,id: x.id,url: x.concepturi})));
+    setIsLoading(false);
+  }
+
+  const handleAuto = (word) => {
     if (word != "" && word != null) {
       let url = `${baseURL}/autocomplete?entity=${word}`
       fetch(url)
         .then(response => response.json())
-        .then(data => setOptions(data.search.map((x) => ({label: x.label,id: x.id,url: x.concepturi}))));
+        .then(data => handleNewData(data));
     }
     else {
       setOptions([]);
     }
+    
+  }
+
+  const handleOpt = async (word) => {
+    clearTimeout(timeoutIdRef.current);
+    setInputValue(word);
+    setIsLoading(true);
+    timeoutIdRef.current = setTimeout(() => {
+      handleAuto(word);
+    }, 500);
   }
     
   
   return (
-    <div className='mb-3'>
+    <div className='mt-3 mb-3'>
       <Autocomplete
+        onClose={() => setIsLoading(false)} // al cerrar autocompletado
+        filterOptions={(x) => x}            // quita filtro de opciones (no se necesita ya que obtengo de API)
         value={value}
         onChange={(event, newValue) => {
             if (newValue != null) {
@@ -41,8 +63,24 @@ export default function Autocom(props) {
         id="combo-box-demo"
         options={options}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Songs" />}
+        renderInput={(params) => 
+          <TextField {...params} 
+            label="Entidad"
+            variant="filled"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            }}
+            />}
         
+        
+
+            
         /*
         renderOption={(props, option) => { return <h2> ok2</h2>}}
           
