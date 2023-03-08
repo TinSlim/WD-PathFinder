@@ -2,12 +2,20 @@
 
 ## Información
 
+- Versiones:
+	- Node: v16.17.1
+	- Java: openjdk 11
 - Lanzar en el servidor demora **80 minutos**.
 - Parámetros extra, se agregan con **-D{lo de abajo}**:
-	
 	- Archivo grafo externo a `.jar`: `graph-path="{nombre archivo}"`
 	- Token de Telegram para recibir mensajes de carga de grafo: `tg-token="{token}"`
 
+## Desarrollo
+
+### Frontend
+
+- Lanzar `npm run dev` desde `/frontend`.
+- Ver `public\index.html`
 
 ## Lanzar Servidor desde `.jar`
 
@@ -62,4 +70,4 @@ Con esto almacenará combinaciones en `rdf-entity-path/src/main/resuorces/test`.
 
 ### Ejecutar tests de tiempo
 
-Con los archivos creados ejecutar `TimeTest.java`. Creara resultados en la carpeta `rdf-entity-path/src/main/resuorces/test/results`.
+Con los archivos creados ejecutar `TimeTest.java`. Creara resultados en la carpeta `rdf-entity-path/src/main/resuorces/results`.

@@ -11,9 +11,11 @@ var data = {
     edges: edges,
 };
 var options = {
-
-    height: '300%', //'400px',
+    autoResize: true,
+    height: (window.innerHeight - 48) + "px",
+    width: (window.innerWidth - 25) + "px",
 };
+
 var network = null;
 window.onload = function() {
     container = document.getElementById("mynetwork");
@@ -35,9 +37,10 @@ export function makeGraph() {
 
     var options = {
         autoResize: true,
-        height: '100%',
-        width: '100%'
+        width: (window.innerWidth - 25) + "px",
     };
+
+    console.log("erre");
 
     var network = new vis.Network(container, data, options);
 

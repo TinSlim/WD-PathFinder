@@ -3,18 +3,19 @@ import ListT from "./ListT"
 import Autocom from "./Autocom"
 import {connect, makeGraph, startGraph} from './../script/grafo.js'
 const { baseURL } = require('config');
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 export default function Search(props) {
     const [entity, setEntity] = useState('');
     const [ansEntity, setAnsEntity] = useState([]);
-    
+
     const handleEntitySubmit = async e => {
         e.preventDefault();
         if (entity != '') {
             addWord(entity);
             setEntity('');
-        }
-        
+        }   
     }
 
     const handleEntityChange = async (word) => {
@@ -43,15 +44,17 @@ export default function Search(props) {
     }
 
     const launchGraph = () => {
+        props.closeDrawer();
         let ids = props.values.map((entity) => (entity.id).replace("Q", ""));//})
         startGraph(ids);
         console.log(ids);
     }
 
     return (
-        <div className='column is-3 mt-5 mr-3 has-background-secondary'>
-            <div className='mb-4'>
-                <button onClick={launchGraph} className='button is-fullwidth is-info'> BUSCAR </button>
+        <div className='column has-background-secondary'>
+
+            <div>
+                <button onClick={launchGraph} className='button is-info'> BUSCAR </button>
             </div>
             <Autocom addEntity={(newWord) => props.setValues(prevArray => [...prevArray, newWord])}></Autocom>
 
@@ -61,7 +64,7 @@ export default function Search(props) {
                     props.setValues(newWords);}}
             />
             <div>
-                <button onClick={clearWords} className='button is-fullwidth is-danger'> CLEAR </button>
+                <button onClick={clearWords} className='button is-danger'> CLEAR </button>
             </div>
 
         </div>
