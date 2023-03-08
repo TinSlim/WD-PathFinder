@@ -12,7 +12,7 @@ var data = {
 };
 var options = {
     autoResize: true,
-    height: (window.innerHeight - 75) + "px",
+    height: (window.innerHeight - 48) + "px",
     width: (window.innerWidth - 25) + "px",
 };
 
@@ -37,7 +37,6 @@ export function makeGraph() {
 
     var options = {
         autoResize: true,
-        height: (window.innerHeight - 75) + "px",
         width: (window.innerWidth - 25) + "px",
     };
 
