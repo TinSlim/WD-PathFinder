@@ -32,6 +32,7 @@ public class Graph {
 				System.out.println(myCounter.getCountedLines());
 			}
 			this.nodes = myCounter.getNodes();
+			myCounter.printCounters();
 			return;
 		}
 		else {
@@ -47,10 +48,8 @@ public class Graph {
 			catch (Exception e) {
 				throw new IOException(e);
 			}
-			//int numberOfStatements = myCounter.getCountedStatements();
-			//System.out.println(myCounter.getNodes());
-			//System.out.println(numberOfStatements);
 			this.nodes = myCounter.getNodes();
+			myCounter.printCounters(); // TODO Imprime valores resultantes
 			return;
 		}
 		 
