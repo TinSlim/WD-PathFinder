@@ -35,20 +35,30 @@ public class Utils {
 	}
 	
 	public static String getEntityName (String id) {
-		//String url = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids="
-		//		+ id
-		//		+ "&languages=en&formatversion=2";				
+		/*
+		 * String url = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids="
+				+ id
+				+ "&languages=en&formatversion=2";
+		 */
+
 		String url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search=" + id + "&language=en&formatversion=2";
 		String respuesta = "";
 		try {
 			respuesta = peticionHttpGet(url);
 			JSONObject obj = new JSONObject(respuesta);
-			return (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
+			String label = (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
+			if (label != "" || label != null) {
+				return (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
+			};
+			//return (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
+			
+			return "";
 		} catch (Exception e) {
 			// Manejar excepción
 			e.printStackTrace();
 		}
-		return "";
+		
+		return id;
 	}
 	
 	// TODO ACA USA IDIOMA
