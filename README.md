@@ -10,12 +10,24 @@
 	- Archivo grafo externo a `.jar`: `graph-path="{nombre archivo}"`
 	- Token de Telegram para recibir mensajes de carga de grafo: `tg-token="{token}"`
 
+## Instalación
+
+- Se requiere Node *v16.17.1* y Java *openjdk 11*.
+- En `/frontend` usar `npm i`, para instalar dependencias.
+- Cargar `/rdf-entity-path` a **Eclipse IDE**. 
+
 ## Desarrollo
 
 ### Frontend
 
 - Lanzar `npm run dev` desde `/frontend`.
-- Ver `public\index.html`
+- Correr `public\index.html`.
+
+### Backend
+
+- En archivo `/frontend/.env` usar **localhost** que está comentado.
+- Lanzar `npm run build` desde `/frontend`.
+- Lazar servidor desde Eclipse con configuración `RunServer`.
 
 ## Lanzar Servidor desde `.jar`
 
@@ -54,7 +66,7 @@ java -jar .\rdf-entity-path-0.0.1-SNAPSHOT.jar
 java -jar -Dgraph-path="{nombre archivo}" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
 
 #EJEMPLO:
-java -jar -Dgraph-path="delete.nt.gz" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
+#java -jar -Dgraph-path="delete.nt.gz" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
 ```
 
 
