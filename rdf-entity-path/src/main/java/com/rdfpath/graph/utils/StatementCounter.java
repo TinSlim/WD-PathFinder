@@ -21,16 +21,24 @@ public class StatementCounter extends AbstractRDFHandler {
 	private long actualTime;
 	private int minute;
 	
+	private int nodesLoaded;
+	private int edgesLoaded;
+	
 	public StatementCounter () {
 		nodes = new HashMap<Integer, Vertex>();
 		startTime = System.currentTimeMillis();
 		actualTime = System.currentTimeMillis();
 		minute = 0;
+		
+		nodesLoaded = 0;
+		edgesLoaded = 0;
 	}
 	
 	public void handleStatement(Statement st) {
+		
 		countedLines += 1;
 		long timeA = System.currentTimeMillis();
+		// TODO AVISO
 		if ((((timeA - actualTime)/1000) / 60) >= 10) { // Minutos
 			actualTime = timeA;
 			minute += 10;
@@ -57,8 +65,6 @@ public class StatementCounter extends AbstractRDFHandler {
 		}
 		catch (Exception e) {
 			//throw new IOException(e);
-			System.out.println("EXCEPTION IN:");
-			System.out.println(countedLines);
 			return;
 		}
 		
@@ -71,6 +77,7 @@ public class StatementCounter extends AbstractRDFHandler {
 		int subjectKey;
 		int ObjectKey;
 		Integer PredicateKey;
+
 		try {
 			subjectKey = getObjectId(strSubject);
 			ObjectKey = getObjectId(strObject);
@@ -90,6 +97,7 @@ public class StatementCounter extends AbstractRDFHandler {
 		} else {
 			subjectNode = new Vertex(subjectKey);
 			nodes.put(subjectKey, subjectNode);
+			nodesLoaded += 1; //Cuenta nodos
 		}
 
 		if(nodes.containsKey(ObjectKey)){
@@ -97,6 +105,7 @@ public class StatementCounter extends AbstractRDFHandler {
 		} else {
 			objectNode = new Vertex(ObjectKey);
 			nodes.put(ObjectKey, objectNode);
+			nodesLoaded += 1; //Cuenta nodos
 		}
 		
 		//double weight = 1.0 + (double) edgesCount.get(getPredicateId(strPredicate))/maxEdgeCount;
@@ -105,11 +114,20 @@ public class StatementCounter extends AbstractRDFHandler {
 		Edge edge = new Edge(PredicateKey, subjectNode, objectNode, 0);
 		subjectNode.addEdge(edge);
 		objectNode.addEdge(edge);
+		edgesLoaded += 1; //Cuenta arista
 		
 		if (debug) System.out.println(subjectKey + "->" + getPredicateId(strPredicate) + "->" + ObjectKey);
 	}
 
-
+	public void printCounters() {
+		System.out.println("Lineas contadas:" + countedLines);
+		System.out.println("Lineas Agregadas:" + countedStatements);
+		System.out.println("Nodos Creados:" + nodesLoaded);
+		System.out.println(nodes.size());
+		System.out.println("Aristas Creadas:" + edgesLoaded);
+		
+	}
+	
 	private Integer getObjectId(String obj) {
 			return Integer.parseInt(obj.substring(32, obj.length()));	
 		}
