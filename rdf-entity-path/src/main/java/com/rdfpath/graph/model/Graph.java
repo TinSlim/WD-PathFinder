@@ -29,7 +29,10 @@ public class Graph {
 			}
 			catch (Exception e) {
 				//throw new IOException(e);
-				System.out.println(myCounter.getCountedLines());
+				System.out.println("ERROR:STACKTRACE::"); // TODO
+				e.printStackTrace();
+				System.out.println("ERROR:_______::"); // TODO
+				System.out.println(e);
 			}
 			this.nodes = myCounter.getNodes();
 			myCounter.printCounters();
@@ -49,7 +52,7 @@ public class Graph {
 				throw new IOException(e);
 			}
 			this.nodes = myCounter.getNodes();
-			myCounter.printCounters(); // TODO Imprime valores resultantes
+			myCounter.printCounters(); 
 			return;
 		}
 		 
