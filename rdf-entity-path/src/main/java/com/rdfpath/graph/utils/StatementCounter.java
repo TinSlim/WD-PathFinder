@@ -35,7 +35,6 @@ public class StatementCounter extends AbstractRDFHandler {
 	}
 	
 	public void handleStatement(Statement st) {
-		
 		countedLines += 1;
 		long timeA = System.currentTimeMillis();
 		// TODO AVISO
@@ -53,14 +52,14 @@ public class StatementCounter extends AbstractRDFHandler {
 				}
 			}
 		}
-		
-		// Obtiene IRI
+
+
 		Value object;
-		IRI subject;
+		Value subject;
 		IRI predicate;
 		try {
 			object = st.getObject();
-			subject = (IRI) st.getSubject();
+			subject = st.getSubject();
 			predicate = st.getPredicate();
 		}
 		catch (Exception e) {
@@ -78,6 +77,11 @@ public class StatementCounter extends AbstractRDFHandler {
 		int ObjectKey;
 		Integer PredicateKey;
 
+		String str = "http://www.wikidata.org/entity/Q";
+		if(!strSubject.startsWith(str) || !strObject.startsWith(str)){
+			return;
+		};
+
 		try {
 			subjectKey = getObjectId(strSubject);
 			ObjectKey = getObjectId(strObject);
@@ -86,11 +90,11 @@ public class StatementCounter extends AbstractRDFHandler {
 		catch (Exception e) {
 			return;
 		}
-		
+
 		countedStatements++;
 		Vertex subjectNode;
 		Vertex objectNode;	
-		
+
 		// Obtiene nodos si existen, sino los crea
 		if(nodes.containsKey(subjectKey)){
 			subjectNode = nodes.get(subjectKey);
@@ -107,15 +111,14 @@ public class StatementCounter extends AbstractRDFHandler {
 			nodes.put(ObjectKey, objectNode);
 			nodesLoaded += 1; //Cuenta nodos
 		}
-		
 		//double weight = 1.0 + (double) edgesCount.get(getPredicateId(strPredicate))/maxEdgeCount;
-		
+;
 		// Añade arista
 		Edge edge = new Edge(PredicateKey, subjectNode, objectNode, 0);
 		subjectNode.addEdge(edge);
 		objectNode.addEdge(edge);
 		edgesLoaded += 1; //Cuenta arista
-		
+
 		if (debug) System.out.println(subjectKey + "->" + getPredicateId(strPredicate) + "->" + ObjectKey);
 	}
 
