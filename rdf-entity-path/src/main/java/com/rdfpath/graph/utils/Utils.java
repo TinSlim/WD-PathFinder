@@ -47,12 +47,9 @@ public class Utils {
 			respuesta = peticionHttpGet(url);
 			JSONObject obj = new JSONObject(respuesta);
 			String label = (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
-			if (label != "" || label != null) {
+			if (label != "" && label != null) {
 				return (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
 			};
-			//return (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
-			
-			return "";
 		} catch (Exception e) {
 			// Manejar excepción
 			e.printStackTrace();
@@ -71,15 +68,12 @@ public class Utils {
 		
 		try {
 			respuesta = peticionHttpGet(url);
-			System.out.println("REQU OK");
 			JSONObject resp = new JSONObject();
 			JSONArray search = new JSONArray();
 			JSONObject ans = new JSONObject(respuesta);
 			JSONArray arr = ans.getJSONArray("search");
 			
-			System.out.println("Empieza iterador");
 			for (Object ob : arr) {
-				System.out.println("Dentro iterador");
 				JSONObject obj = (JSONObject) ob;
 				JSONObject newObj = new JSONObject();
 				newObj.put("label", obj.getString("label"));
@@ -89,7 +83,6 @@ public class Utils {
 				search.put(newObj);
 			}
 			resp.put("search", search);
-			System.out.println("JSON OK");
 			return resp.toString();
 			//return (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
 		} catch (Exception e) {
@@ -97,7 +90,6 @@ public class Utils {
 			JSONObject resp = new JSONObject();
 			JSONArray search = new JSONArray();
 			resp.put("search", search);
-			System.out.println(resp.toString());
 			return resp.toString();
 		}
 	}
