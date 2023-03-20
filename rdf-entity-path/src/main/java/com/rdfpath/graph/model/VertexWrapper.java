@@ -1,8 +1,11 @@
 package com.rdfpath.graph.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VertexWrapper {
+	private HashMap<Integer, VertexWrapper> nodes;
+	
 	public Vertex node;
 	
 	public Vertex fatherNode;

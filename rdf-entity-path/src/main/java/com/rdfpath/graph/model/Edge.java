@@ -8,9 +8,9 @@ import org.json.JSONObject;
 import com.rdfpath.graph.utils.Utils;
 
 public class Edge  {
-    private final Integer id;
-    private final Vertex origin;
-    private final Vertex destination;
+    public final Integer id;
+    public final Vertex origin;
+    public final Vertex destination;
     private double weight;
     
     public Edge(Integer id, Vertex origin, Vertex destination) {

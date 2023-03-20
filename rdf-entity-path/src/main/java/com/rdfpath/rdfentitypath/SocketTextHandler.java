@@ -18,17 +18,15 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.rdfpath.graph.algorithms.BFSMix;
-import com.rdfpath.graph.model.Edge;
 import com.rdfpath.graph.model.Graph;
-import com.rdfpath.graph.model.GraphWrapper;
-import com.rdfpath.graph.model.Vertex;
-import com.rdfpath.graph.utils.StatementCounter;
+import com.rdfpath.graph.model.GraphNative;
+import com.rdfpath.graph.model.GraphWrapper2;
+import com.rdfpath.graph.model.IGraph;
 
 
 @Component
 public class SocketTextHandler extends TextWebSocketHandler {
-	public Graph graph;
+	public IGraph graph;
 	
 	public SocketTextHandler () throws IOException {
 		super();
@@ -38,10 +36,10 @@ public class SocketTextHandler extends TextWebSocketHandler {
 			System.out.println("USING GRAPH FROM VAR\n\n");
 			//System.out.println(System.getProperty("graph-path"));
 			filename = System.getProperty("graph-path");
-			graph = new Graph(filename, true);
+			graph = new GraphNative(filename, true);
 		}
 		else {
-			graph = new Graph(filename, false);
+			graph = new GraphNative(filename, false);
 		}
 		//String filename = "/nt/subset100000.nt"; //myGraph.nt;//star.nt";// subset100000.nt"
 		System.out.println("--"+filename+"\n");
@@ -54,7 +52,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 			throws InterruptedException, IOException {
 		String response = message.getPayload();
 		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
-		GraphWrapper graphWrapper = new GraphWrapper(graph);
+		GraphWrapper2 graphWrapper = new GraphWrapper2(graph);
 		graphWrapper.setSession(session);
 		graphWrapper.search(nodesNumbers, 2);
 		System.out.println("end");

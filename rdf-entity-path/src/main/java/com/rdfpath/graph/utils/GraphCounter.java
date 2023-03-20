@@ -1,22 +1,31 @@
+/**
+ * 
+ */
 package com.rdfpath.graph.utils;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
-import com.rdfpath.graph.model.Edge;
-import com.rdfpath.graph.model.Graph;
-import com.rdfpath.graph.model.Vertex;
 
-public class StatementCounter extends AbstractRDFHandler {
-	
+/**
+ *
+ * @author Cristóbal Torres G.
+ * @github Tinslim
+ *
+ */
+public class GraphCounter extends AbstractRDFHandler {	
 	private Boolean debug = false;
 	private int countedStatements = 0;
 	private int countedLines = 0;
-	HashMap<Integer, Vertex> nodes = null;
+	
+	HashMap<Integer, LinkedList<Integer>> nodes;
+	HashMap<Integer, int[]> edges;
+	
 	private long startTime;
 	private long actualTime;
 	private int minute;
@@ -24,8 +33,10 @@ public class StatementCounter extends AbstractRDFHandler {
 	private int nodesLoaded;
 	private int edgesLoaded;
 	
-	public StatementCounter () {
-		nodes = new HashMap<Integer, Vertex>();
+	public GraphCounter () {
+		nodes = new HashMap<Integer, LinkedList<Integer>>();
+		edges = new HashMap<Integer, int[]>();
+		
 		startTime = System.currentTimeMillis();
 		actualTime = System.currentTimeMillis();
 		minute = 0;
@@ -37,6 +48,7 @@ public class StatementCounter extends AbstractRDFHandler {
 	public void handleStatement(Statement st) {
 		countedLines += 1;
 		long timeA = System.currentTimeMillis();
+		
 		// TODO AVISO
 		if ((((timeA - actualTime)/1000) / 60) >= 10) { // Minutos
 			actualTime = timeA;
@@ -94,31 +106,33 @@ public class StatementCounter extends AbstractRDFHandler {
 		//}
 
 		countedStatements++;
-		Vertex subjectNode;
-		Vertex objectNode;	
-
-		// Obtiene nodos si existen, sino los crea
-		if(nodes.containsKey(subjectKey)){
-			subjectNode = nodes.get(subjectKey);
-		} else {
-			subjectNode = new Vertex(subjectKey);
-			nodes.put(subjectKey, subjectNode);
-			nodesLoaded += 1; //Cuenta nodos
+		
+		// Crea Nodo
+		if (nodes.containsKey(subjectKey)) {
+			nodes.get(subjectKey).add(countedStatements);
 		}
-
-		if(nodes.containsKey(ObjectKey)){
-			objectNode = nodes.get(ObjectKey);
-		} else {
-			objectNode = new Vertex(ObjectKey);
-			nodes.put(ObjectKey, objectNode);
-			nodesLoaded += 1; //Cuenta nodos
+		else {
+			LinkedList<Integer> adjList = new LinkedList<Integer>();
+			adjList.add(countedStatements);
+			nodes.put(subjectKey,adjList);
+			nodesLoaded += 1;
 		}
-		//double weight = 1.0 + (double) edgesCount.get(getPredicateId(strPredicate))/maxEdgeCount;
-;
+		
+		if (nodes.containsKey(ObjectKey)) {
+			nodes.get(ObjectKey).add(countedStatements);
+		}
+		else {
+			LinkedList<Integer> adjList = new LinkedList<Integer>();
+			adjList.add(countedStatements);
+			nodes.put(ObjectKey,adjList);
+			nodesLoaded += 1;
+		}
+		// ---
+	
+	
 		// Añade arista
-		Edge edge = new Edge(PredicateKey, subjectNode, objectNode, 0);
-		subjectNode.addEdge(edge);
-		objectNode.addEdge(edge);
+		int[] triplet = {subjectKey, PredicateKey,ObjectKey};
+		edges.put(countedStatements,triplet);
 		edgesLoaded += 1; //Cuenta arista
 
 		if (debug) System.out.println(subjectKey + "->" + getPredicateId(strPredicate) + "->" + ObjectKey);
@@ -150,8 +164,15 @@ public class StatementCounter extends AbstractRDFHandler {
 	 public int getCountedLines () {
 		 return countedLines;
 	 }
-	 
-	 public HashMap<Integer, Vertex> getNodes () {
-		 return nodes;
-	 }
+
+	/**
+	 * @return
+	 */
+	public HashMap getNodes() {
+		return nodes;
+	}
+	
+	public HashMap getEdges() {
+		return edges;
+	}
 }
