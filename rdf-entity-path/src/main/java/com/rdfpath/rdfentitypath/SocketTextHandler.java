@@ -19,6 +19,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.rdfpath.graph.model.Graph;
+import com.rdfpath.graph.model.GraphComp;
 import com.rdfpath.graph.model.GraphNative;
 import com.rdfpath.graph.model.GraphWrapper2;
 import com.rdfpath.graph.model.IGraph;
@@ -36,10 +37,10 @@ public class SocketTextHandler extends TextWebSocketHandler {
 			System.out.println("USING GRAPH FROM VAR\n\n");
 			//System.out.println(System.getProperty("graph-path"));
 			filename = System.getProperty("graph-path");
-			graph = new GraphNative(filename, true);
+			graph = new GraphComp(filename, true);
 		}
 		else {
-			graph = new GraphNative(filename, false);
+			graph = new GraphComp(filename, false);
 		}
 		//String filename = "/nt/subset100000.nt"; //myGraph.nt;//star.nt";// subset100000.nt"
 		System.out.println("--"+filename+"\n");
