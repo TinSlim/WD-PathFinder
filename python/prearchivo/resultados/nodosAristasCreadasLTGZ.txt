@@ -1,0 +1,48 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.7.6)
+
+2023-03-15 16:37:24.391  INFO 8496 --- [           main] c.r.r.RdfEntityPathApplication           : Starting RdfEntityPathApplication v0.0.1-SNAPSHOT using Java 11.0.18 on s10-vm01 with PID 8496 (/home/ctorres/rdf-entity-path-0.0.1-SNAPSHOT.jar started by ctorres in /home/ctorres)
+2023-03-15 16:37:24.398  INFO 8496 --- [           main] c.r.r.RdfEntityPathApplication           : No active profile set, falling back to 1 default profile: "default"
+2023-03-15 16:37:25.796  INFO 8496 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-03-15 16:37:25.811  INFO 8496 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-03-15 16:37:25.812  INFO 8496 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.69]
+2023-03-15 16:37:25.909  INFO 8496 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-03-15 16:37:25.910  INFO 8496 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1442 ms
+== Cargando Grafo ==
+
+USING GRAPH FROM VAR
+
+
+Minutos: 10
+Fila: 30776248
+Minutos: 20
+Fila: 59655984
+Minutos: 30
+Fila: 87261153
+Minutos: 40
+Fila: 112950734
+Minutos: 50
+Fila: 140076285
+Minutos: 60
+Fila: 167343673
+Minutos: 70
+Fila: 194585193
+219746574
+Lineas contadas:219746574
+Lineas Agregadas:13236293
+Nodos Creados:4655443
+4655443
+Aristas Creadas:13236293
+--latest-truthy.nt.gz
+
+== Grafo Cargado ==
+
+2023-03-15 17:56:33.938  INFO 8496 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-03-15 17:56:34.285  INFO 8496 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-03-15 17:56:34.302  INFO 8496 --- [           main] c.r.r.RdfEntityPathApplication           : Started RdfEntityPathApplication in 4750.542 seconds (JVM running for 4751.202)
