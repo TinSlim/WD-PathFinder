@@ -2,95 +2,149 @@ import os
 import math
 import gzip
 
+
+def mergeDictionary(dict_1, dict_2):
+   dict_3 = {**dict_1, **dict_2}
+   for key, value in dict_3.items():
+       if key in dict_1 and key in dict_2:
+               dict_3[key] = value + dict_1[key]
+   return dict_3
+
+def format_line (line):
+    id_line_local = line[0]
+    answer = [str(id_line_local)]
+    for edge in line[1].keys():
+        nums_string = list(map (lambda x: str(x), line[1][edge]))
+        nums_join = '.'.join([str(edge)] + nums_string)
+        answer.append(nums_join)
+    last = ' '.join(answer) + '\n'
+    return last.encode()
+
+# Vars
 TOTAL_NODES = 98347590
 new_node = 0
 
-comp_file = gzip.open("compressed_struct.gz","wb")
+# Nuevo Archivo
+comp_file = gzip.open("compressed_struct_new.gz","wb") # TODO NEW
 
-parts = os.listdir('parts')
+def line_convert (line):
+    """
+    Convierte texto de línea a formato correcto [num, {}]
+    
+    [['0', {0: 2}], ['11', {23: 29}], ['24', {-1: 35}]]
+    """
+    line_to = []
+    if line != '':
+        line_to = line.split(' ')
+        id_line = int(line_to[0])
+        rs = {}
+        for val in line_to[1:]:
+            val_split = list(map(lambda x: int(x),val.split('.')))
+            rs[val_split[0]] = val_split[1:]
+        line_to = [id_line,rs]
+    return line_to
+
+# Abro archivos
+parts = os.listdir('parts2')
 files = []
 for filename in parts:
-    files.append(open(f'parts/{filename}',"r"))
+    files.append(open(f'parts2/{filename}',"r"))
 
+# Lee una línea de cada archivo
 lines = []
 for x in files:
-    lines.append(x.readline().replace('\n',''))
+    line_to = x.readline().replace('\n','')
+    line_f = line_convert(line_to)
+    lines.append(line_f)
 
-last_id = math.inf
-act_line = []
-agregar_fila = False
 
-write_line = False
+
+act_line = []           # Línea que se escribirá en archivo
+last_id = math.inf      # Menor ID de líneas escritas en archivo
+write_line = False      # Debe escribir línea
+
+# En algún momento se ejecuta exit()
 while True:
+
+    # Revisa líneas cargadas, si estan todas vacías [], hay que terminar
     i = 0
     done_files = True
     for i in range(len(lines)):
-        if lines[i].strip():
+        if lines[i] != []:
             done_files = False
             continue
-        lines[i] = files[i].readline().replace('\n','')
+        line_to = files[i].readline().replace('\n','')
+        line_f = line_convert(line_to)
+        lines[i] = line_f
 
+
+    # Todas vacías, debe terminar
     if done_files:
-        # TODO Escribir archivo
-        text = ' '.join(list(map(lambda x: str(x),act_line))) + '\n'
-        comp_file.write(text.encode())
+        # Escribir archivo
+        line_write = format_line(act_line)
+        comp_file.write(line_write)
         new_node += 1
+        
+        # Finaliza
+        print("\n")
+        print(f"Total Nodos: {new_node}")
         print("\n")
         exit()
 
    
     index = 0
-
-    done_add_line = False
     write_line = True
 
+    # Valores para candidato de línea que se escribirá
     local_last_id = math.inf
     local_index = 0
     local_act_line = []
+
+
+    # Revisa líneas cargadas para actualizar la que se deberá escribir (Similar a un merge sort)
     while index < len(lines):
         
-        # línea vacía ''
-        if not lines[index].strip():
-            lines[index] = files[index].readline()
+        # Si la línea es vacía carga una línea de su archivo
+        if lines[index] == []:
+            line_to = files[index].readline().replace('\n','')
+            lines[index] = line_convert(line_to)
         
-        # línea sigue vacía ''
-        if not lines[index].strip():
+        # Si sigue vacía, pasa a la siguiente línea cargada
+        if lines[index] == []:
             index += 1
             continue
         
-        # línea tiene valores
-        val_line = lines[index].split()
-        val_line = map(lambda x:int(x), val_line)
-        val_line = list(val_line)
+        # La línea tiene valores, debe actualizar la línea que se escribirá
+        line_id = lines[index][0]
+        line_con = lines[index][1]
 
-        if int(val_line[0]) == last_id: # compara id actual con el de la línea
-            act_line[1] = act_line[1] + val_line[1]
-            act_line = act_line + val_line[2:]
-            lines[index] = ''
-            lines[index] = files[index].readline().replace('\n','')
+        # Si tiene mismo id que la que se escribirá, se mezclan
+        if line_id == last_id:
+            act_line[1] = mergeDictionary(line_con, act_line[1])
+            line_to = files[index].readline().replace('\n','')
+            lines[index] = line_convert(line_to)
             write_line = False
-            done_add_line = True
             break
-       
-        elif int(val_line[0]) < local_last_id:
-            local_last_id = int(val_line[0])
-            local_act_line = val_line
+        
+        # Busca una línea candidata para escribir
+        elif line_id < local_last_id:
+            local_last_id = line_id
+            local_act_line = lines[index]
             local_index = index
-            write_line = True
 
         index += 1
 
-    
-    if write_line and not done_add_line:
-        # TODO Escribir archivo
+    # Escribe línea y candidato se extrae, obteniendo una nueva línea del archivo
+    if write_line:
         if act_line != []:
-            text = ' '.join(list(map(lambda x: str(x),act_line))) + '\n'
+            # Escribir archivo
+            line_write = format_line(act_line)
+            comp_file.write(line_write)
             new_node += 1
-            comp_file.write(text.encode())
         act_line = local_act_line
         last_id = local_last_id
-        lines[local_index] = files[local_index].readline().replace('\n','')  
-    
+        line_to = files[local_index].readline().replace('\n','')
+        lines[local_index] = line_convert(line_to)
     
     print(f"{new_node} / {TOTAL_NODES} | {(new_node * 100) // TOTAL_NODES}%",end='\r')
 

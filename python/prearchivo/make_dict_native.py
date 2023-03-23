@@ -14,6 +14,11 @@ rel = {}
 act_part = 0
 
 
+def structToText(key, value):
+	groups = list(map(lambda x: '.'.join( list(map(lambda y: str(y),x)) ),value))
+	return [key] + groups
+
+
 with gzip.open('cached_file.nt.gz','r') as f:
 	for line in f:
 		line_decode = line.decode()
@@ -55,11 +60,12 @@ with gzip.open('cached_file.nt.gz','r') as f:
 
 		if line_added > 100000000:
 			line_added = 0
-			file_open = open(f"parts/part_{act_part}.csv",'w',newline='')
+			file_open = open(f"parts2/part_{act_part}.csv",'w',newline='')
 			file_writer = writer = csv.writer(file_open,delimiter=' ', quotechar='|')
 
 			for data in sorted(rel.keys()):
-				result = [data,len(rel[data])] + sum(rel[data],[])
+				#result = [data,len(rel[data])] + sum(rel[data],[])
+				result = structToText(data,rel[data])
 				file_writer.writerow(result)
 			
 			file_open.close()
@@ -70,11 +76,12 @@ with gzip.open('cached_file.nt.gz','r') as f:
 
 if line_added > 0:
 			line_added = 0
-			file_open = open(f"parts/part_{act_part}.csv",'w',newline='')
+			file_open = open(f"parts2/part_{act_part}.csv",'w',newline='')
 			file_writer = writer = csv.writer(file_open,delimiter=' ', quotechar='|')
-
+			
 			for data in sorted(rel.keys()):
-				result = [data,len(rel[data])] + sum(rel[data],[])
+				#result = [data,len(rel[data])] + sum(rel[data],[])
+				result = structToText(data,rel[data])
 				file_writer.writerow(result)
 			
 			file_open.close()
