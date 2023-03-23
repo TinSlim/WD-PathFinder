@@ -9,14 +9,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.rdfpath.graph.utils.StatementCounter;
+import com.rdfpath.graph.utils.Utils;
 
 /**
  *
@@ -25,83 +29,223 @@ import com.rdfpath.graph.utils.StatementCounter;
  *
  */
 public class GraphComp implements IGraph {
-
+	// NODES = 98347590
 	public int[][][] nodes;
+	public HashMap<Integer,Integer> idNodes; /// HASHMAP TODO
 	
 	public GraphComp (String filename, Boolean isGz ) throws IOException {
-		String filename2 = "C:/Users/Cristóbal/Documents/RDF-Path-server/python/prearchivo/compressed_struct.gz";
-		FileInputStream stream = new FileInputStream(filename2);
+		//String filename2 = "C:/Users/Cristóbal/Documents/RDF-Path-server/python/prearchivo/compressed_struct.gz";
+		
+		// TODO set 36 - 98347590 FILE
+		
+		if (!isGz) {
+			return;
+		}
+		
+		
+		nodes = new int[98347590][][];
+		idNodes = new HashMap<Integer, Integer>(); /// HASHMAP TODO
+		
+		FileInputStream stream = new FileInputStream(filename);
 		GZIPInputStream gzip = new GZIPInputStream(stream);
 		BufferedReader br = new BufferedReader(new InputStreamReader(gzip));
-		
+
 		String line = "";
         String[] tempArr;
+        int node_id = 0;
+        
+        long startTime = System.currentTimeMillis();
+    	long actualTime = System.currentTimeMillis();
+    	long timeA = System.currentTimeMillis();
+    	int minute = 0;
+    	
         while((line = br.readLine()) != null) {
-           tempArr = line.split(" ");
-           String id = tempArr[0];
-           int edgeSize = Integer.parseInt(tempArr[1]);
-           int i = 2;
-           int[] edgeArray = new int[edgeSize * 2];
-           for(String tempStr : tempArr) {
-               System.out.print(tempStr + "\n");
-            }
-           //while (i < edgeSize) {
-           //
-           //}
-           //System.out.println();
+    		timeA = System.currentTimeMillis();
+    		
+    		// TODO AVISO
+    		if ((((timeA - actualTime)/1000) / 60) >= 5) { // Minutos
+    			actualTime = timeA;
+    			minute += 5;
+    			System.out.println("Minutos: " + minute);
+    			System.out.println("Nodo: " + node_id);
+    			if (System.getProperty("tg-token") != null) {
+    				try {
+    					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=Minutos:"+ minute +" Nodos:"+node_id);
+    				
+    				} catch (Exception e) {
+    					// TODO Auto-generated catch block
+    					//e.printStackTrace();
+    				}
+    			}
+    		}
+        													// line = 18 -22.16 23.17 24.19 -26.20 27.21
+           tempArr = line.split(" ");						// [18, -22.16, 23.17, 24.19, -26.20, 27.21]
+           int id[] = {Integer.parseInt(tempArr[0])};		// 18
+           idNodes.put(id[0], node_id); /// HASHMAP TODO
+           int[][] numbers = new int[tempArr.length][];		
+           		// int [][][]
+				// [
+				//  [[18], [-22, 16], [23,17], [24,19], [-26,20], [27,21]],
+				//	[[19],  ...]
+				// ]
+           numbers[0] = id; // [[18]]
+           // Para cada grupo [pred, obj] O [pred, obj1, obj2, ...]
+           for(int i = 1;i < tempArr.length;i++)
+           {
+        	   
+        	   String[] temp_arr3 = tempArr[i].split("\\.");
+        	   int [] conn = new int[temp_arr3.length];
+        	   for (int j = 0;j < temp_arr3.length;j++) {
+        		   conn[j] = Integer.parseInt(temp_arr3[j]);
+        	   }
+              numbers[i] = conn;
+           }
+           // numbers = [[18], [-22, 16], [23,17], [24,19], [-26,20], [27,21]]
+           
+           nodes[node_id] = numbers;
+           node_id += 1;
         }
         br.close();
-		//RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
-		//StatementCounter myCounter = new StatementCounter();
-		//
-		//GraphCounterNative myCounter = new GraphCounterNative();
-		//parser.setRDFHandler(myCounter);
+        System.out.println("END::::");
+        System.out.println("Total de nodos: "+node_id);
+        try {
+			Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=TerminóCarga,Nodos: "+node_id);
 		
-        //try {
-        //	parser.parse(br, "");
-        //}
-        //catch (Exception e) {
-			//throw new IOException(e);
-        //System.out.println("ERROR:STACKTRACE::"); // TODO
-        //e.printStackTrace();
-        //System.out.println("ERROR:_______::"); // TODO
-        //System.out.println(e);
-        //}
-        //this.nodes = myCounter.getNodes();
-        //myCounter.printCounters();
-        System.out.println("comp");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
 		return;
 	}
 	
 	
+	public int searchVertexIndex (int id) {
+		
+		/* NO HASHMAP
+		int actIndex = -1;
+		
+		for (int[][] line : nodes) {
+			actIndex += 1;
+			if (line[0][0] == id) {
+				return actIndex;
+			}
+		}
+		return -1;
+		*/
+		return idNodes.get(id);
+	}
+	
 	@Override
 	public List<Integer> getAdjacentVertex(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Integer> answer = new ArrayList<Integer>();
+		int index = searchVertexIndex(id);
+		int i = 1;
+		int j;
+		while (i < nodes[index].length) {
+			j = 1;
+			while (j < nodes[index][i].length) {
+				int existsInAns = answer.indexOf(nodes[index][i][j]);
+				if (existsInAns == -1) {
+					answer.add(nodes[index][i][j]);
+				}
+				j+=1;
+			}
+			i+=1;
+		}
+		return answer;
 	}
 
 	@Override
 	public ArrayList getEdges(int idVertex, int idVertex2) {
 		// TODO Auto-generated method stub
-		return null;
+		ArrayList<int[]> edges = new ArrayList<int[]>();
+		int index = searchVertexIndex(idVertex);
+		
+		int i = 1;
+		int j;
+		while (i < nodes[index].length) {
+			j = 1;
+			while (j < nodes[index][i].length) {
+				if (idVertex2 == nodes[index][i][j])  {
+					int[] edge = {nodes[index][0][0],nodes[index][i][0], nodes[index][i][j]};
+					edges.add(edge);
+					break;
+				}
+				j+=1;
+			}
+			i+=1;
+		}
+		return edges;
 	}
 
 	@Override
 	public int getOriginEdge(Object e) {
-		// TODO Auto-generated method stub
-		return 0;
+		int[] edge = (int[]) e;
+		if (edge[1] > 0) {
+			return edge[0];
+		}
+		return edge[2];
 	}
 
 	@Override
 	public int getDestinationEdge(Object e) {
-		// TODO Auto-generated method stub
-		return 0;
+		int[] edge = (int[]) e;
+		if (edge[1] < 0) {
+			return edge[0];
+		}
+		return edge[2];
+	}
+	
+	public int getPredicateEdge(int[] edge) {
+		if (edge[1] < 0) {
+			return -1 * edge[1];
+		}
+		return edge[1];
 	}
 
 	@Override
 	public CharSequence edgeToJson(Object e, ArrayList<Integer> vList) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		int[] edgeF = (int[]) e;
+		String message;
+    	JSONObject json = new JSONObject();
+    	
+    	String edgeLabel = Utils.getEntityName("P"+getPredicateEdge(edgeF)+"&type=property");
+    	String edgeLabelSmall = edgeLabel;
+    	if (edgeLabel.length() > 7) {edgeLabelSmall = edgeLabel.substring(0,Math.min(edgeLabel.length(), 7)) + "...";}
+    	
+    	// Edge
+    	JSONObject edge = new JSONObject();
+    	edge.put("from", getOriginEdge(e));
+    	edge.put("to", getDestinationEdge(e));
+    	//edge.put("label", "K"+id);
+    	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
+    	edge.put("title", edgeLabel);
+    	edge.put("font", new JSONObject().put("align", "middle"));
+    	edge.put("color", new JSONObject().put("color", "#848484"));
+    	edge.put("arrows", new JSONObject().put("to", new JSONObject().put("enabled", true).put("type", "arrow")));
+    	edge.put("length", 500);
+    	// Vertex
+    	JSONArray vertexArray = new JSONArray();
+    	for (Integer v : vList) {
+    		String color = "#97C2FC";
+    		//String color = (v.father == v) ? "#cc76FC" : "#97C2FC";
+    		//String vertexLabel = "" + v;
+    		String vertexLabel = Utils.getEntityName("Q" + v);
+        	String vertexLabelSmall = vertexLabel;
+        	if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
+    		vertexArray.put(
+    				new JSONObject()
+    				.put("id", v)
+    				//.put("label",Utils.getEntityName("Q" + v) + "_" + v)
+    				.put("label", vertexLabelSmall)
+    				.put("title", vertexLabel)
+    				.put("color",color));
+    	}
+    	json.put("edge", edge);
+    	json.put("vertex", vertexArray);
+    	message = json.toString();
+    	
+    	return message;
+    }
 
 }
