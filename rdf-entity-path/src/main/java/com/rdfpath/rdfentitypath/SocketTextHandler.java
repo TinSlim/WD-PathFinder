@@ -35,7 +35,6 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		String filename = "/nt/subset100000.nt";
 		if (System.getProperty("graph-path") != null) {
 			System.out.println("USING GRAPH FROM VAR\n\n");
-			//System.out.println(System.getProperty("graph-path"));
 			filename = System.getProperty("graph-path");
 			graph = new GraphComp(filename, true);
 		}
