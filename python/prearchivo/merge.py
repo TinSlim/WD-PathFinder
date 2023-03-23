@@ -1,16 +1,36 @@
+# --------------------------
+# @author Cristóbal Torres G.
+# @github Tinslim
+# --------------------------
+
 import os
 import math
 import gzip
 
+# CONSTANTES
+TOTAL_NODES = 98347590
+OUTPUT = "compressed_struct_new.gz"
+FOLDER_PARTS = "parts2"
 
 def mergeDictionary(dict_1, dict_2):
-   dict_3 = {**dict_1, **dict_2}
-   for key, value in dict_3.items():
-       if key in dict_1 and key in dict_2:
-               dict_3[key] = value + dict_1[key]
-   return dict_3
+    """
+    Une diccionarios de formato correcto
+    dict1   {0: [2,4], 1: [5]}
+    dict2   {0: [3], 2: [5]}
+    ret     {0: [2,4,3], 1: [5], 2: [5]}
+    """
+    dict_3 = {**dict_1, **dict_2}
+    for key, value in dict_3.items():
+        if key in dict_1 and key in dict_2:
+            dict_3[key] = value + dict_1[key]
+    return dict_3
 
 def format_line (line):
+    """
+    Convierte de formato correcto [num, {}] a línea para el archivo .gz
+    line    [0, {0: [2,3,4], 1: [5]}]
+    ret     "0 0.2.3.4 1.5\n".encode()
+    """
     id_line_local = line[0]
     answer = [str(id_line_local)]
     for edge in line[1].keys():
@@ -20,18 +40,11 @@ def format_line (line):
     last = ' '.join(answer) + '\n'
     return last.encode()
 
-# Vars
-TOTAL_NODES = 98347590
-new_node = 0
-
-# Nuevo Archivo
-comp_file = gzip.open("compressed_struct_new.gz","wb") # TODO NEW
-
 def line_convert (line):
     """
     Convierte texto de línea a formato correcto [num, {}]
-    
-    [['0', {0: 2}], ['11', {23: 29}], ['24', {-1: 35}]]
+    line    "0 0.2.3.4 1.5"
+    ret     [0, {0: [2,3,4], 1: [5]}]
     """
     line_to = []
     if line != '':
@@ -44,14 +57,22 @@ def line_convert (line):
         line_to = [id_line,rs]
     return line_to
 
+# Vars
+new_node = 0
+
+# Archivo que se va a escribir
+comp_file = gzip.open(OUTPUT,"wb")
+
+
+
 # Abro archivos
-parts = os.listdir('parts2')
+parts = os.listdir(FOLDER_PARTS)
 files = []
 for filename in parts:
-    files.append(open(f'parts2/{filename}',"r"))
+    files.append(open(f'{FOLDER_PARTS}/{filename}',"r"))
 
 # Lee una línea de cada archivo
-lines = []
+lines = []              # Almacena lineas 1 línea cargada de cada archivo
 for x in files:
     line_to = x.readline().replace('\n','')
     line_f = line_convert(line_to)
@@ -68,10 +89,10 @@ while True:
 
     # Revisa líneas cargadas, si estan todas vacías [], hay que terminar
     i = 0
-    done_files = True
+    done_files = True           # Condición de término
     for i in range(len(lines)):
         if lines[i] != []:
-            done_files = False
+            done_files = False  # Se define que va a terminar
             continue
         line_to = files[i].readline().replace('\n','')
         line_f = line_convert(line_to)
@@ -92,8 +113,8 @@ while True:
         exit()
 
    
-    index = 0
-    write_line = True
+    index = 0           # Índice para obtener línea cargada del archivo
+    write_line = True   # Debe escribir la línea actual
 
     # Valores para candidato de línea que se escribirá
     local_last_id = math.inf
@@ -109,7 +130,7 @@ while True:
             line_to = files[index].readline().replace('\n','')
             lines[index] = line_convert(line_to)
         
-        # Si sigue vacía, pasa a la siguiente línea cargada
+        # Si sigue vacía, pasa a la siguiente línea cargada (ese archivo esta terminado)
         if lines[index] == []:
             index += 1
             continue
@@ -146,6 +167,7 @@ while True:
         line_to = files[local_index].readline().replace('\n','')
         lines[local_index] = line_convert(line_to)
     
+    # Imprime Avance de los nodos
     print(f"{new_node} / {TOTAL_NODES} | {(new_node * 100) // TOTAL_NODES}%",end='\r')
 
 
