@@ -30,24 +30,15 @@ import com.rdfpath.graph.utils.Utils;
 * @github Tinslim
 *
 */
-public class GraphNative implements IGraph {
+public class GraphNative extends AbstractGraph {
 
     private HashMap<Integer, LinkedList<Integer>> nodes;
 	private int[][] edges;
 
 
 	public GraphNative (String filename, Boolean isGz) throws IOException {
-		System.out.println("NATIVO");
-		
-		double maxHeapSize = Runtime.getRuntime().maxMemory();
-		double kbSize = maxHeapSize / 1024;
-		double mbSize = kbSize / 1024;
-		double gbSize = mbSize / 1024;
-		
-		System.out.println("HeapSize:" + maxHeapSize);
-		System.out.println("HeapSize kB:" + kbSize);
-		System.out.println("HeapSize mB:" + mbSize);
-		System.out.println("HeapSize gB:" + gbSize);
+		printMemory();
+
 		
 		if (isGz) {
 			FileInputStream stream = new FileInputStream(filename);

@@ -21,63 +21,33 @@ import com.rdfpath.graph.utils.GraphCounterNative;
 import com.rdfpath.graph.utils.StatementCounter;
 import com.rdfpath.graph.utils.Utils;
 
-public class Graph implements IGraph {
+public class Graph extends AbstractGraph {
 
 	private HashMap<Integer, Vertex> nodes;
 
 	public Graph (String filename, Boolean isGz) throws IOException {
-		double maxHeapSize = Runtime.getRuntime().maxMemory();
-		double kbSize = maxHeapSize / 1024;
-		double mbSize = kbSize / 1024;
-		double gbSize = mbSize / 1024;
 		
-		System.out.println("HeapSize:" + maxHeapSize);
-		System.out.println("HeapSize kB:" + kbSize);
-		System.out.println("HeapSize mB:" + mbSize);
-		System.out.println("HeapSize gB:" + gbSize);
+		printMemory();
 		
-		if (isGz) {
-			FileInputStream stream = new FileInputStream(filename);
-			GZIPInputStream gzip = new GZIPInputStream(stream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(gzip));
+		BufferedReader fileBuff = readFile(filename, isGz);
+		RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
+		StatementCounter myCounter = new StatementCounter();
+		parser.setRDFHandler(myCounter);
 			
-			RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
-			StatementCounter myCounter = new StatementCounter();
-			//
-			//GraphCounterNative myCounter = new GraphCounterNative();
-			parser.setRDFHandler(myCounter);
-			
-			try {
-				parser.parse(br, "");
-			}
-			catch (Exception e) {
-				//throw new IOException(e);
-				System.out.println("ERROR:STACKTRACE::"); // TODO
-				e.printStackTrace();
-				System.out.println("ERROR:_______::"); // TODO
-				System.out.println(e);
-			}
-			this.nodes = myCounter.getNodes();
-			myCounter.printCounters();
-			return;
+		try {
+			parser.parse(fileBuff, "");
 		}
-		else {
-			RDFParser parser = Rio.createParser(Rio.getParserFormatForFileName(filename).orElse(RDFFormat.NTRIPLES));
-			StatementCounter myCounter = new StatementCounter();
-			parser.setRDFHandler(myCounter);
-			
-			//RDFWriter writer = Rio.createWriter(RDFFormat.RDFJSON, System.out);
-			//parser.setRDFHandler(writer);
-			try {
-				parser.parse(ParseExample.class.getResourceAsStream(filename), "");
-			}
-			catch (Exception e) {
-				throw new IOException(e);
-			}
-			this.nodes = myCounter.getNodes();
-			myCounter.printCounters(); 
-			return;
+		catch (Exception e) {
+			System.out.println("::ERRORSTACKTRACE::");
+			e.printStackTrace();
+			System.out.println("::     ERROR     ::");
+			System.out.println(e);
 		}
+		
+		this.nodes = myCounter.getNodes();
+		myCounter.printCounters();
+		
+		return;
 		 
     }
 	

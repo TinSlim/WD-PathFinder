@@ -28,99 +28,84 @@ import com.rdfpath.graph.utils.Utils;
  * @github Tinslim
  *
  */
-public class GraphComp implements IGraph {
+
+public class GraphComp extends AbstractGraph {
 	// NODES = 98347590
 	public int[][][] nodes;
 	public HashMap<Integer,Integer> idNodes; /// HASHMAP TODO
+	public int edgesSize;
 	
-	public GraphComp (String filename, Boolean isGz ) throws IOException {
+	public GraphComp (String filename, Boolean isGz, int edgesSize) throws IOException {
+
+		printMemory();
 		//String filename2 = "C:/Users/Cristóbal/Documents/RDF-Path-server/python/prearchivo/compressed_struct.gz";
-		
+		//98347590
 		// TODO set 36 - 98347590 FILE
 		
-		if (!isGz) {
-			return;
-		}
+
+		nodes = new int[edgesSize][][];
+		this.edgesSize = edgesSize;
 		
+		idNodes = new HashMap<Integer, Integer>();
 		
-		nodes = new int[98347590][][];
-		idNodes = new HashMap<Integer, Integer>(); /// HASHMAP TODO
-		
-		FileInputStream stream = new FileInputStream(filename);
-		GZIPInputStream gzip = new GZIPInputStream(stream);
-		BufferedReader br = new BufferedReader(new InputStreamReader(gzip));
+		BufferedReader fileBuff = readFile(filename, isGz);
 
 		String line = "";
         String[] tempArr;
         int node_id = 0;
-        
-        long startTime = System.currentTimeMillis();
-    	long actualTime = System.currentTimeMillis();
-    	long timeA = System.currentTimeMillis();
-    	int minute = 0;
-    	
-        while((line = br.readLine()) != null) {
+
+
+        while((line = fileBuff.readLine()) != null) {					// Ejemplo:
     		timeA = System.currentTimeMillis();
     		
-    		// TODO AVISO
-    		if ((((timeA - actualTime)/1000) / 60) >= 5) { // Minutos
-    			actualTime = timeA;
-    			minute += 5;
-    			System.out.println("Minutos: " + minute);
-    			System.out.println("Nodo: " + node_id);
-    			if (System.getProperty("tg-token") != null) {
-    				try {
-    					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=Minutos:"+ minute +" Nodos:"+node_id);
-    				
-    				} catch (Exception e) {
-    					// TODO Auto-generated catch block
-    					//e.printStackTrace();
-    				}
-    			}
-    		}
-        													// line = 18 -22.16 23.17 24.19 -26.20 27.21
-           tempArr = line.split(" ");						// [18, -22.16, 23.17, 24.19, -26.20, 27.21]
-           int id[] = {Integer.parseInt(tempArr[0])};		// 18
-           idNodes.put(id[0], node_id); /// HASHMAP TODO
-           int[][] numbers = new int[tempArr.length][];		
-           		// int [][][]
-				// [
-				//  [[18], [-22, 16], [23,17], [24,19], [-26,20], [27,21]],
-				//	[[19],  ...]
-				// ]
-           numbers[0] = id; // [[18]]
-           // Para cada grupo [pred, obj] O [pred, obj1, obj2, ...]
-           for(int i = 1;i < tempArr.length;i++)
-           {
-        	   
-        	   String[] temp_arr3 = tempArr[i].split("\\.");
+    		sendNotificationTime(10,"Nodos: " + node_id);
+    		
+    		tempArr = line.split(" ");
+    		int id[] = {Integer.parseInt(tempArr[0])};					// line 	= "18 -22.16.32 23.17"
+    		idNodes.put(id[0], node_id);								// temArr 	= {"18", "-22.16.32", "23.17"}
+    		int[][] numbers = new int[tempArr.length][];				// id 		= {18}
+    		numbers[0] = id;											// numbers	= {{18}  }
+           
+    		// Para cada grupo [pred, obj] ó [pred, obj1, obj2, ...]	// Usando el "-22.16.32":
+    		for(int i = 1;i < tempArr.length;i++)
+    		{
+        	   String[] temp_arr3 = tempArr[i].split("\\.");			// temp_arr3	= {"-22", "16", "32} 
         	   int [] conn = new int[temp_arr3.length];
         	   for (int j = 0;j < temp_arr3.length;j++) {
-        		   conn[j] = Integer.parseInt(temp_arr3[j]);
+        		   conn[j] = Integer.parseInt(temp_arr3[j]);			// conn	= {-22, 16, 32} 
         	   }
-              numbers[i] = conn;
+        	   numbers[i] = conn;										// numbers = {{18}, {-22, 16, 32}, {23, 17}} 
            }
-           // numbers = [[18], [-22, 16], [23,17], [24,19], [-26,20], [27,21]]
            
            nodes[node_id] = numbers;
            node_id += 1;
         }
-        br.close();
+        fileBuff.close();
+        
         System.out.println("END::::");
-        System.out.println("Total de nodos: "+node_id);
-        try {
-			Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=TerminóCarga,Nodos: "+node_id);
-		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
+        sendNotification("Nodos:" + node_id);
 		return;
 	}
 	
 	
 	public int searchVertexIndex (int id) {
-		
+		// Búsqueda binaria
+		int actIndexLeft = 0;
+		int actIndexRight = edgesSize - 1;
+		int actIndex = 0;
+		while (actIndexLeft <= actIndexRight) {
+			actIndex = (actIndexRight + actIndexLeft) / 2;
+			if (nodes[actIndex][0][0] < id) {
+				actIndexLeft = actIndex + 1;
+			}
+			else if (nodes[actIndex][0][0] > id){
+				actIndexRight = actIndex - 1;
+			}
+			else {
+				return actIndex;
+			}
+		}
+		return -1;
 		/* NO HASHMAP
 		int actIndex = -1;
 		
@@ -132,7 +117,7 @@ public class GraphComp implements IGraph {
 		}
 		return -1;
 		*/
-		return idNodes.get(id);
+		//return idNodes.get(id);
 	}
 	
 	@Override

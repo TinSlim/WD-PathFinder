@@ -43,10 +43,10 @@ public class StatementCounter extends AbstractRDFHandler {
 			minute += 10;
 			System.out.println("Minutos: " + minute);
 			System.out.println("Fila: " + countedLines);
-			if (System.getProperty("tg-token") != null) {
+			if (System.getProperty("tg-token") != null && System.getProperty("tg-user") != null) {
 				try {
-					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=Minutos:"+minute+"_Fila:"+countedLines);
-					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=Minutos:"+"Nodos:"+nodes.size());
+					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=" + System.getProperty("tg-user") +"&text=Minutos:"+minute+"_Fila:"+countedLines);
+					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id="+ System.getProperty("tg-user") +"&text=Minutos:"+"Nodos:"+nodes.size());
 				
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
