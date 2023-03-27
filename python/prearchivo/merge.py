@@ -8,9 +8,7 @@ import math
 import gzip
 
 # CONSTANTES
-TOTAL_NODES = 98347590
-OUTPUT = "compressed_struct_new.gz"
-FOLDER_PARTS = "parts2"
+from vars import *
 
 def mergeDictionary(dict_1, dict_2):
     """
