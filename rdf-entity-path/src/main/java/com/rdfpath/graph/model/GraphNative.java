@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import com.rdfpath.graph.main.ParseExample;
 import com.rdfpath.graph.utils.GraphCounterNative;
-import com.rdfpath.graph.utils.StatementCounter;
 import com.rdfpath.graph.utils.Utils;
 
 /**

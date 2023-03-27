@@ -38,9 +38,9 @@ public class SocketTextHandler extends TextWebSocketHandler {
 			filename = System.getProperty("graph-path");
 			graph = new GraphComp(filename, true, 98347590);
 		}
-		else {
-			graph = new GraphComp(filename, false, 98347590);
-		}
+		//else {
+		//	graph = new GraphComp(filename, false, 98347590);
+		//}
 		//String filename = "/nt/subset100000.nt"; //myGraph.nt;//star.nt";// subset100000.nt"
 		System.out.println("--"+filename+"\n");
 		

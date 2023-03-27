@@ -4,22 +4,12 @@
 package com.rdfpath.graph.model;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
-
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.Rio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.rdfpath.graph.utils.StatementCounter;
 import com.rdfpath.graph.utils.Utils;
 
 /**
@@ -32,7 +22,7 @@ import com.rdfpath.graph.utils.Utils;
 public class GraphComp extends AbstractGraph {
 	// NODES = 98347590
 	public int[][][] nodes;
-	public HashMap<Integer,Integer> idNodes; /// HASHMAP TODO
+	//public HashMap<Integer,Integer> idNodes; /// HASHMAP TODO
 	public int edgesSize;
 	
 	public GraphComp (String filename, Boolean isGz, int edgesSize) throws IOException {
@@ -46,7 +36,7 @@ public class GraphComp extends AbstractGraph {
 		nodes = new int[edgesSize][][];
 		this.edgesSize = edgesSize;
 		
-		idNodes = new HashMap<Integer, Integer>();
+		//idNodes = new HashMap<Integer, Integer>();
 		
 		BufferedReader fileBuff = readFile(filename, isGz);
 
@@ -62,7 +52,7 @@ public class GraphComp extends AbstractGraph {
     		
     		tempArr = line.split(" ");
     		int id[] = {Integer.parseInt(tempArr[0])};					// line 	= "18 -22.16.32 23.17"
-    		idNodes.put(id[0], node_id);								// temArr 	= {"18", "-22.16.32", "23.17"}
+    		//idNodes.put(id[0], node_id);								// temArr 	= {"18", "-22.16.32", "23.17"}
     		int[][] numbers = new int[tempArr.length][];				// id 		= {18}
     		numbers[0] = id;											// numbers	= {{18}  }
            
