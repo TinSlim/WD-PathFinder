@@ -10,6 +10,9 @@
 	- Archivo grafo externo a `.jar`: `graph-path="{nombre archivo}"`
 	- Token de Telegram para recibir mensajes de carga de grafo: `tg-token="{token}"`
 - IMPORTANTE: Se debe incluir las flags: `-Dorg.eclipse.rdf4j.rio.verify_uri_syntax=false -Dorg.eclipse.rdf4j.rio.ntriples.fail_on_invalid_lines=false`.
+
+- Objeto GraphComp, archivo compressed_struct.nt.gz , usa **98347590**
+
 ## Instalación
 
 - Se requiere Node *v16.17.1* y Java *openjdk 11*.

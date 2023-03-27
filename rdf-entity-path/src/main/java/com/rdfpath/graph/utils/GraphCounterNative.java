@@ -39,8 +39,6 @@ public class GraphCounterNative extends AbstractRDFHandler {
 	
 	public GraphCounterNative (int lines) {
 		nodes = new HashMap<Integer, LinkedList<Integer>>();
-		//nodes = new HashMap<Integer, Integer>();
-		//edges = new int[1][1];
 		edges = new int[lines][3];
 		//edges = new int[703000000][3];
 		
@@ -62,10 +60,10 @@ public class GraphCounterNative extends AbstractRDFHandler {
 			minute += 10;
 			System.out.println("Minutos: " + minute);
 			System.out.println("Fila: " + countedLines);
-			if (System.getProperty("tg-token") != null) {
+			if (System.getProperty("tg-token") != null && System.getProperty("tg-user") != null) {
 				try {
-					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=Minutos:"+minute+"_Fila:"+countedLines);
-					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=542731494&text=Minutos:"+"Nodos:"+nodes.size());
+					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id="+System.getProperty("tg-user")+"&text=Minutos:"+minute+"_Fila:"+countedLines);
+					Utils.peticionHttpGet("https://api.telegram.org/bot"+System.getProperty("tg-token") + "/sendMessage?chat_id=" + System.getProperty("tg-user") +"&text=Minutos:"+"Nodos:"+nodes.size());
 				
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -78,15 +76,10 @@ public class GraphCounterNative extends AbstractRDFHandler {
 		Value object;
 		Value subject;
 		IRI predicate;
-		//try {
+
 		object = st.getObject();
 		subject = st.getSubject();
 		predicate = st.getPredicate();
-		//}
-		//catch (Exception e) {
-		//	throw new IOException(e);
-		//	return;
-		//}
 		
 		// Transforma a String
 		String strSubject = subject.toString();
@@ -103,45 +96,20 @@ public class GraphCounterNative extends AbstractRDFHandler {
 			return;
 		};
 
-		//try {
 		subjectKey = getObjectId(strSubject);
 		ObjectKey = getObjectId(strObject);
 		PredicateKey = getPredicateId(strPredicate);
-		//}
-		//catch (Exception e) {
-		//	return;
-		//}
 
-		
-		
-		// Crea Nodo
-		
+		// Añade Arista a los Nodos, puede crear nodos si no existen
 		if (nodes.containsKey(subjectKey)) {
 			nodes.get(subjectKey).add(countedStatements);
-			/*
-			nodes.put(subjectKey,1 + nodes.get(subjectKey));
-			if (nodes.get(subjectKey) > max_best) {
-				max_best = nodes.get(subjectKey);
-				best = subjectKey;
-			
-			}*/
 		}
 		else {
 			LinkedList<Integer> adjList = new LinkedList<Integer>();
 			adjList.add(countedStatements);
 			nodes.put(subjectKey,adjList);
 			nodesLoaded += 1;
-			
-			/*
-			nodes.put(subjectKey,1);
-			if (1 > max_best) {
-				max_best = 1;
-				best = subjectKey;
-			}*/
-			
 		}
-		
-		
 		if (nodes.containsKey(ObjectKey)) {
 			nodes.get(ObjectKey).add(countedStatements);
 		}
@@ -151,30 +119,7 @@ public class GraphCounterNative extends AbstractRDFHandler {
 			nodes.put(ObjectKey,adjList);
 			nodesLoaded += 1;
 		}
-		
-		// ---
-		/*
-		if (nodes.containsKey(ObjectKey)) {
-			//nodes.get(subjectKey).add(countedStatements);
-			nodes.put(ObjectKey,1 + nodes.get(ObjectKey));
-			if (nodes.get(ObjectKey) > max_best) {
-				max_best = nodes.get(ObjectKey);
-				best = ObjectKey;
-			}
-		}
-		else {
-			//LinkedList<Integer> adjList = new LinkedList<Integer>();
-			//adjList.add(countedStatements);
-			//nodes.put(subjectKey,adjList);
-			nodesLoaded += 1;
-			
-			nodes.put(ObjectKey,1);
-			if (1 > max_best) {
-				max_best = 1;
-				best = ObjectKey;
-			}
-			
-		}*/
+
 	
 		// Añade arista
 		edges[countedStatements][0] = subjectKey;
@@ -215,9 +160,6 @@ public class GraphCounterNative extends AbstractRDFHandler {
 		 return countedLines;
 	 }
 
-	/**
-	 * @return
-	 */
 	public HashMap getNodes() {
 		return nodes;
 	}
