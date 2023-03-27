@@ -7,11 +7,8 @@ import gzip
 from itertools import islice
 import csv
 
-# Constantes
-TOTAL_LINES_FILE = 702544222
-INPUT_FILE = 'star.nt.gz'
-FOLDER_PARTS = 'parts2'
-MAX_LINES_PER_FILE = 100000000
+# CONSTANTES
+from vars import *
 
 def structToText(key, value):
 	"""
