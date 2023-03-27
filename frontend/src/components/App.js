@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { render } from "react-dom"
+//import useWebSocket from 'react-use-websocket';
+
 import Navbar from "./Navbar"
 import Content from "./Content"
 import Footer from "./Footer"
@@ -19,13 +21,37 @@ export default function App() {
     const [words, setWords] = useState([]);
     const [values, setValues] = useState([]);
     const [time, setTime] = useState(0);
+    
+    /*
+    const [websocket, setWebSocket] = useState(0);
+    React.useEffect(() => {
+        const websocket = new WebSocket('ws://localhost:8080/query');
+    
+        websocket.onopen = () => {
+          console.log('connected TO REACT WS');
+        }
+    
+        websocket.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+        }
+
+        setWebSocket(websocket);
+
+        return () => {
+            websocket.close()
+        }
+        }, [])
+    */
 
     const openDrawer = () => {
+        //websocket.send("261, 298");
+        //websocket.send("1, 2");
         setDrawerState(true);
     }
 
     const closeDrawer = () => {
         setDrawerState(false);
+        console.log("CloseDrawer");
     }
 
     //<div style={{height:'80vh', display: 'inline-flex'}} className='ml-3 mr-3 columns'> 
