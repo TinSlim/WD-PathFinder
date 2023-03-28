@@ -32,22 +32,21 @@ public class GraphComp extends AbstractGraph {
 		//98347590
 		// TODO set 36 - 98347590 FILE
 		
-
+		
 		nodes = new int[edgesSize][][];
 		this.edgesSize = edgesSize;
 		
 		//idNodes = new HashMap<Integer, Integer>();
-		
 		BufferedReader fileBuff = readFile(filename, isGz);
-
+		
 		String line = "";
         String[] tempArr;
         int node_id = 0;
 
-
+        System.out.println("WHILE;\n");
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
     		timeA = System.currentTimeMillis();
-    		
+
     		sendNotificationTime(10,"Nodos: " + node_id);
     		
     		tempArr = line.split(" ");
@@ -96,17 +95,6 @@ public class GraphComp extends AbstractGraph {
 			}
 		}
 		return -1;
-		/* NO HASHMAP
-		int actIndex = -1;
-		
-		for (int[][] line : nodes) {
-			actIndex += 1;
-			if (line[0][0] == id) {
-				return actIndex;
-			}
-		}
-		return -1;
-		*/
 		//return idNodes.get(id);
 	}
 	
@@ -115,7 +103,8 @@ public class GraphComp extends AbstractGraph {
 		ArrayList<Integer> answer = new ArrayList<Integer>();
 		int index = searchVertexIndex(id);
 		int i = 1;
-		int j;
+		int j = -1;
+		int[][] actNode = nodes[index];
 		while (i < nodes[index].length) {
 			j = 1;
 			while (j < nodes[index][i].length) {

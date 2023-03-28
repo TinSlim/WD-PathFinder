@@ -185,10 +185,7 @@ public class GraphWrapper2 {
 		}
 		
 		//
-		if (session == null) {
-			System.out.println(e);
-		}
-		else {
+		if (session != null) {
 			ArrayList<Integer> vList = new ArrayList<Integer>();
 			if (!sentVertex.contains(graph.getOriginEdge(e))) {
 				sentVertex.add(graph.getOriginEdge(e));

@@ -6,6 +6,8 @@ package com.rdfpath.graph.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.parser.ParseException;
+
 /**
  *
  * @author Cristóbal Torres G.
@@ -41,4 +43,16 @@ public interface IGraph {
 	 * @return
 	 */
 	public CharSequence edgeToJson(Object e, ArrayList<Integer> vList);
+
+	/**
+	 * @throws ParseException 
+	 * 
+	 */
+	public void diffGroups() throws ParseException;
+	
+	/**
+	 * @throws ParseException 
+	 * 
+	 */
+	public void sameGroups() throws ParseException;
 }
