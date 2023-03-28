@@ -5,11 +5,12 @@ import json
 
 max_size = 3
 
+
 #------------------------------------------------
 # CSV lo transforma a diccionario
 values = {}
 value_group = {}
-with open("items.csv","r") as csv_file:
+with open("../export/test_data/items.csv","r") as csv_file:
 	csv_reader = csv.reader(csv_file, delimiter=',')
 	for row in csv_reader:
 		ids = []
@@ -25,17 +26,20 @@ with open("items.csv","r") as csv_file:
 # Genera combinaciones en un mismo grupo
 same_group = {}
 for size in range(max_size + 1)[2:]:
-	same_group[size] = {}
+	ans = {}
 
 	for group in values.keys():
-		same_group[size][group] = []
+		result = []
 		for subset in itertools.combinations(values[group], size):
-			same_group[size][group].append(list(subset))
+			result.append(list(subset))
+		if result:
+			ans[group] = result
+	same_group[size] = ans
 
 # Combinaciones distintos grupos
 dif_group = {}
 for size in range(max_size + 1)[2:]:
-	dif_group[size] = []
+	result = []
 	for groups in itertools.combinations(values.keys(), size):
 		total_nums = []
 		for team in groups:
@@ -52,16 +56,18 @@ for size in range(max_size + 1)[2:]:
 					typo.append(value_group[x])
 
 			if not pass_next:
-				dif_group[size].append(list(subset))
+				result.append(list(subset))
+	if result:
+		dif_group[size] = result
 #------------------------------------------------
 
 
 
 #------------------------------------------------
 # Genera Archivos
-with open("../rdf-entity-path/src/main/resources/test/json_same_group.json", "w") as outfile:
+with open("../export/test_data/json_same_group.json", "w") as outfile:
 	json.dump(same_group, outfile)
 
-with open("../rdf-entity-path/src/main/resources/test/json_dif_group.json", "w") as outfile:
+with open("../export/test_data/json_dif_group.json", "w") as outfile:
 	json.dump(dif_group, outfile)
 #------------------------------------------------
