@@ -1,0 +1,30 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+### Importe de Bibliotecas
+
+```{r}
+library(ggplot2)
+datos <- read.csv("./example.csv",sep = ";")
+```
+
+
+### Trabajo en datos
+
+```{r}
+data <- datos
+#data$Proportion[data$Proportion > 1] <- 1 # Acota a 1
+```
+
+
+### Gráfico
+
+```{r}
+ggplot(data, aes(x=SetDatos, y=Tiempos, color=Estructura))+#,color = interaction(Method,Adaptive.or.Fixed))) + 
+  geom_boxplot() #+ 
+  #facet_grid(Calculated.Over ~ Neural.Network) 
+
+```
