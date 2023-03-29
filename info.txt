@@ -1,0 +1,25 @@
+TODO: Medir tiempo de creación cache.
+---------------------------
+subset10000.nt.gz
+subset10000_compressed.gz
+Total 59304 lineas leídas
+Total Nodos: 9025
+ID Máximo: 10000
+---------------------------
+subset100000.nt.gz
+subset100000_compressed.gz
+Total 598840 lineas leídas
+Total Nodos: 92633
+ID Máximo: 100000
+----------------------------
+subset1000000.nt.gz
+subset1000000_compressed.gz
+Total 5955914 lineas leídas
+Total Nodos: 829294
+ID Máximo: 1000000
+----------------------------
+subset10000000.nt.gz
+subset10000000_compressed.gz
+Total 42340828 lineas leídas
+Total Nodos: 8163693
+ID Máximo: 10000000
