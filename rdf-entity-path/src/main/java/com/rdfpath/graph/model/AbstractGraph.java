@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 
 import org.json.simple.JSONArray;
@@ -21,7 +23,8 @@ public abstract class AbstractGraph implements IGraph {
 	long actualTime = System.currentTimeMillis();
 	long timeA = System.currentTimeMillis();
 	int minute = 0;
-	
+	String structName = "graph";
+
 	public void printMemory () {
 		double maxHeapSize = Runtime.getRuntime().maxMemory();
 		double kbSize = maxHeapSize / 1024;
@@ -42,6 +45,17 @@ public abstract class AbstractGraph implements IGraph {
 		}
 		FileInputStream stream = new FileInputStream(filename);
 		return new BufferedReader(new InputStreamReader(stream));
+	}
+	
+	public void writeSearchAdj (ArrayList<Integer> ids, PrintWriter pw, String dataSet) {
+		for (int j = 0; j < ids.size(); j++) {
+			int vertexId = ids.get(j);
+			long st = System.currentTimeMillis();
+			this.getAdjacentVertex(vertexId);
+			long end = System.currentTimeMillis();
+			long dif = end - st;
+			pw.println(this.structName+";"+dif+";"+vertexId+";"+dataSet+";");
+		}
 	}
 	
 	public void sendNotificationTime (int perMinutes, String data) {

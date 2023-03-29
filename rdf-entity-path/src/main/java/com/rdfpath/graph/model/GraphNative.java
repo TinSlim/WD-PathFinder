@@ -30,6 +30,7 @@ import com.rdfpath.graph.utils.Utils;
 *
 */
 public class GraphNative extends AbstractGraph {
+	String structName = "native";
 
     private HashMap<Integer, LinkedList<Integer>> nodes;
 	private int[][] edges;

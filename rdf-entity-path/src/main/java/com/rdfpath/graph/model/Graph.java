@@ -22,7 +22,7 @@ import com.rdfpath.graph.utils.StatementCounter;
 import com.rdfpath.graph.utils.Utils;
 
 public class Graph extends AbstractGraph {
-
+	String structName = "graphGT";
 	private HashMap<Integer, Vertex> nodes;
 
 	public Graph (String filename, Boolean isGz) throws IOException {

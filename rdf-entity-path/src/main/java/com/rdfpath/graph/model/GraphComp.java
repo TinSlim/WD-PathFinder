@@ -16,14 +16,14 @@ import com.rdfpath.graph.utils.Utils;
  *
  */
 
-public class GraphCompDense extends AbstractGraph {
-	String structName = "compressedDense";
+public class GraphComp extends AbstractGraph {
+	String structName = "compressed";
 	// NODES = 98347590
 	public int[][][] nodes;
 	//public HashMap<Integer,Integer> idNodes; /// HASHMAP TODO
 	public int edgesSize;
 	
-	public GraphCompDense (String filename, Boolean isGz, int edgesSize) throws IOException {
+	public GraphComp (String filename, Boolean isGz, int edgesSize) throws IOException {
 
 		printMemory();
 		//String filename2 = "C:/Users/Cristóbal/Documents/RDF-Path-server/python/prearchivo/compressed_struct.gz";
@@ -48,10 +48,9 @@ public class GraphCompDense extends AbstractGraph {
     		sendNotificationTime(10,"Nodos: " + node_id);
     		
     		tempArr = line.split(" ");
-    		int id[] = {Integer.parseInt(tempArr[0])};					// line 	= "18 -22.16.32 23.17"
+    		int id = Integer.parseInt(tempArr[0]);						// line 	= "18 -22.16.32 23.17"
     		//idNodes.put(id[0], node_id);								// temArr 	= {"18", "-22.16.32", "23.17"}
-    		int[][] numbers = new int[tempArr.length][];				// id 		= {18}
-    		numbers[0] = id;											// numbers	= {{18}  }
+    		int[][] numbers = new int[tempArr.length - 1][];			// id 		= 18
            
     		// Para cada grupo [pred, obj] ó [pred, obj1, obj2, ...]	// Usando el "-22.16.32":
     		for(int i = 1;i < tempArr.length;i++)
@@ -61,10 +60,10 @@ public class GraphCompDense extends AbstractGraph {
         	   for (int j = 0;j < temp_arr3.length;j++) {
         		   conn[j] = Integer.parseInt(temp_arr3[j]);			// conn	= {-22, 16, 32} 
         	   }
-        	   numbers[i] = conn;										// numbers = {{18}, {-22, 16, 32}, {23, 17}} 
+        	   numbers[i - 1] = conn;									// numbers = {{-22, 16, 32}, {23, 17}} 
            }
            
-           nodes[node_id] = numbers;
+           nodes[id] = numbers;
            node_id += 1;
         }
         fileBuff.close();
@@ -76,31 +75,17 @@ public class GraphCompDense extends AbstractGraph {
 	
 	
 	public int searchVertexIndex (int id) {
-		// Búsqueda binaria
-		int actIndexLeft = 0;
-		int actIndexRight = edgesSize - 1;
-		int actIndex = 0;
-		while (actIndexLeft <= actIndexRight) {
-			actIndex = (actIndexRight + actIndexLeft) / 2;
-			if (nodes[actIndex][0][0] < id) {
-				actIndexLeft = actIndex + 1;
-			}
-			else if (nodes[actIndex][0][0] > id){
-				actIndexRight = actIndex - 1;
-			}
-			else {
-				return actIndex;
-			}
+		if (id < edgesSize) {
+			return id;
 		}
 		return -1;
-		//return idNodes.get(id);
 	}
 	
 	@Override
 	public List<Integer> getAdjacentVertex(int id) {
 		ArrayList<Integer> answer = new ArrayList<Integer>();
 		int index = searchVertexIndex(id);
-		int i = 1;
+		int i = 0;
 		int j = -1;
 		while (i < nodes[index].length) {
 			j = 1;
@@ -118,10 +103,11 @@ public class GraphCompDense extends AbstractGraph {
 
 	@Override
 	public ArrayList getEdges(int idVertex, int idVertex2) {
+		// TODO Auto-generated method stub
 		ArrayList<int[]> edges = new ArrayList<int[]>();
 		int index = searchVertexIndex(idVertex);
 		
-		int i = 1;
+		int i = 0;
 		int j;
 		while (i < nodes[index].length) {
 			j = 1;
