@@ -20,7 +20,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.rdfpath.graph.model.Graph;
-import com.rdfpath.graph.model.GraphComp;
+import com.rdfpath.graph.model.GraphCompDense;
 import com.rdfpath.graph.model.GraphNative;
 import com.rdfpath.graph.model.GraphWrapper2;
 import com.rdfpath.graph.model.IGraph;
@@ -40,10 +40,10 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		if (System.getProperty("graph-path") != null) {
 			System.out.println("USING GRAPH FROM VAR\n\n");
 			filename = System.getProperty("graph-path");
-			graph = new GraphComp(filename, true, 98347590);
+			graph = new GraphCompDense(filename, true, 98347590);
 		}
 		else {
-			graph = new GraphComp(filename, true, 37);//89968);
+			graph = new GraphCompDense(filename, true, 37);//89968);
 		}
 		//String filename = "/nt/subset100000.nt"; //myGraph.nt;//star.nt";// subset100000.nt"
 		System.out.println("==    Grafo Cargado    ==\n");

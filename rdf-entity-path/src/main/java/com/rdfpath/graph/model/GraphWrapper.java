@@ -160,7 +160,7 @@ public class GraphWrapper {
 		}
 		
 	}
-	
+
 	public void sendEdge(Edge e) throws IOException {
 		if (edges.contains(e)) {return;};
 		
