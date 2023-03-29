@@ -17,14 +17,13 @@ import com.rdfpath.graph.utils.Utils;
  */
 
 public class GraphCompDense extends AbstractGraph {
-	String structName = "compressedDense";
 	// NODES = 98347590
 	public int[][][] nodes;
 	//public HashMap<Integer,Integer> idNodes; /// HASHMAP TODO
 	public int edgesSize;
 	
 	public GraphCompDense (String filename, Boolean isGz, int edgesSize) throws IOException {
-
+		structName = "compressedDense";
 		printMemory();
 		//String filename2 = "C:/Users/Cristóbal/Documents/RDF-Path-server/python/prearchivo/compressed_struct.gz";
 		//98347590
@@ -41,7 +40,6 @@ public class GraphCompDense extends AbstractGraph {
         String[] tempArr;
         int node_id = 0;
 
-        System.out.println("WHILE;\n");
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
     		timeA = System.currentTimeMillis();
 
@@ -102,6 +100,7 @@ public class GraphCompDense extends AbstractGraph {
 		int index = searchVertexIndex(id);
 		int i = 1;
 		int j = -1;
+
 		while (i < nodes[index].length) {
 			j = 1;
 			while (j < nodes[index][i].length) {

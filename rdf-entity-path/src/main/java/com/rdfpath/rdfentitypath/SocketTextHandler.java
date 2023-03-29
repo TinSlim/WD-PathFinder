@@ -20,6 +20,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.rdfpath.graph.model.Graph;
+import com.rdfpath.graph.model.GraphComp;
 import com.rdfpath.graph.model.GraphCompDense;
 import com.rdfpath.graph.model.GraphNative;
 import com.rdfpath.graph.model.GraphWrapper2;
@@ -34,7 +35,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		super();
 		
 		String path = "src/main/resources";
-		String filename = path + "/nt/star_compressed_struct.gz";
+		String filename = path + "/nt/subset100000_compressed_struct.gz";
 		System.out.println("==    Cargando Grafo   ==");
 		System.out.println("Archivo: "+ filename+ "\n");
 		if (System.getProperty("graph-path") != null) {
@@ -43,7 +44,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 			graph = new GraphCompDense(filename, true, 98347590);
 		}
 		else {
-			graph = new GraphCompDense(filename, true, 37);//89968);
+			graph = new GraphComp(filename, true, 100000);//89968); star:37
 		}
 		//String filename = "/nt/subset100000.nt"; //myGraph.nt;//star.nt";// subset100000.nt"
 		System.out.println("==    Grafo Cargado    ==\n");

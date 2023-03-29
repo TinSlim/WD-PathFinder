@@ -17,22 +17,21 @@ import com.rdfpath.graph.utils.Utils;
  */
 
 public class GraphComp extends AbstractGraph {
-	String structName = "compressed";
 	// NODES = 98347590
 	public int[][][] nodes;
 	//public HashMap<Integer,Integer> idNodes; /// HASHMAP TODO
 	public int edgesSize;
 	
 	public GraphComp (String filename, Boolean isGz, int edgesSize) throws IOException {
-
+		structName = "compressed";
 		printMemory();
 		//String filename2 = "C:/Users/Cristóbal/Documents/RDF-Path-server/python/prearchivo/compressed_struct.gz";
 		//98347590
 		// TODO set 36 - 98347590 FILE
 		
 		
-		nodes = new int[edgesSize][][];
-		this.edgesSize = edgesSize;
+		nodes = new int[edgesSize + 1][][];
+		this.edgesSize = edgesSize + 1;
 		
 		//idNodes = new HashMap<Integer, Integer>();
 		BufferedReader fileBuff = readFile(filename, isGz);
@@ -113,7 +112,7 @@ public class GraphComp extends AbstractGraph {
 			j = 1;
 			while (j < nodes[index][i].length) {
 				if (idVertex2 == nodes[index][i][j])  {
-					int[] edge = {nodes[index][0][0],nodes[index][i][0], nodes[index][i][j]};
+					int[] edge = {index,nodes[index][i][0], nodes[index][i][j]};
 					edges.add(edge);
 					break;
 				}

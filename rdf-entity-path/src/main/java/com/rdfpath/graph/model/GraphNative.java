@@ -30,15 +30,15 @@ import com.rdfpath.graph.utils.Utils;
 *
 */
 public class GraphNative extends AbstractGraph {
-	String structName = "native";
 
     private HashMap<Integer, LinkedList<Integer>> nodes;
 	private int[][] edges;
+	private int edgesSize;
 
-
-	public GraphNative (String filename, Boolean isGz) throws IOException {
+	public GraphNative (String filename, Boolean isGz, int edgesSize) throws IOException {
+		structName = "native";
 		printMemory();
-
+		this.edgesSize = edgesSize; 
 		
 		if (isGz) {
 			FileInputStream stream = new FileInputStream(filename);
@@ -46,7 +46,7 @@ public class GraphNative extends AbstractGraph {
 			BufferedReader br = new BufferedReader(new InputStreamReader(gzip));
 			
 			RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
-			GraphCounterNative myCounter = new GraphCounterNative(462570);
+			GraphCounterNative myCounter = new GraphCounterNative(edgesSize);
 			parser.setRDFHandler(myCounter);
 			
 			try {

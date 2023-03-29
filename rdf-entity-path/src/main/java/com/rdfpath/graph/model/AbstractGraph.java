@@ -54,6 +54,10 @@ public abstract class AbstractGraph implements IGraph {
 			this.getAdjacentVertex(vertexId);
 			long end = System.currentTimeMillis();
 			long dif = end - st;
+			//System.out.println("----");
+			//System.out.println(st);
+			//System.out.println(end);
+			//System.out.println("----");
 			pw.println(this.structName+";"+dif+";"+vertexId+";"+dataSet+";");
 		}
 	}
