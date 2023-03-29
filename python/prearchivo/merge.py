@@ -107,6 +107,7 @@ while True:
         # Finaliza
         print("\n")
         print(f"Total Nodos: {new_node}")
+        print(f"ID Máximo: {act_line[0]}")
         print("\n")
         exit()
 
