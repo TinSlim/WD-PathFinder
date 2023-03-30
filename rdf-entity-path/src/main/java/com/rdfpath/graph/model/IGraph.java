@@ -76,6 +76,6 @@ public interface IGraph {
 	 */
 	public void sameGroups() throws ParseException;
 
-	public void writeSearchAdj(ArrayList<Integer> ids, PrintWriter pw, String dataSet);
+	public void writeSearchAdj(int[] ids, PrintWriter pw, String dataSet);
 
 }
