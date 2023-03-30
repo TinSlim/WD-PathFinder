@@ -30,59 +30,76 @@ import com.rdfpath.graph.utils.Utils;
 *
 */
 public class GraphNative extends AbstractGraph {
-
+	
+	
     private HashMap<Integer, LinkedList<Integer>> nodes;
 	private int[][] edges;
 	private int edgesSize;
-
+	
 	public GraphNative (String filename, Boolean isGz, int edgesSize) throws IOException {
 		structName = "native";
-		printMemory();
 		this.edgesSize = edgesSize; 
 		
-		if (isGz) {
-			FileInputStream stream = new FileInputStream(filename);
-			GZIPInputStream gzip = new GZIPInputStream(stream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(gzip));
-			
-			RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
-			GraphCounterNative myCounter = new GraphCounterNative(edgesSize);
-			parser.setRDFHandler(myCounter);
-			
-			try {
-				parser.parse(br, "");
-			}
-			catch (Exception e) {
-				//throw new IOException(e);
-				System.out.println("ERROR:STACKTRACE::"); // TODO
-				e.printStackTrace();
-				System.out.println("ERROR:_______::"); // TODO
-				System.out.println(e);
-			}
-			this.nodes = myCounter.getNodes();
-			this.edges = myCounter.getEdges();
-			myCounter.printCounters();
-			return;
-		}
-		else {
-			RDFParser parser = Rio.createParser(Rio.getParserFormatForFileName(filename).orElse(RDFFormat.NTRIPLES));
-			GraphCounterNative myCounter = new GraphCounterNative(462570);
-			parser.setRDFHandler(myCounter);
-			
-			//RDFWriter writer = Rio.createWriter(RDFFormat.RDFJSON, System.out);
-			//parser.setRDFHandler(writer);
-			try {
-				parser.parse(ParseExample.class.getResourceAsStream(filename), "");
-			}
-			catch (Exception e) {
-				throw new IOException(e);
-			}
-			this.nodes = myCounter.getNodes();
-			this.edges = myCounter.getEdges();
-			myCounter.printCounters(); 
-			return;
-		}
-		 
+		nodes = new HashMap<Integer, LinkedList<Integer>>();
+		edges = new int[edgesSize][3];
+		
+		BufferedReader fileBuff = readFile(filename, isGz);
+
+		String line = "";
+        String[] tempArr;
+        
+        int countedStatements = 0;
+        int nodesLoaded = 0;
+        int edgesLoaded = 0;
+
+        while((line = fileBuff.readLine()) != null) {					// Ejemplo:
+    		timeA = System.currentTimeMillis();
+    		sendNotificationTime(10,"Nodos: " + nodesLoaded);
+    		
+    		tempArr = line.split(" ");									// line 	= "<...> <...> <...> ."
+    		
+    		String subj = tempArr[0];
+    		String pred = tempArr[1];
+    		String obj = tempArr[2];
+
+    		int objectID = Integer.parseInt(obj.substring(33, obj.length()-1));
+    		int predicateID = Integer.parseInt(pred.substring(38, pred.length()-1));
+    		int subjectID = Integer.parseInt(subj.substring(33, subj.length()-1));
+    		
+
+    		// Añade Arista a los Nodos, puede crear nodos si no existen
+    		if (nodes.containsKey(subjectID)) {
+    			nodes.get(subjectID).add(countedStatements);
+    		}
+    		else {
+    			LinkedList<Integer> adjList = new LinkedList<Integer>();
+    			adjList.add(countedStatements);
+    			nodes.put(subjectID,adjList);
+    			nodesLoaded += 1;
+    		}
+    		if (nodes.containsKey(objectID)) {
+    			nodes.get(objectID).add(countedStatements);
+    		}
+    		else {
+    			LinkedList<Integer> adjList = new LinkedList<Integer>();
+    			adjList.add(countedStatements);
+    			nodes.put(objectID,adjList);
+    			nodesLoaded += 1;
+    		}
+    		
+    		// Añade arista
+    		edges[countedStatements][0] = subjectID;
+    		edges[countedStatements][1] = predicateID;
+    		edges[countedStatements][2] = objectID;
+    		edgesLoaded += 1; //Cuenta arista
+    		countedStatements++;
+ 
+        }
+        fileBuff.close();
+        
+        System.out.println("END::::");
+        sendNotification("Nodos:" + nodesLoaded);
+		return;
     }
 
 	@Override

@@ -47,18 +47,14 @@ public abstract class AbstractGraph implements IGraph {
 		return new BufferedReader(new InputStreamReader(stream));
 	}
 	
-	public void writeSearchAdj (ArrayList<Integer> ids, PrintWriter pw, String dataSet) {
-		for (int j = 0; j < ids.size(); j++) {
-			int vertexId = ids.get(j);
+	public void writeSearchAdj (int[] ids, PrintWriter pw, String dataSet) {
+		for (int j = 0; j < ids.length; j++) {
+			int vertexId = ids[j];
 			long st = System.currentTimeMillis();
 			this.getAdjacentVertex(vertexId);
 			long end = System.currentTimeMillis();
 			long dif = end - st;
-			//System.out.println("----");
-			//System.out.println(st);
-			//System.out.println(end);
-			//System.out.println("----");
-			pw.println(this.structName+";"+dif+";"+vertexId+";"+dataSet+";");
+			pw.println(this.structName+";"+dif+";"+vertexId+";"+dataSet);
 		}
 	}
 	

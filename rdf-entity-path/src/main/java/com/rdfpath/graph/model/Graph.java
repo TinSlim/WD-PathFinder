@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
@@ -26,28 +28,63 @@ public class Graph extends AbstractGraph {
 
 	public Graph (String filename, Boolean isGz) throws IOException {
 		structName = "graphGT";
-		printMemory();
-		
+
+		nodes = new HashMap<Integer, Vertex>();
 		BufferedReader fileBuff = readFile(filename, isGz);
-		RDFParser parser = Rio.createParser(RDFFormat.NTRIPLES);
-		StatementCounter myCounter = new StatementCounter();
-		parser.setRDFHandler(myCounter);
-			
-		try {
-			parser.parse(fileBuff, "");
-		}
-		catch (Exception e) {
-			System.out.println("::ERRORSTACKTRACE::");
-			e.printStackTrace();
-			System.out.println("::     ERROR     ::");
-			System.out.println(e);
-		}
-		
-		this.nodes = myCounter.getNodes();
-		myCounter.printCounters();
-		
+
+		String line = "";
+        String[] tempArr;
+        int edgesLoaded = 0;
+        int countedStatements = 0;
+        int nodesLoaded = 0;
+        
+        while((line = fileBuff.readLine()) != null) {					// Ejemplo:
+    		timeA = System.currentTimeMillis();
+
+    		sendNotificationTime(10,"Nodos: " + nodesLoaded);
+    		
+    		tempArr = line.split(" ");									// line 	= "<...> <...> <...> ."
+    		
+    		String subj = tempArr[0];
+    		String pred = tempArr[1];
+    		String obj = tempArr[2];
+
+    		int objectID = Integer.parseInt(obj.substring(33, obj.length()-1));
+    		int predicateID = Integer.parseInt(pred.substring(38, pred.length()-1));
+    		int subjectID = Integer.parseInt(subj.substring(33, subj.length()-1));
+    		
+    		countedStatements++;
+    		Vertex subjectNode;
+    		Vertex objectNode;	
+
+    		// Obtiene nodos si existen, sino los crea
+    		if(nodes.containsKey(subjectID)){
+    			subjectNode = nodes.get(subjectID);
+    		} else {
+    			subjectNode = new Vertex(subjectID);
+    			nodes.put(subjectID, subjectNode);
+    			nodesLoaded += 1; //Cuenta nodos
+    		}
+
+    		if(nodes.containsKey(objectID)){
+    			objectNode = nodes.get(objectID);
+    		} else {
+    			objectNode = new Vertex(objectID);
+    			nodes.put(objectID, objectNode);
+    			nodesLoaded += 1; //Cuenta nodos
+    		}
+
+    		Edge edge = new Edge(predicateID, subjectNode, objectNode, 0);
+    		subjectNode.addEdge(edge);
+    		objectNode.addEdge(edge);
+    		edgesLoaded += 1;
+ 
+        }
+        fileBuff.close();
+        
+        System.out.println("END::::");
+        sendNotification("Nodos:" + nodesLoaded);
 		return;
-		 
     }
 	
 	public Graph() {
