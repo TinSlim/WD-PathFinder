@@ -16,7 +16,8 @@ import org.json.simple.parser.ParseException;
  *
  */
 public interface IGraph {
-	
+
+
 	/**
 	 * Entrega los IDs de los nodos adyacentes de un nodo.
 	 *
@@ -77,5 +78,12 @@ public interface IGraph {
 	public void sameGroups() throws ParseException;
 
 	public void writeSearchAdj(int[] ids, PrintWriter pw, String dataSet);
+
+	/**
+	 * Obtiene el nombre de la estructura.
+	 * 
+	 * @return				Nombre de la estructura
+	 */
+	public String getStructName();
 
 }

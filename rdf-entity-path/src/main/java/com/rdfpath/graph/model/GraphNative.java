@@ -4,23 +4,14 @@
 package com.rdfpath.graph.model;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
-
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.Rio;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.rdfpath.graph.main.ParseExample;
-import com.rdfpath.graph.utils.GraphCounterNative;
 import com.rdfpath.graph.utils.Utils;
 
 /**
@@ -96,9 +87,6 @@ public class GraphNative extends AbstractGraph {
  
         }
         fileBuff.close();
-        
-        System.out.println("END::::");
-        sendNotification("Nodos:" + nodesLoaded);
 		return;
     }
 

@@ -23,7 +23,7 @@ public abstract class AbstractGraph implements IGraph {
 	long actualTime = System.currentTimeMillis();
 	long timeA = System.currentTimeMillis();
 	int minute = 0;
-	String structName = "graph";
+	protected String structName = "graph";
 
 	public void printMemory () {
 		double maxHeapSize = Runtime.getRuntime().maxMemory();
@@ -35,6 +35,10 @@ public abstract class AbstractGraph implements IGraph {
 		System.out.println("HeapSize kB:" + kbSize);
 		System.out.println("HeapSize mB:" + mbSize);
 		System.out.println("HeapSize gB:" + gbSize);
+	}
+	
+	public String getStructName() {
+		return structName;
 	}
 	
 	public BufferedReader readFile (String filename, Boolean isGz) throws IOException {

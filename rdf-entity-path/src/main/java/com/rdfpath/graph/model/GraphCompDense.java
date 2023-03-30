@@ -66,9 +66,6 @@ public class GraphCompDense extends AbstractGraph {
            node_id += 1;
         }
         fileBuff.close();
-        
-        System.out.println("END::::");
-        sendNotification("Nodos:" + node_id);
 		return;
 	}
 	
