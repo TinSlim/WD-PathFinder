@@ -20,8 +20,8 @@ def structToText(key, value):
 	groups = list(map(lambda x: '.'.join( list(map(lambda y: str(y),x)) ),value))
 	return [key] + groups
 
-line_counter = 0		# Líneas agregadas para 1 archivo (se usa para saber cuando escribir)
-line_added = 0			# Líneas agregadas totales
+line_counter = 0		# Líneas agregadas totales
+line_added = 0			# Líneas agregadas para 1 archivo (se usa para saber cuando escribir)
 
 rel = {}				# Diccionario que almacena valores y después escribirá en archivo
 act_part = 0			# Número actual del archivo en que se escribirá
