@@ -1,6 +1,7 @@
 package com.rdfpath.graph.utils;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +11,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.zip.GZIPInputStream;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -116,4 +118,17 @@ public class Utils {
 		// Regresar resultado, pero como cadena, no como StringBuilder
 		return resultado.toString();
 	}
+
+
+
+	public static BufferedReader readFile (String filename, Boolean isGz) throws IOException {
+		if (isGz) {
+			FileInputStream stream = new FileInputStream(filename);
+			GZIPInputStream gzip = new GZIPInputStream(stream);
+			return new BufferedReader(new InputStreamReader(gzip));
+		}
+		FileInputStream stream = new FileInputStream(filename);
+		return new BufferedReader(new InputStreamReader(stream));
+	}
+
 }
