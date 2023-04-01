@@ -1,3 +1,6 @@
+latest-truthy.nt.gz se descarga 30-03-2023
+version 24-Mar-2023 16:48 59456991776
+
 TODO: Medir tiempo de creación cache.
 ---------------------------
 subset10000.nt.gz               |
@@ -23,3 +26,26 @@ subset10000000_compressed.gz
 Total 42340828 lineas leídas
 Total Nodos: 8163693
 ID Máximo: 10000000
+
+
+
+===========================================================
+===========================================================
+===========================================================
+
+latest-truthy NUEVO
+
+------------ COMPRESIÓN ----------------
+latest-truthy_compressed.gz
+
+Lineas usadas del archivo: 715906922
+Líneas reales archivo:    7425200149
+Total Nodos: 99609308
+ID Máximo: 117288116
+
+Tiempo inicio:  1680274418.9579463
+Tiempo final creación dict:  1680301396.41808
+Tiempo inicio merge:  1680301396.4181123
+Tiempo FIN:  1680308760.1807876
+-----------------------------------------
+
