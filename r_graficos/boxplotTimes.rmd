@@ -8,7 +8,7 @@ output: html_notebook
 
 ```{r}
 library(ggplot2)
-datos <- read.csv("./example.csv",sep = ";")
+datos <- read.csv("./tiempos.csv",sep = ";")
 ```
 
 
