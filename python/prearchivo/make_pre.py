@@ -11,8 +11,8 @@ import time
 import csv
 
 from utils import *
-from vars import *
 
+MAX_LINES_PER_FILE = 100000000
 inicio = time.time()
 
 #----------------------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ with gzip.open('latest-truthy.nt.gz','r') as f:
         # Si la cantidad de líneas supera MAX_LINES_PER_FILE se debe escribir un archivo
 		if line_added > MAX_LINES_PER_FILE:
 			# Abre archivo
-			file_open = open(f"{FOLDER_PARTS}/part_{act_part}.csv",'w',newline='')
+			file_open = open(f"parts/part_{act_part}.csv",'w',newline='')
 			file_writer = writer = csv.writer(file_open,delimiter=' ', quotechar='|')
 
 			# Escribe data
@@ -103,7 +103,7 @@ with gzip.open('latest-truthy.nt.gz','r') as f:
 # Si quedaron líneas, se escribe última parte
 if line_added > 0:
 	# Abre archivo
-	file_open = open(f"{FOLDER_PARTS}/part_{act_part}.csv",'w',newline='')
+	file_open = open(f"parts/part_{act_part}.csv",'w',newline='')
 	file_writer = writer = csv.writer(file_open,delimiter=' ', quotechar='|')
 	
 	# Escribe data
@@ -135,10 +135,10 @@ new_node = 0
 # Archivo que se va a escribir
 comp_file = gzip.open('latest-truthy_compressed.gz',"wb")
 # Abro archivos
-parts = os.listdir(FOLDER_PARTS)
+parts = os.listdir('parts')
 files = []
 for filename in parts:
-    files.append(open(f'{FOLDER_PARTS}/{filename}',"r"))
+    files.append(open(f'parts/{filename}',"r"))
 
 # Lee una línea de cada archivo
 lines = []              # Almacena lineas 1 línea cargada de cada archivo
