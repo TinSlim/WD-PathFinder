@@ -53,6 +53,7 @@ public abstract class AbstractGraph implements IGraph {
 	
 	public void writeSearchAdj (int[] ids, PrintWriter pw, String dataSet) {
 		for (int j = 0; j < ids.length; j++) {
+			System.out.print(j+"/"+ids.length+"\r");
 			int vertexId = ids[j];
 			long st = System.currentTimeMillis();
 			this.getAdjacentVertex(vertexId);

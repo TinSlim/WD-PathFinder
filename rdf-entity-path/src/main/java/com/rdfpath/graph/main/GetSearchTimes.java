@@ -7,9 +7,6 @@ import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
-import java.util.ArrayList;
-import java.util.Random;
-
 import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.GraphComp;
 import com.rdfpath.graph.model.GraphCompDense;
@@ -27,13 +24,13 @@ public class GetSearchTimes {
 
 		//String path = "subsets/";
 		String path = "subsets_old/";
-		String[] files = {"subset100000", "subset1000000", "subset10000000"};
+		String[] files = {"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
 		String end = ".nt.gz";
 		String endComp = "_compressed.gz";
 		
-		int [] nodesSize = {92633, 829294, 8163693};
-		int [] maxNodeId = {100000, 1000000, 10000000};
-		int [] edgesSize = {598840, 5955914, 42340828};
+		int [] nodesSize = {8163693};//{92633, 829294, 8163693};
+		int [] maxNodeId = {10000000};//{100000, 1000000, 10000000};
+		int [] edgesSize = {42340828};//{598840, 5955914, 42340828};
 		System.out.println("Entra al try");
 		try {
 			PrintWriter pwGraphs = new PrintWriter(csvOutputFileGraphs);
@@ -41,8 +38,8 @@ public class GetSearchTimes {
 			pwGraphs.println("Estructura;SetDatos;TiempoCreación;UsoMemoria");
 			pw.println("Estructura;Tiempos;ID;SetDatos");
 
-			for (int i = 0; i < 3; i++) { // TODO al exportar al servidor usar 3 y no 1
-				System.out.println("Usando: subset" + files[i]);
+			for (int i = 0; i < 1; i++) { // TODO al exportar al servidor usar 3 y no 1
+				System.out.println("Usando: " + files[i]);
 				
 				// Obtiene números aleatorios
 				BufferedReader fileBuff = Utils.readFile(path+files[i]+"_random_values.csv",false);
@@ -62,23 +59,6 @@ public class GetSearchTimes {
 				MemoryUsage beforeHeapMemoryUsage;
 				MemoryUsage afterHeapMemoryUsage;
 				
-				// TODO Calcular tiempo
-		        graph = null;
-				System.out.println("Carga grafo comprimido denso");
-
-				beforeHeapMemoryUsage = mbean.getHeapMemoryUsage();
-				startMakeTime = System.currentTimeMillis();
-				graph = new GraphCompDense(path + files[i] + endComp, true, nodesSize[i]);
-				endMakeTime = System.currentTimeMillis();
-				afterHeapMemoryUsage = mbean.getHeapMemoryUsage();
-				
-				
-				System.out.println("Escribe memoria grafo comprimido denso 1/4");
-				pwGraphs.println(graph.getStructName() +";"+ files[i]+";"+(endMakeTime-startMakeTime)+";"+(afterHeapMemoryUsage.getUsed() - beforeHeapMemoryUsage.getUsed()));
-				System.out.println("Escribe datos grafo comprimido denso 1/4");
-				graph.writeSearchAdj(ids,pw,files[i]);
-				
-				// Calcular tiempo
 				graph = null;
 				System.out.println("Carga grafo");
 				
@@ -88,12 +68,12 @@ public class GetSearchTimes {
 				endMakeTime = System.currentTimeMillis();
 				afterHeapMemoryUsage = mbean.getHeapMemoryUsage();
 				
-				System.out.println("Escribe memoria grafo clases 2/4");
+				System.out.println("Escribe memoria grafo clases 1/4");
 				pwGraphs.println(graph.getStructName() +";"+ files[i]+";"+(endMakeTime-startMakeTime)+";"+(afterHeapMemoryUsage.getUsed() - beforeHeapMemoryUsage.getUsed()));
-				System.out.println("Escribe datos grafo clases 2/4");
+				System.out.println("Escribe datos grafo clases 1/4");
 				graph.writeSearchAdj(ids,pw,files[i]);
-				
-				// Calcular tiempo
+
+
 				graph = null;
 				System.out.println("Carga grafo");
 				
@@ -103,11 +83,32 @@ public class GetSearchTimes {
 				endMakeTime = System.currentTimeMillis();
 				afterHeapMemoryUsage = mbean.getHeapMemoryUsage();
 				
-				System.out.println("Escribe memoria grafo nativo 3/4");
+				System.out.println("Escribe memoria grafo nativo 2/4");
 				pwGraphs.println(graph.getStructName() +";"+ files[i]+";"+(endMakeTime-startMakeTime)+";"+(afterHeapMemoryUsage.getUsed() - beforeHeapMemoryUsage.getUsed()));
 				
-				System.out.println("Escribe datos grafo nativo 3/4");
+				System.out.println("Escribe datos grafo nativo 2/4");
 				graph.writeSearchAdj(ids,pw,files[i]);
+				
+				
+				graph = null;
+				System.out.println("Carga grafo comprimido denso");
+
+				beforeHeapMemoryUsage = mbean.getHeapMemoryUsage();
+				startMakeTime = System.currentTimeMillis();
+				graph = new GraphCompDense(path + files[i] + endComp, true, nodesSize[i]);
+				endMakeTime = System.currentTimeMillis();
+				afterHeapMemoryUsage = mbean.getHeapMemoryUsage();
+				
+				
+				System.out.println("Escribe memoria grafo comprimido denso 3/4");
+				pwGraphs.println(graph.getStructName() +";"+ files[i]+";"+(endMakeTime-startMakeTime)+";"+(afterHeapMemoryUsage.getUsed() - beforeHeapMemoryUsage.getUsed()));
+				System.out.println("Escribe datos grafo comprimido denso 3/4");
+				graph.writeSearchAdj(ids,pw,files[i]);
+				
+				
+				
+				
+				
 				
 				// Calcular tiempo
 				graph = null;
