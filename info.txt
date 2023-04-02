@@ -49,3 +49,90 @@ Tiempo inicio merge:  1680301396.4181123
 Tiempo FIN:  1680308760.1807876
 -----------------------------------------
 
+subset100000000.txt
+Total 7425200149 lineas
+Total 652319619 lineas agregadas
+Max id: 99999996
+
+subset10000000.txt
+Total 652319619 lineas
+Total 42682387 lineas agregadas
+Max id: 10000000
+
+subset1000000.txt
+Total 42682387 lineas
+Total 5977585 lineas agregadas
+Max id: 1000000
+
+subset100000.txt
+Total 5977585 lineas
+Total 600493 lineas agregadas
+Max id: 100000
+
+subset10000.txt
+Total 600493 lineas
+Total 59564 lineas agregadas
+Max id: 10000
+
+======
+======
+log_make_presubset100000000.txt
+Lineas usadas del archivo: 652319619
+Líneas reales archivo: 652319619
+
+Total Nodos: 87110322
+ID Máximo: 99999996
+
+Tiempo inicio:  1680369086.8456826
+Tiempo final creación dict:  1680377451.1387296
+Tiempo inicio merge:  1680377451.1387615
+Tiempo FIN:  1680383817.2581928
+-------------------------
+log_make_presubset10000000.txt
+Lineas usadas del archivo: 42682387
+Líneas reales archivo: 42682387
+
+Total Nodos: 8159611
+ID Máximo: 10000000
+
+Tiempo inicio:  1680384259.8564355
+Tiempo final creación dict:  1680384833.0790825
+Tiempo inicio merge:  1680384833.079113
+Tiempo FIN:  1680385206.7693524
+-------------------------
+log_make_presubset1000000.txt
+Lineas usadas del archivo: 5977585
+Líneas reales archivo: 5977585
+
+Total Nodos: 829794
+ID Máximo: 1000000
+
+Tiempo inicio:  1680394254.920065
+Tiempo final creación dict:  1680394332.4046485
+Tiempo inicio merge:  1680394332.4046786
+Tiempo FIN:  1680394375.1261106
+--------------------------
+log_make_presubset100000.txt
+Lineas usadas del archivo: 600493
+Líneas reales archivo: 600493
+
+Total Nodos: 92654
+ID Máximo: 100000
+
+Tiempo inicio:  1680394525.763269
+Tiempo final creación dict:  1680394532.6173217
+Tiempo inicio merge:  1680394532.6173499
+Tiempo FIN:  1680394537.0251348
+---------------------------
+log_make_presubset10000.txt
+Lineas usadas del archivo: 59564
+Líneas reales archivo: 59564
+
+Total Nodos: 9031
+ID Máximo: 10000
+
+Tiempo inicio:  1680394612.0529604
+Tiempo final creación dict:  1680394612.5848234
+Tiempo inicio merge:  1680394612.5848453
+Tiempo FIN:  1680394612.9710362
+--------------------------
