@@ -1,0 +1,13 @@
+Estructura;SetDatos;TiempoCreación;UsoMemoria
+graphGT;subset100000;1781;187171224
+native;subset100000;1685;137933768
+compressedDense;subset100000;668;48660656
+compressed;subset100000;542;-73767608
+graphGT;subset1000000;17015;1067345064
+native;subset1000000;15666;1684434432
+compressedDense;subset1000000;4740;-82666496
+compressed;subset1000000;4647;-36402688
+graphGT;subset10000000;120615;9230773248
+native;subset10000000;121254;-2340152768
+compressedDense;subset10000000;37058;3935673344
+compressed;subset10000000;37093;-11702879232
