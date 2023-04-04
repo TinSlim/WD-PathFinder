@@ -10,6 +10,7 @@ import java.lang.management.MemoryUsage;
 import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.GraphComp;
 import com.rdfpath.graph.model.GraphCompDense;
+import com.rdfpath.graph.model.GraphFullNative;
 import com.rdfpath.graph.model.GraphNative;
 import com.rdfpath.graph.model.IGraph;
 import com.rdfpath.graph.utils.Utils;
@@ -36,6 +37,7 @@ public class TestSearchTimes {
 		String[] files = {"subset100000", "subset1000000", "subset10000000", "subset100000000"};//{"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
 		String end = ".nt.gz";
 		String endComp = "_compressed.gz";
+		String endNative = "_native.gz";
 		
 		int [] nodesSize = {92654, 829794, 8159611, 87110322};
 		int [] maxNodeId = {100000, 1000000, 10000000, 99999996};
@@ -101,6 +103,13 @@ public class TestSearchTimes {
 			}
 			else if (graphName.equals("graphComp")) {
 				graph = new GraphComp(path + files[index] + endComp, true, maxNodeId[index]);
+			}
+			else if (graphName.equals("graphNativeFull")) {
+				graph = new GraphFullNative(path + files[index] + end, path + files[index] + endNative, true, true, edgesSize[index], nodesSize[index]);
+			}
+			else {
+				System.out.println("Fail");
+				System.out.println("Fail");
 			}
 			endMakeTime = System.currentTimeMillis();
 			afterHeapMemoryUsage = mbean.getHeapMemoryUsage();

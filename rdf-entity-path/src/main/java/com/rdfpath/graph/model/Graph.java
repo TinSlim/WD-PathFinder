@@ -14,7 +14,7 @@ public class Graph extends AbstractGraph {
 	private HashMap<Integer, Vertex> nodes;
 
 	public Graph (String filename, Boolean isGz) throws IOException {
-		structName = "graphGT";
+		structName = "graphGt";
 
 		nodes = new HashMap<Integer, Vertex>();
 		BufferedReader fileBuff = readFile(filename, isGz);

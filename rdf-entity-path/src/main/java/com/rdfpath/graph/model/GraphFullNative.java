@@ -1,13 +1,8 @@
-/**
- * 
- */
 package com.rdfpath.graph.model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,19 +15,22 @@ import com.rdfpath.graph.utils.Utils;
 * @github Tinslim
 *
 */
-public class GraphNative extends AbstractGraph {
+
+public class GraphFullNative extends AbstractGraph {
 	
-	
-    private HashMap<Integer, LinkedList<Integer>> nodes;
 	private int[][] edges;
-	private int edgesSize;
+	private int[][] nodes2;
 	
-	public GraphNative (String filename, Boolean isGz, int edgesSize) throws IOException {
-		structName = "graphNative";
+	private int edgesSize;
+	private int nodesSize;
+	
+	public GraphFullNative (String filename, String filename2, Boolean isGz, Boolean isGz2, int edgesSize, int nodesSize) throws IOException {
+		structName = "graphNativeFull";
 		this.edgesSize = edgesSize; 
-		
-		nodes = new HashMap<Integer, LinkedList<Integer>>();
+		this.nodesSize = nodesSize;
+
 		edges = new int[edgesSize][3];
+		nodes2 = new int[nodesSize + 1][];
 		
 		BufferedReader fileBuff = readFile(filename, isGz);
 
@@ -57,27 +55,6 @@ public class GraphNative extends AbstractGraph {
     		int predicateID = Integer.parseInt(pred.substring(38, pred.length()-1));
     		int subjectID = Integer.parseInt(subj.substring(33, subj.length()-1));
     		
-
-    		// Añade Arista a los Nodos, puede crear nodos si no existen
-    		if (nodes.containsKey(subjectID)) {
-    			nodes.get(subjectID).add(countedStatements);
-    		}
-    		else {
-    			LinkedList<Integer> adjList = new LinkedList<Integer>();
-    			adjList.add(countedStatements);
-    			nodes.put(subjectID,adjList);
-    			nodesLoaded += 1;
-    		}
-    		if (nodes.containsKey(objectID)) {
-    			nodes.get(objectID).add(countedStatements);
-    		}
-    		else {
-    			LinkedList<Integer> adjList = new LinkedList<Integer>();
-    			adjList.add(countedStatements);
-    			nodes.put(objectID,adjList);
-    			nodesLoaded += 1;
-    		}
-    		
     		// Añade arista
     		edges[countedStatements][0] = subjectID;
     		edges[countedStatements][1] = predicateID;
@@ -85,6 +62,25 @@ public class GraphNative extends AbstractGraph {
     		edgesLoaded += 1; //Cuenta arista
     		countedStatements++;
  
+        }
+        fileBuff.close();
+        
+        
+        fileBuff = readFile(filename2, isGz2);
+
+		line = "";
+        while((line = fileBuff.readLine()) != null) {					// Ejemplo:
+    		timeA = System.currentTimeMillis();
+    		sendNotificationTime(10,"Nodos: " + nodesLoaded);
+    		
+    		tempArr = line.split(" ");									// line 	= "18 22 16 32 23"
+    		int[] numbers = new int[tempArr.length - 1];				// temArr 	= {"18", "22", "16", "32", "23"}
+    		int id = Integer.parseInt(tempArr[0]);						// id		= 18
+    		
+    		for (int j=1;j<tempArr.length;j++) {
+    			numbers[j - 1] = Integer.parseInt(tempArr[j]);			// numbers = {22, 16, 32, 23}
+    		}
+    		nodes2[id] = numbers;
         }
         fileBuff.close();
 		return;
@@ -136,21 +132,20 @@ public class GraphNative extends AbstractGraph {
 
 	@Override
 	public List<Integer> getAdjacentVertex(int id) {
-		LinkedList<Integer> edgesOfV = nodes.get(id);
+		int[] edgesOfV = nodes2[id];
 		ArrayList<Integer> adjVL = new ArrayList<Integer>();
-		for (Integer ig : edgesOfV) {
-			int adjID = (edges[ig][0] == id) ? edges[ig][2] : edges[ig][0]; 
+		for (int edgeId : edgesOfV) {
+			int adjID = (edges[edgeId][0] == id) ? edges[edgeId][2] : edges[edgeId][0];
 			adjVL.add(adjID);
 		}
-		
 		return adjVL;
 	}
 
 	@Override
 	public ArrayList getEdges(int idVertex, int idVertex2) {
 		ArrayList<Integer> result = new ArrayList();
-		Boolean lessEdges = nodes.get(idVertex).size() > nodes.get(idVertex2).size();
-		List<Integer> vFrom = lessEdges ? nodes.get(idVertex2) : nodes.get(idVertex);
+		Boolean lessEdges = nodes2[idVertex].length > nodes2[idVertex2].length;
+		int [] vFrom = lessEdges ? nodes2[idVertex2] : nodes2[idVertex];
 		int vTo = lessEdges ? idVertex : idVertex2;
 		for (int edgeAdj : vFrom) {
 			if (edges[edgeAdj][0] == vTo || edges[edgeAdj][2] == vTo) {

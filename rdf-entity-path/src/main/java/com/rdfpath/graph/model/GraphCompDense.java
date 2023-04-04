@@ -23,7 +23,7 @@ public class GraphCompDense extends AbstractGraph {
 	public int edgesSize;
 	
 	public GraphCompDense (String filename, Boolean isGz, int edgesSize) throws IOException {
-		structName = "compressedDense";
+		structName = "graphCompDense";
 		//String filename2 = "C:/Users/Cristóbal/Documents/RDF-Path-server/python/prearchivo/compressed_struct.gz";
 		//98347590
 		// TODO set 36 - 98347590 FILE
