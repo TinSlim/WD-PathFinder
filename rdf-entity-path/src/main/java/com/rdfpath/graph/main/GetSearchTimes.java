@@ -22,15 +22,15 @@ public class GetSearchTimes {
 		File csvOutputFileGraphs = new File("tiemposGrafos.csv");
 		File csvOutputFile = new File("tiempos.csv");
 
-		//String path = "subsets/";
-		String path = "subsets_old/";
-		String[] files = {"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
+		String path = "subsets/";
+		//String path = "subsets_old/";
+		String[] files = {"subset100000", "subset1000000","subset10000000"};//{"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
 		String end = ".nt.gz";
 		String endComp = "_compressed.gz";
 		
-		int [] nodesSize = {8163693};//{92633, 829294, 8163693};
-		int [] maxNodeId = {10000000};//{100000, 1000000, 10000000};
-		int [] edgesSize = {42340828};//{598840, 5955914, 42340828};
+		int [] nodesSize = {92654, 829794, 8159611};//{8163693};//{92633, 829294, 8163693};
+		int [] maxNodeId = {100000, 1000000, 10000000};//{10000000};//{100000, 1000000, 10000000};
+		int [] edgesSize = {600493, 5977585, 42682387};//{42340828};//{598840, 5955914, 42340828};
 		System.out.println("Entra al try");
 		try {
 			PrintWriter pwGraphs = new PrintWriter(csvOutputFileGraphs);
@@ -38,7 +38,7 @@ public class GetSearchTimes {
 			pwGraphs.println("Estructura;SetDatos;TiempoCreación;UsoMemoria");
 			pw.println("Estructura;Tiempos;ID;SetDatos");
 
-			for (int i = 0; i < 1; i++) { // TODO al exportar al servidor usar 3 y no 1
+			for (int i = 0; i < files.length; i++) { // TODO al exportar al servidor usar 3 y no 1
 				System.out.println("Usando: " + files[i]);
 				
 				// Obtiene números aleatorios
