@@ -87,7 +87,7 @@ with gzip.open('latest-truthy.nt.gz','r') as f:
 		if line_added > MAX_LINES_PER_FILE:
 			# Abre archivo
 			file_open = open(f"parts/part_{act_part}.csv",'w',newline='')
-			file_writer = writer = csv.writer(file_open,delimiter=' ', quotechar='|')
+			file_writer = csv.writer(file_open,delimiter=' ', quotechar='|')
 
 			# Escribe data
 			for data in sorted(rel.keys()):
@@ -104,7 +104,7 @@ with gzip.open('latest-truthy.nt.gz','r') as f:
 if line_added > 0:
 	# Abre archivo
 	file_open = open(f"parts/part_{act_part}.csv",'w',newline='')
-	file_writer = writer = csv.writer(file_open,delimiter=' ', quotechar='|')
+	file_writer = csv.writer(file_open,delimiter=' ', quotechar='|')
 	
 	# Escribe data
 	for data in sorted(rel.keys()):
