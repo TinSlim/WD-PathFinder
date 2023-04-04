@@ -14,7 +14,7 @@ library(ggplot2)
 ### Importe Datos
 
 ```{r}
-tiemposBusquedaVecino <- read.csv("./tiempos.csv",sep = ";")
+tiemposBusquedaVecino <- read.csv("datos/timeResults.csv",sep = ";") #tiempos.csv
 tiempoCompresion <- read.csv("datos/compresion.csv",sep = ";")
 ```
 
@@ -28,10 +28,19 @@ tiempoCompresion$VariacionTiempo = tiempoCompresion$TiempoFin - tiempoCompresion
 ### Gráfico tiemposBusquedaVecino
 
 ```{r}
-ggplot(tiemposBusquedaVecino, aes(x=SetDatos, y=Tiempos, color=Estructura))+#,color = interaction(Method,Adaptive.or.Fixed))) + 
+ggplot(tiemposBusquedaVecino, aes(x=SetDatos, y=Tiempos, color=Estructura)) + # fill=Estructura
+
   geom_boxplot() +
-  scale_y_continuous(trans='log2')#+ 
-  #facet_grid(Calculated.Over ~ Neural.Network) 
+
+  labs(title= "Tiempos de búsqueda de vecinos (10000 datos)",
+       color = "Estructura del Grafo",
+       y = "Tiempo [ms] (log2)",
+       x = "Set de datos") +
+
+  theme(plot.title = element_text(hjust = 0.5)) +
+
+  scale_y_continuous(trans='log2')
+
 ```
 
 
