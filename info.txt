@@ -136,3 +136,19 @@ Tiempo final creación dict:  1680394612.5848234
 Tiempo inicio merge:  1680394612.5848453
 Tiempo FIN:  1680394612.9710362
 --------------------------
+
+cat log_make_natsubset1000000.txt
+Lineas usadas del archivo: 5977585
+Líneas reales archivo: 1
+
+
+Total Nodos: 829794
+ID Máximo: 1000000
+
+
+Tiempo inicio:  1680628973.9180088
+Tiempo final creación dict:  1680629014.446396
+Tiempo inicio merge:  1680629014.446435
+Tiempo FIN:  1680629039.690992
+
+---------------------------------
