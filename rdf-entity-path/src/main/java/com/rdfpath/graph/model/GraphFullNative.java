@@ -43,7 +43,7 @@ public class GraphFullNative extends AbstractGraph {
 
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
     		timeA = System.currentTimeMillis();
-    		sendNotificationTime(10,"Nodos: " + nodesLoaded);
+    		sendNotificationTime(10,"Edges: " + edgesLoaded);
     		
     		tempArr = line.split(" ");									// line 	= "<...> <...> <...> ."
     		
@@ -71,7 +71,7 @@ public class GraphFullNative extends AbstractGraph {
 		line = "";
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
     		timeA = System.currentTimeMillis();
-    		sendNotificationTime(10,"Nodos: " + nodesLoaded);
+    		sendNotificationTime(10,"Edges: " + edgesLoaded);
     		
     		tempArr = line.split(" ");									// line 	= "18 22 16 32 23"
     		int[] numbers = new int[tempArr.length - 1];				// temArr 	= {"18", "22", "16", "32", "23"}

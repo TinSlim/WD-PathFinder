@@ -34,7 +34,7 @@ public class TestSearchTimes {
 
 		String path = "subsets/";
 		//String path = "subsets_old/";
-		String[] files = {"subset100000", "subset1000000", "subset10000000", "subset100000000"};//{"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
+		String[] files = {"subset100000", "subset1000000", "subset10000000", "subset100000000"};
 		String end = ".nt.gz";
 		String endComp = "_compressed.gz";
 		String endNative = "_native.gz";
@@ -55,13 +55,15 @@ public class TestSearchTimes {
 		
 		System.out.println("Indice: "+index);
 		
-		File csvOutputFileGraphs = new File("timeResults/tiemposGrafos_"+graphName + "_" + actSubset+".csv");
-		File csvOutputFile = new File("timeResults/tiempos_"+graphName + "_" + actSubset+".csv");
+		File csvOutputFileGraphs = new File("timeProfiler/tiemposGrafos_"+graphName + "_" + actSubset+".csv");
+		File csvOutputFile = new File("timeProfiler/tiempos_"+graphName + "_" + actSubset+".csv");
+		// TODO
+		// File csvOutputFileGraphs = new File("timeResults/tiemposGrafos_"+graphName + "_" + actSubset+".csv");
+		// File csvOutputFile = new File("timeResults/tiempos_"+graphName + "_" + actSubset+".csv");
 		
 		
 		System.out.println("Entra al try");
 		try {
-			
 			PrintWriter pwGraphs = new PrintWriter(csvOutputFileGraphs);
 			PrintWriter pw = new PrintWriter(csvOutputFile);
 			pwGraphs.println("Estructura;SetDatos;TiempoCreación;UsoMemoria");
@@ -105,7 +107,7 @@ public class TestSearchTimes {
 				graph = new GraphComp(path + files[index] + endComp, true, maxNodeId[index]);
 			}
 			else if (graphName.equals("graphNativeFull")) {
-				graph = new GraphFullNative(path + files[index] + end, path + files[index] + endNative, true, true, edgesSize[index], nodesSize[index]);
+				graph = new GraphFullNative(path + files[index] + end, path + files[index] + endNative, true, true, edgesSize[index], maxNodeId[index]);
 			}
 			else {
 				System.out.println("Fail");

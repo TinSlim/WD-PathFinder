@@ -22,8 +22,9 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.GraphComp;
 import com.rdfpath.graph.model.GraphCompDense;
+import com.rdfpath.graph.model.GraphFullNative;
 import com.rdfpath.graph.model.GraphNative;
-import com.rdfpath.graph.model.GraphWrapper2;
+import com.rdfpath.graph.model.GraphWrapper;
 import com.rdfpath.graph.model.IGraph;
 
 
@@ -34,26 +35,56 @@ public class SocketTextHandler extends TextWebSocketHandler {
 	public SocketTextHandler () throws IOException, ParseException {
 		super();
 		
-		String path = "src/main/resources";
-		String filename = path + "/nt/subset100000_compressed_struct.gz";
-		System.out.println("==    Cargando Grafo   ==");
-		System.out.println("Archivo: "+ filename+ "\n");
-		if (System.getProperty("graph-path") != null) {
-			System.out.println("USING GRAPH FROM VAR\n\n");
-			filename = System.getProperty("graph-path");
-			graph = new GraphCompDense(filename, true, 98347590);
+		String path = "subsets/";
+		String[] files = {"subset100000", "subset1000000", "subset10000000", "subset100000000","latest-truthy_small"};//{"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
+		String end = ".nt.gz";
+		String endComp = "_compressed.gz";
+		String endNative = "_native.gz";
+		
+		int [] nodesSize = {92654, 829794, 8159611, 87110322, 99609308};
+		int [] maxNodeId = {100000, 1000000, 10000000, 99999996, 117288116};
+		int [] edgesSize = {600493, 5977585, 42682387, 652319619, 715906922};
+		
+
+		String actFile = (System.getProperty("graph-data") != null) ?
+					System.getProperty("graph-data") :
+					"subset1000000";
+		String filename = path + actFile;
+		
+		int index = 0;
+		while (index < files.length) {
+			if (files[index].equals(actFile)) {
+				break;
+			}
+			index ++;
+		};
+		
+		if (index >= files.length) {
+			System.out.println("End, file "+filename+" not found");
+			System.exit(0);
+			return;
 		}
-		else {
-			graph = new GraphComp(filename, true, 100000);//89968); star:37
-		}
-		//String filename = "/nt/subset100000.nt"; //myGraph.nt;//star.nt";// subset100000.nt"
+		
+
+		System.out.println("==    Cargando Grafo   ==\n"+
+				(filename + end) + "\n" +
+				(filename + endComp) + "\n" +
+				(filename + endNative)); 
+		
+		//graph = new Graph(path + files[index] + end, true);
+		//graph = new GraphNative(path + files[index] + end, true, edgesSize[index]);
+		//graph = new GraphCompDense(path + files[index] + endComp, true, nodesSize[index]);
+		//graph = new GraphComp(path + files[index] + endComp, true, maxNodeId[index]);
+		//graph = new GraphFullNative(path + files[index] + end, path + files[index] + endNative, true, true, edgesSize[index], maxNodeId[index]);
+		graph = new GraphFullNative(
+				path + files[index] + end,
+				path + files[index] + endNative,
+				true,
+				true,
+				edgesSize[index],
+				maxNodeId[index]);
+		
 		System.out.println("==    Grafo Cargado    ==\n");
-		//System.out.println("==   Test Mismo grupo  ==");
-		//graph.diffGroups();
-		//System.out.println("==    Test terminado   ==\n");
-		//System.out.println("== Test Distinto grupo ==");
-		//graph.sameGroups();
-		//System.out.println("==  Test terminado  ==\n");
 	}
 	
 	@Override
@@ -61,7 +92,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 			throws InterruptedException, IOException {
 		String response = message.getPayload();
 		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
-		GraphWrapper2 graphWrapper = new GraphWrapper2(graph);
+		GraphWrapper graphWrapper = new GraphWrapper(graph);
 		graphWrapper.setSession(session);
 		graphWrapper.search(nodesNumbers, 2);
 		System.out.println("end");

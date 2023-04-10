@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.rdfpath.graph.model;
 
 import java.io.IOException;
@@ -7,33 +10,40 @@ import java.util.HashMap;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+/**
+ *
+ * @author Cristóbal Torres G.
+ * @github Tinslim
+ *
+ */
 public class GraphWrapper {
-	private HashMap<Vertex, VertexWrapper> nodes;
-	private Graph graph;
+
+	private HashMap<Integer, VertexWrapper> nodes;
+	
+	private IGraph graph;
 	
 	private int nodesSearch;
 	private ArrayList <VertexWrapper> toSearch;
-
-	private ArrayList<Vertex> road;
+	private ArrayList<Integer> road;
 	
 	private WebSocketSession session;
-	private ArrayList<Edge> edges;
-	private ArrayList<Vertex> sentVertex;
+	private ArrayList edges;
+	private ArrayList<Integer> sentVertex;
 	
 	private long startTime;
 	private long firstTime;
 	private long lastTime;
 	private Boolean started;
 	
-	public GraphWrapper (Graph graph) {
-		this.nodes = new HashMap<Vertex, VertexWrapper>();
-		this.graph = graph;
+	public GraphWrapper (IGraph graph2) {
+		this.graph = (IGraph) graph2;
 		this.nodesSearch = 0;
 		this.toSearch = new ArrayList<VertexWrapper>();
-		this.road = new ArrayList<Vertex>();
+		this.road = new ArrayList<Integer>();
 		this.session = null;
 		this.edges = new ArrayList<Edge>();
-		this.sentVertex = new ArrayList<Vertex>();
+		this.sentVertex = new ArrayList<Integer>();
+		this.nodes = new HashMap<Integer, VertexWrapper>();
 	}
 	
 	public void setSession (WebSocketSession session) {
@@ -53,24 +63,27 @@ public class GraphWrapper {
 		lastTime = startTime;
 		
 		
-		ArrayList<Vertex> listNodes = new ArrayList<Vertex> ();
+		// Guarda id nodos para buscar
+		ArrayList<Integer> listNodes = new ArrayList<Integer> ();
 		for (Integer i : nodesNumbers) {
-			listNodes.add(graph.getNodes().get(i));
+			listNodes.add(i);
 		}
-		// -----
 		
 		// Los añade a lista para buscar
 		nodesSearch = 0;
-		for (Vertex v : listNodes) {
-			nodesSearch += 1;
-			VertexWrapper actVW = new VertexWrapper(v);
-			nodes.put(v, actVW);
+		for (Integer idSearch : listNodes) {
+			
+			VertexWrapper actVW = new VertexWrapper(idSearch);
+			//actVW.colorNode = nodesSearch;
+			//nodes.put(v, actVW); revisar
 			toSearch.add(actVW);
+			nodesSearch += 1;
 		}
 		// -----
 		
 		int roadSize = 0;
-		Vertex actColor = null;
+		
+		int actColor = 0; // USAR NÚMEROS
 		while (toSearch.size() > 0 && roadSize < size * nodesSearch) {
 			VertexWrapper actualVW = toSearch.remove(0);
 			
@@ -81,7 +94,7 @@ public class GraphWrapper {
 			}
 			
 			// Revisa VÉRTICES adyacentes
-			for (Vertex adjVertex : actualVW.node.getAdjacentVertex()) {
+			for (Integer adjVertex : graph.getAdjacentVertex(actualVW.idVertex)) {
 				
 				// NO ha sido visitado:
 				if (nodes.get(adjVertex) == null) {
@@ -101,8 +114,8 @@ public class GraphWrapper {
 						// NUEVA RAMA -> BackTracking
 						if (road.contains(adjVertex)) {
 							// añadir Edge actualVW-adjVW
-							ArrayList<Edge> edges = actualVW.node.getEdges(adjVW.node);
-							for (Edge e : edges) {
+							ArrayList edgesVW = graph.getEdges(actualVW.idVertex, adjVW.idVertex);
+							for (Object e : edgesVW) {
 								sendEdge(e);
 							}
 							
@@ -122,8 +135,8 @@ public class GraphWrapper {
 					else if (!actualVW.from.contains(adjVW) && !adjVW.from.contains(actualVW)) {
 						
 						// añadir Edge actualVW-adjVW
-						ArrayList<Edge> edges = actualVW.node.getEdges(adjVW.node);
-						for (Edge e : edges) {
+						ArrayList edgesVW = graph.getEdges(actualVW.idVertex, adjVW.idVertex);
+						for (Object e : edgesVW) {
 							sendEdge(e);
 						}
 						
@@ -145,14 +158,15 @@ public class GraphWrapper {
 		toCheck.add(vw);
 		while (toCheck.size() > 0) {
 			VertexWrapper actualVW = toCheck.remove(0);
-			if (! road.contains(actualVW.node)) {
-				road.add(actualVW.node);
+			if (! road.contains(actualVW.idVertex)) {
+				road.add(actualVW.idVertex);
 				for (VertexWrapper adjVW : actualVW.from) {
 					// Imprime aristas
-					ArrayList<Edge> edges = actualVW.node.getEdges(adjVW.node);
-					for (Edge e : edges) {
+					ArrayList edgesVW = graph.getEdges(actualVW.idVertex, adjVW.idVertex);
+					for (Object e : edgesVW) {
 						sendEdge(e);
 					}
+					
 					// Añade nodos
 					toCheck.add(adjVW);
 				}
@@ -160,8 +174,8 @@ public class GraphWrapper {
 		}
 		
 	}
-
-	public void sendEdge(Edge e) throws IOException {
+	
+	public void sendEdge(Object e) throws IOException {
 		if (edges.contains(e)) {return;};
 		
 		//
@@ -171,20 +185,17 @@ public class GraphWrapper {
 		}
 		
 		//
-		if (session == null) {
-			System.out.println(e);
-		}
-		else {
-			ArrayList<Vertex> vList = new ArrayList<Vertex>();
-			if (!sentVertex.contains(e.getOrigin())) {
-				sentVertex.add(e.getOrigin());
-				vList.add(e.getOrigin());
+		if (session != null) {
+			ArrayList<Integer> vList = new ArrayList<Integer>();
+			if (!sentVertex.contains(graph.getOriginEdge(e))) {
+				sentVertex.add(graph.getOriginEdge(e));
+				vList.add(graph.getOriginEdge(e));
 			}
-			if (!sentVertex.contains(e.getDestination())) {
-				vList.add(e.getDestination());
-				sentVertex.add(e.getDestination());
+			if (!sentVertex.contains(graph.getDestinationEdge(e))) {
+				vList.add(graph.getDestinationEdge(e));
+				sentVertex.add(graph.getDestinationEdge(e));
 			}
-			session.sendMessage(new TextMessage(e.toJson(vList)));
+			session.sendMessage(new TextMessage(graph.edgeToJson(e,vList)));
 		}
 		edges.add(e);
 	}

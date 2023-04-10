@@ -3,11 +3,11 @@ version 24-Mar-2023 16:48 59456991776
 
 TODO: Medir tiempo de creación cache.
 ---------------------------
-subset10000.nt.gz               |
-subset10000_compressed.gz       |
-Total 59304 lineas leídas       |
-Total Nodos: 9025               |
-ID Máximo: 10000                |
+subset10000.nt.gz
+subset10000_compressed.gz
+Total 59304 lineas leídas
+Total Nodos: 9025
+ID Máximo: 10000
 ---------------------------
 subset100000.nt.gz
 subset100000_compressed.gz
@@ -26,6 +26,8 @@ subset10000000_compressed.gz
 Total 42340828 lineas leídas
 Total Nodos: 8163693
 ID Máximo: 10000000
+----------------------------
+
 
 
 
@@ -73,6 +75,11 @@ subset10000.txt
 Total 600493 lineas
 Total 59564 lineas agregadas
 Max id: 10000
+
+log_makeSubsetLTsmall.txt
+Total 7425200149 lineas
+Total 715906922
+Max id: 117288116
 
 ======
 ======
@@ -152,3 +159,32 @@ Tiempo inicio merge:  1680629014.446435
 Tiempo FIN:  1680629039.690992
 
 ---------------------------------
+
+log_make_natLTsmall.txt
+Lineas usadas del archivo: 715906922
+Líneas reales archivo: 1
+
+
+Total Nodos: 99609308
+ID Máximo: 117288116
+
+
+Tiempo inicio:  1680668854.1595116
+Tiempo final creación dict:  1680674609.947836
+Tiempo inicio merge:  1680674609.9485607
+Tiempo FIN:  1680679976.608658
+------------------------------
+cat log_make_preLTsmall.txt
+INICIA
+Lineas usadas del archivo: 715906922
+Líneas reales archivo: 715906922
+
+
+Total Nodos: 99609308
+ID Máximo: 117288116
+
+
+Tiempo inicio:  1680723396.0276895
+Tiempo final creación dict:  1680732361.290518
+Tiempo inicio merge:  1680732361.290551
+Tiempo FIN:  1680739822.0143979

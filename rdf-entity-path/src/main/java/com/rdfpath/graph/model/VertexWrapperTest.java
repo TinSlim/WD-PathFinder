@@ -11,17 +11,20 @@ import java.util.ArrayList;
  * @github Tinslim
  *
  */
-public class VertexWrapper {
+public class VertexWrapperTest {
 	public int idVertex;
 	public int fatherNode;
 	
 	public int colorNode;
-	public ArrayList<VertexWrapper> from;
+	public ArrayList<VertexWrapperTest> from;
+	
+	public int[] union = {-1,-1};
+	public int[] sizes = {0,0};
 	
 	/**
 	 * @param idSearch
 	 */
-	public VertexWrapper(Integer idSearch) {
+	public VertexWrapperTest(Integer idSearch) {
 		// TODO Auto-generated constructor stub
 		this.idVertex = idSearch;
 		this.colorNode = idSearch;
@@ -32,12 +35,24 @@ public class VertexWrapper {
 	 * @param actualVW
 	 * @param adjVertex
 	 */
-	public VertexWrapper(VertexWrapper actualVW, int adjVertex) {
+	public VertexWrapperTest(VertexWrapperTest actualVW, int adjVertex) {
 		this.idVertex = adjVertex;
 		this.colorNode = actualVW.colorNode;
 		this.fatherNode = actualVW.idVertex;
-		this.from = new ArrayList<VertexWrapper>();
+		this.sizes[0] = actualVW.getMinSize() + 1;
+		this.sizes[0] = 0;
+		this.from = new ArrayList<VertexWrapperTest>();
 		this.from.add(actualVW);
 	}
-
+	
+	public int getSize () {
+		return sizes[0] + sizes[1];
+	}
+	
+	public int getMinSize () {
+		if (sizes[0] < sizes[1]) {
+			return sizes[0];
+		}
+		return sizes[1];
+	}
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.json.simple.JSONArray;
@@ -56,7 +57,7 @@ public abstract class AbstractGraph implements IGraph {
 			System.out.print(j+"/"+ids.length+"\r");
 			int vertexId = ids[j];
 			long st = System.currentTimeMillis();
-			this.getAdjacentVertex(vertexId);
+			List<Integer> adj = this.getAdjacentVertex(vertexId);
 			long end = System.currentTimeMillis();
 			long dif = end - st;
 			pw.println(this.structName+";"+dif+";"+vertexId+";"+dataSet);
@@ -118,7 +119,7 @@ public abstract class AbstractGraph implements IGraph {
                 	}
                 	
                 	// tiempos resultantes
-                	GraphWrapper2 graphWrapper = new GraphWrapper2(this); 
+                	GraphWrapper graphWrapper = new GraphWrapper(this); 
                 	try {
 						graphWrapper.search(array, (int) Integer.parseInt(keyStr.toString()));						
 						JSONArray mJSONArray = new JSONArray();
@@ -188,7 +189,7 @@ public abstract class AbstractGraph implements IGraph {
                         }
             			
             			// tiempos resultantes
-            			GraphWrapper2 graphWrapper = new GraphWrapper2(this); 
+            			GraphWrapper graphWrapper = new GraphWrapper(this); 
                     	try {
     						graphWrapper.search(array, (int) Integer.parseInt(keyStr.toString()));
     						
