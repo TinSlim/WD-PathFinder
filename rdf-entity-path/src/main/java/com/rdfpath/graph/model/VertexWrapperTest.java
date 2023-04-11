@@ -28,7 +28,7 @@ public class VertexWrapperTest {
 		// TODO Auto-generated constructor stub
 		this.idVertex = idSearch;
 		this.colorNode = idSearch;
-		this.from = new ArrayList<VertexWrapper>();
+		this.from = new ArrayList<VertexWrapperTest>();
 	}
 
 	/**

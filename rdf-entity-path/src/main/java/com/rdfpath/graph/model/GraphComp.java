@@ -62,7 +62,7 @@ public class GraphComp extends AbstractGraph {
 		return;
 	}
 	
-	
+	// TODO Cuidado excepcion
 	public int searchVertexIndex (int id) {
 		if (id < edgesSize) {
 			return id;
@@ -70,7 +70,7 @@ public class GraphComp extends AbstractGraph {
 		return -1;
 	}
 	
-	@Override
+	@Override	// Collection, hashset
 	public List<Integer> getAdjacentVertex(int id) {
 		ArrayList<Integer> answer = new ArrayList<Integer>();
 		int index = searchVertexIndex(id);
@@ -79,7 +79,7 @@ public class GraphComp extends AbstractGraph {
 		while (i < nodes[index].length) {
 			j = 1;
 			while (j < nodes[index][i].length) {
-				int existsInAns = answer.indexOf(nodes[index][i][j]);
+				int existsInAns = answer.indexOf(nodes[index][i][j]); // Este demora
 				if (existsInAns == -1) {
 					answer.add(nodes[index][i][j]);
 				}

@@ -219,38 +219,70 @@ pre code {
 <h3>Importe de Bibliotecas</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxuZGF0b3MgPC0gcmVhZC5jc3YoXCIuL2V4YW1wbGUuY3N2XCIsc2VwID0gXCI7XCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(ggplot2)
-datos &lt;- read.csv(&quot;./example.csv&quot;,sep = &quot;;&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxuYGBgIn0= -->
+<pre class="r"><code>library(ggplot2)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="trabajo-en-datos" class="section level3">
-<h3>Trabajo en datos</h3>
+<div id="importe-datos" class="section level3">
+<h3>Importe Datos</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSA8LSBkYXRvc1xuI2RhdGEkUHJvcG9ydGlvbltkYXRhJFByb3BvcnRpb24gPiAxXSA8LSAxICMgQWNvdGEgYSAxXG5gYGAifQ== -->
-<pre class="r"><code>data &lt;- datos
-#data$Proportion[data$Proportion &gt; 1] &lt;- 1 # Acota a 1</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGllbXBvc0J1c3F1ZWRhVmVjaW5vIDwtIHJlYWQuY3N2KFwiZGF0b3MvdGltZVJlc3VsdHMuY3N2XCIsc2VwID0gXCI7XCIpICN0aWVtcG9zLmNzdlxudGllbXBvQ29tcHJlc2lvbiA8LSByZWFkLmNzdihcImRhdG9zL2NvbXByZXNpb24uY3N2XCIsc2VwID0gXCI7XCIpXG5gYGAifQ== -->
+<pre class="r"><code>tiemposBusquedaVecino &lt;- read.csv(&quot;datos/timeResults.csv&quot;,sep = &quot;;&quot;) #tiempos.csv
+tiempoCompresion &lt;- read.csv(&quot;datos/compresion.csv&quot;,sep = &quot;;&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="gráfico" class="section level3">
-<h3>Gráfico</h3>
+<div id="trabajo-datos" class="section level3">
+<h3>Trabajo datos</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGRhdGEsIGFlcyh4PVNldERhdG9zLCB5PVRpZW1wb3MsIGNvbG9yPUVzdHJ1Y3R1cmEpKSsjLGNvbG9yID0gaW50ZXJhY3Rpb24oTWV0aG9kLEFkYXB0aXZlLm9yLkZpeGVkKSkpICsgXG4gIGdlb21fYm94cGxvdCgpICMrIFxuICAjZmFjZXRfZ3JpZChDYWxjdWxhdGVkLk92ZXIgfiBOZXVyYWwuTmV0d29yaykgXG5cbmBgYCJ9 -->
-<pre class="r"><code>ggplot(data, aes(x=SetDatos, y=Tiempos, color=Estructura))+#,color = interaction(Method,Adaptive.or.Fixed))) + 
-  geom_boxplot() #+ 
-  #facet_grid(Calculated.Over ~ Neural.Network) 
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3B0aW9ucyhzY2lwZW4gPSA5OTkpXG50aWVtcG9Db21wcmVzaW9uJFZhcmlhY2lvblRpZW1wbyA9IHRpZW1wb0NvbXByZXNpb24kVGllbXBvRmluIC0gdGllbXBvQ29tcHJlc2lvbiRUaWVtcG9JbmljaW9cbnRpZW1wb3NCdXNxdWVkYVZlY2lubyRUaWVtcG9zID0gXG5gYGAifQ== -->
+<pre class="r"><code>options(scipen = 999)
+tiempoCompresion$VariacionTiempo = tiempoCompresion$TiempoFin - tiempoCompresion$TiempoInicio
+tiemposBusquedaVecino$Tiempos = </code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="gráfico-tiemposbusquedavecino" class="section level3">
+<h3>Gráfico tiemposBusquedaVecino</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KHRpZW1wb3NCdXNxdWVkYVZlY2lubywgYWVzKHg9U2V0RGF0b3MsIHk9VGllbXBvcywgY29sb3I9RXN0cnVjdHVyYSkpICsgIyBmaWxsPUVzdHJ1Y3R1cmFcblxuICBnZW9tX2JveHBsb3QoKSArXG5cbiAgbGFicyh0aXRsZT0gXCJUaWVtcG9zIGRlIGLDunNxdWVkYSBkZSB2ZWNpbm9zICgxMDAwMCBkYXRvcylcIixcbiAgICAgICBjb2xvciA9IFwiRXN0cnVjdHVyYSBkZWwgR3JhZm9cIixcbiAgICAgICB5ID0gXCJUaWVtcG8gW21zXSAobG9nMilcIixcbiAgICAgICB4ID0gXCJTZXQgZGUgZGF0b3NcIikgK1xuXG4gIHRoZW1lKHBsb3QudGl0bGUgPSBlbGVtZW50X3RleHQoaGp1c3QgPSAwLjUpKSArXG5cbiAgc2NhbGVfeV9jb250aW51b3VzKHRyYW5zPSdsb2cxMCcpXG5cbmBgYCJ9 -->
+<pre class="r"><code>ggplot(tiemposBusquedaVecino, aes(x=SetDatos, y=Tiempos, color=Estructura)) + # fill=Estructura
+
+  geom_boxplot() +
+
+  labs(title= &quot;Tiempos de búsqueda de vecinos (10000 datos)&quot;,
+       color = &quot;Estructura del Grafo&quot;,
+       y = &quot;Tiempo [ms] (log2)&quot;,
+       x = &quot;Set de datos&quot;) +
+
+  theme(plot.title = element_text(hjust = 0.5)) +
+
+  scale_y_continuous(trans=&#39;log10&#39;)
 </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="gráfico-tiempocompresión" class="section level3">
+<h3>Gráfico tiempoCompresión</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIGdncGxvdCh0aWVtcG9Db21wcmVzaW9uLCBhZXMoeD1MaW5lYXNBcmNoaXZvLCB5PVZhcmlhY2lvblRpZW1wbywgZ3JvdXA9MSkpICsgZ2VvbV9saW5lKClcbmBgYCJ9 -->
+<pre class="r"><code> ggplot(tiempoCompresion, aes(x=LineasArchivo, y=VariacionTiempo, group=1)) + geom_line()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQoNCiMjIyBJbXBvcnRlIGRlIEJpYmxpb3RlY2FzDQoNCmBgYHtyfQ0KbGlicmFyeShnZ3Bsb3QyKQ0KZGF0b3MgPC0gcmVhZC5jc3YoIi4vZXhhbXBsZS5jc3YiLHNlcCA9ICI7IikNCmBgYA0KDQoNCiMjIyBUcmFiYWpvIGVuIGRhdG9zDQoNCmBgYHtyfQ0KZGF0YSA8LSBkYXRvcw0KI2RhdGEkUHJvcG9ydGlvbltkYXRhJFByb3BvcnRpb24gPiAxXSA8LSAxICMgQWNvdGEgYSAxDQpgYGANCg0KDQojIyMgR3LDoWZpY28NCg0KYGBge3J9DQpnZ3Bsb3QoZGF0YSwgYWVzKHg9U2V0RGF0b3MsIHk9VGllbXBvcywgY29sb3I9RXN0cnVjdHVyYSkpKyMsY29sb3IgPSBpbnRlcmFjdGlvbihNZXRob2QsQWRhcHRpdmUub3IuRml4ZWQpKSkgKyANCiAgZ2VvbV9ib3hwbG90KCkgIysgDQogICNmYWNldF9ncmlkKENhbGN1bGF0ZWQuT3ZlciB+IE5ldXJhbC5OZXR3b3JrKSANCg0KYGBgDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQoNCiMjIyBJbXBvcnRlIGRlIEJpYmxpb3RlY2FzDQoNCmBgYHtyfQ0KbGlicmFyeShnZ3Bsb3QyKQ0KYGBgDQoNCg0KIyMjIEltcG9ydGUgRGF0b3MNCg0KYGBge3J9DQp0aWVtcG9zQnVzcXVlZGFWZWNpbm8gPC0gcmVhZC5jc3YoImRhdG9zL3RpbWVSZXN1bHRzLmNzdiIsc2VwID0gIjsiKSAjdGllbXBvcy5jc3YNCnRpZW1wb0NvbXByZXNpb24gPC0gcmVhZC5jc3YoImRhdG9zL2NvbXByZXNpb24uY3N2IixzZXAgPSAiOyIpDQpgYGANCg0KIyMjIFRyYWJham8gZGF0b3MNCg0KYGBge3J9DQpvcHRpb25zKHNjaXBlbiA9IDk5OSkNCnRpZW1wb0NvbXByZXNpb24kVmFyaWFjaW9uVGllbXBvID0gdGllbXBvQ29tcHJlc2lvbiRUaWVtcG9GaW4gLSB0aWVtcG9Db21wcmVzaW9uJFRpZW1wb0luaWNpbw0KdGllbXBvc0J1c3F1ZWRhVmVjaW5vJFRpZW1wb3MgPSANCmBgYA0KDQojIyMgR3LDoWZpY28gdGllbXBvc0J1c3F1ZWRhVmVjaW5vDQoNCmBgYHtyfQ0KZ2dwbG90KHRpZW1wb3NCdXNxdWVkYVZlY2lubywgYWVzKHg9U2V0RGF0b3MsIHk9VGllbXBvcywgY29sb3I9RXN0cnVjdHVyYSkpICsgIyBmaWxsPUVzdHJ1Y3R1cmENCg0KICBnZW9tX2JveHBsb3QoKSArDQoNCiAgbGFicyh0aXRsZT0gIlRpZW1wb3MgZGUgYsO6c3F1ZWRhIGRlIHZlY2lub3MgKDEwMDAwIGRhdG9zKSIsDQogICAgICAgY29sb3IgPSAiRXN0cnVjdHVyYSBkZWwgR3JhZm8iLA0KICAgICAgIHkgPSAiVGllbXBvIFttc10gKGxvZzIpIiwNCiAgICAgICB4ID0gIlNldCBkZSBkYXRvcyIpICsNCg0KICB0aGVtZShwbG90LnRpdGxlID0gZWxlbWVudF90ZXh0KGhqdXN0ID0gMC41KSkgKw0KDQogIHNjYWxlX3lfY29udGludW91cyh0cmFucz0nbG9nMTAnKQ0KDQpgYGANCg0KDQojIyMgR3LDoWZpY28gdGllbXBvQ29tcHJlc2nDs24NCg0KYGBge3J9DQogZ2dwbG90KHRpZW1wb0NvbXByZXNpb24sIGFlcyh4PUxpbmVhc0FyY2hpdm8sIHk9VmFyaWFjaW9uVGllbXBvLCBncm91cD0xKSkgKyBnZW9tX2xpbmUoKQ0KYGBgDQoNCg==</div>
 
 
 
