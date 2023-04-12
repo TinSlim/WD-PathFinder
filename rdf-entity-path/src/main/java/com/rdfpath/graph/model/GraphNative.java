@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import org.json.JSONArray;
@@ -44,8 +45,8 @@ public class GraphNative extends AbstractGraph {
         int edgesLoaded = 0;
 
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
-    		timeA = System.currentTimeMillis();
-    		sendNotificationTime(10,"Nodos: " + nodesLoaded);
+    		//timeA = System.currentTimeMillis();
+    		//sendNotificationTime(10,"Nodos: " + nodesLoaded);
     		
     		tempArr = line.split(" ");									// line 	= "<...> <...> <...> ."
     		
@@ -135,14 +136,13 @@ public class GraphNative extends AbstractGraph {
     }
 
 	@Override
-	public List<Integer> getAdjacentVertex(int id) {
+	public HashSet<Integer> getAdjacentVertex(int id) {
 		LinkedList<Integer> edgesOfV = nodes.get(id);
-		ArrayList<Integer> adjVL = new ArrayList<Integer>();
+		HashSet<Integer> adjVL = new HashSet<Integer>();
 		for (Integer ig : edgesOfV) {
 			int adjID = (edges[ig][0] == id) ? edges[ig][2] : edges[ig][0]; 
 			adjVL.add(adjID);
 		}
-		
 		return adjVL;
 	}
 

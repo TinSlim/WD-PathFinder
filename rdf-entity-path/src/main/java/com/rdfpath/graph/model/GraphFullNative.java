@@ -3,6 +3,7 @@ package com.rdfpath.graph.model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,8 +43,8 @@ public class GraphFullNative extends AbstractGraph {
         int edgesLoaded = 0;
 
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
-    		timeA = System.currentTimeMillis();
-    		sendNotificationTime(10,"Edges: " + edgesLoaded);
+    		//timeA = System.currentTimeMillis();
+    		//sendNotificationTime(10,"Edges: " + edgesLoaded);
     		
     		tempArr = line.split(" ");									// line 	= "<...> <...> <...> ."
     		
@@ -70,8 +71,8 @@ public class GraphFullNative extends AbstractGraph {
 
 		line = "";
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
-    		timeA = System.currentTimeMillis();
-    		sendNotificationTime(10,"Edges: " + edgesLoaded);
+    		//timeA = System.currentTimeMillis();
+    		//sendNotificationTime(10,"Edges: " + edgesLoaded);
     		
     		tempArr = line.split(" ");									// line 	= "18 22 16 32 23"
     		int[] numbers = new int[tempArr.length - 1];				// temArr 	= {"18", "22", "16", "32", "23"}
@@ -131,9 +132,9 @@ public class GraphFullNative extends AbstractGraph {
     }
 
 	@Override
-	public List<Integer> getAdjacentVertex(int id) {
+	public HashSet<Integer> getAdjacentVertex(int id) {
 		int[] edgesOfV = nodes2[id];
-		ArrayList<Integer> adjVL = new ArrayList<Integer>();
+		HashSet<Integer> adjVL = new HashSet<Integer>();
 		for (int edgeId : edgesOfV) {
 			int adjID = (edges[edgeId][0] == id) ? edges[edgeId][2] : edges[edgeId][0];
 			adjVL.add(adjID);

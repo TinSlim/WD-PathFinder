@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,9 +27,9 @@ public class Graph extends AbstractGraph {
         int nodesLoaded = 0;
         
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
-    		timeA = System.currentTimeMillis();
+    		//timeA = System.currentTimeMillis();
 
-    		sendNotificationTime(10,"Nodos: " + nodesLoaded);
+    		//sendNotificationTime(10,"Nodos: " + nodesLoaded);
     		
     		tempArr = line.split(" ");									// line 	= "<...> <...> <...> ."
     		
@@ -140,13 +141,8 @@ public class Graph extends AbstractGraph {
     }
 
 	@Override
-	public List<Integer> getAdjacentVertex(int id) {
-		List nList = nodes.get(id).getAdjacentVertex();
-		int i = 0;
-        while (i < nList.size()) {
-            nList.set(i, ((Vertex) nList.get(i)).id);
-            i++;
-        }
+	public HashSet<Integer> getAdjacentVertex(int id) {
+		HashSet<Integer> nList = nodes.get(id).getAdjacentVertex();
 		return nList;
 	}
 

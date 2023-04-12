@@ -3,6 +3,7 @@ package com.rdfpath.graph.model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,9 +41,9 @@ public class GraphCompDense extends AbstractGraph {
         int node_id = 0;
 
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
-    		timeA = System.currentTimeMillis();
+    		//timeA = System.currentTimeMillis();
 
-    		sendNotificationTime(10,"Nodos: " + node_id);
+    		//sendNotificationTime(10,"Nodos: " + node_id);
     		
     		tempArr = line.split(" ");
     		int id[] = {Integer.parseInt(tempArr[0])};					// line 	= "18 -22.16.32 23.17"
@@ -91,8 +92,8 @@ public class GraphCompDense extends AbstractGraph {
 	}
 	
 	@Override
-	public List<Integer> getAdjacentVertex(int id) {
-		ArrayList<Integer> answer = new ArrayList<Integer>();
+	public HashSet<Integer> getAdjacentVertex(int id) {
+		HashSet<Integer> answer = new HashSet<Integer>();
 		int index = searchVertexIndex(id);
 		int i = 1;
 		int j = -1;
@@ -100,10 +101,7 @@ public class GraphCompDense extends AbstractGraph {
 		while (i < nodes[index].length) {
 			j = 1;
 			while (j < nodes[index][i].length) {
-				int existsInAns = answer.indexOf(nodes[index][i][j]);
-				if (existsInAns == -1) {
-					answer.add(nodes[index][i][j]);
-				}
+				answer.add(nodes[index][i][j]);
 				j+=1;
 			}
 			i+=1;
