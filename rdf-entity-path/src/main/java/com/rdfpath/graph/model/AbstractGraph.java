@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -56,9 +57,9 @@ public abstract class AbstractGraph implements IGraph {
 		for (int j = 0; j < ids.length; j++) {
 			System.out.print(j+"/"+ids.length+"\r");
 			int vertexId = ids[j];
-			long st = System.currentTimeMillis();
-			List<Integer> adj = this.getAdjacentVertex(vertexId);
-			long end = System.currentTimeMillis();
+			long st = System.nanoTime();
+			HashSet<Integer> adj = this.getAdjacentVertex(vertexId);
+			long end = System.nanoTime();
 			long dif = end - st;
 			pw.println(this.structName+";"+dif+";"+vertexId+";"+dataSet);
 		}
