@@ -5,6 +5,7 @@ package com.rdfpath.graph.model;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.json.simple.parser.ParseException;
@@ -22,9 +23,9 @@ public interface IGraph {
 	 * Entrega los IDs de los nodos adyacentes de un nodo.
 	 *
 	 * @param id			ID nodo del que se buscan nodos adyacentes.
-	 * @return				Lista de IDs de nodos adyacentes.
+	 * @return				Set de IDs de nodos adyacentes.
 	 */
-	public List<Integer> getAdjacentVertex (int id);
+	public HashSet<Integer> getAdjacentVertex (int id);
 
 	/**
 	 * Obtiene la lista de Aristas entre dos Nodos del Grafo, el formato depende de cada
