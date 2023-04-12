@@ -62,7 +62,7 @@ public class Graph extends AbstractGraph {
     			nodesLoaded += 1; //Cuenta nodos
     		}
 
-    		Edge edge = new Edge(predicateID, subjectNode, objectNode, 0);
+    		Edge edge = new Edge(predicateID, subjectNode, objectNode);
     		subjectNode.addEdge(edge);
     		objectNode.addEdge(edge);
     		edgesLoaded += 1;
