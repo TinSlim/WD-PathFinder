@@ -8,35 +8,18 @@ import org.json.JSONObject;
 import com.rdfpath.graph.utils.Utils;
 
 public class Edge  {
-    public final Integer id;
+    public final int id;
     public final Vertex origin;
     public final Vertex destination;
-    private double weight;
     
     public Edge(Integer id, Vertex origin, Vertex destination) {
         this.id = id;
         this.origin = origin;
         this.destination = destination;
-        this.weight = 1;
-    }
-    
-    public Edge(Integer id, Vertex origin, Vertex destination, double weight) {
-        this.id = id;
-        this.origin = origin;
-        this.destination = destination;
-        this.weight = weight;
     }
 
     public Integer getId() {
         return id;
-    }
-    
-    public double getWeight() {
-    	return weight;
-    }
-    
-    public void setWeight(double weight) {
-    	this.weight = weight;
     }
     
     public Vertex getOrigin() {
