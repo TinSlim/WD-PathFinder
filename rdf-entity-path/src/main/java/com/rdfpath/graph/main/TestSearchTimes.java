@@ -7,11 +7,13 @@ import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
+
 import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.GraphComp;
 import com.rdfpath.graph.model.GraphCompDense;
 import com.rdfpath.graph.model.GraphFullNative;
 import com.rdfpath.graph.model.GraphNative;
+import com.rdfpath.graph.model.GraphNativeFullDense;
 import com.rdfpath.graph.model.IGraph;
 import com.rdfpath.graph.utils.Utils;
 
@@ -25,6 +27,7 @@ public class TestSearchTimes {
 
 	public static void main (String[] args) {
 		if (System.getProperty("subset") == null || System.getProperty("graph") == null) {
+			System.out.println("-Dsubset -Dgraph");
 			return;
 		}		
 		
@@ -54,13 +57,11 @@ public class TestSearchTimes {
 		}		
 		
 		System.out.println("Indice: "+index);
+		System.out.println("Subset: "+actSubset);
+		System.out.println("Graph : "+graphName);
 		
-		File csvOutputFileGraphs = new File("timeProfiler/tiemposGrafos_"+graphName + "_" + actSubset+".csv");
-		File csvOutputFile = new File("timeProfiler/tiempos_"+graphName + "_" + actSubset+".csv");
-		// TODO
-		// File csvOutputFileGraphs = new File("timeResults/tiemposGrafos_"+graphName + "_" + actSubset+".csv");
-		// File csvOutputFile = new File("timeResults/tiempos_"+graphName + "_" + actSubset+".csv");
-		
+		File csvOutputFileGraphs = new File("timeNano/tiemposGrafos_"+graphName + "_" + actSubset+".csv");
+		File csvOutputFile = new File("timeNano/tiempos_"+graphName + "_" + actSubset+".csv");
 		
 		System.out.println("Entra al try");
 		try {
@@ -94,6 +95,7 @@ public class TestSearchTimes {
 			
 			beforeHeapMemoryUsage = mbean.getHeapMemoryUsage();
 			startMakeTime = System.currentTimeMillis();
+
 			if (graphName.equals("graphGt")) {
 				graph = new Graph(path + files[index] + end, true);
 			}
@@ -109,9 +111,14 @@ public class TestSearchTimes {
 			else if (graphName.equals("graphNativeFull")) {
 				graph = new GraphFullNative(path + files[index] + end, path + files[index] + endNative, true, true, edgesSize[index], maxNodeId[index]);
 			}
+			else if (graphName.equals("graphNativeFullDense")) {
+				graph = new GraphNativeFullDense(path + files[index] + end, path + files[index] + endNative, true, true, edgesSize[index], nodesSize[index]);
+			}
 			else {
 				System.out.println("Fail");
-				System.out.println("Fail");
+				pw.close();
+				pwGraphs.close();
+				return;
 			}
 			endMakeTime = System.currentTimeMillis();
 			afterHeapMemoryUsage = mbean.getHeapMemoryUsage();
