@@ -4,6 +4,7 @@
 package com.rdfpath.graph.model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -12,47 +13,34 @@ import java.util.ArrayList;
  *
  */
 public class VertexWrapperTest {
-	public int idVertex;
-	public int fatherNode;
-	
-	public int colorNode;
-	public ArrayList<VertexWrapperTest> from;
-	
-	public int[] union = {-1,-1};
-	public int[] sizes = {0,0};
+	public int vertexID;
+	public LinkedList<Integer> path;
+	public int initId;
+	public int actSize;
 	
 	/**
-	 * @param idSearch
+	 * @param x
 	 */
-	public VertexWrapperTest(Integer idSearch) {
-		// TODO Auto-generated constructor stub
-		this.idVertex = idSearch;
-		this.colorNode = idSearch;
-		this.from = new ArrayList<VertexWrapperTest>();
+	public VertexWrapperTest(int x) {
+		this.vertexID = x;
+		path = new LinkedList<Integer>();
+		path.add(x);
+		this.initId = x;
+		this.actSize = 0;
+	}
+	
+	/**
+	 * @param actVW
+	 */
+	public VertexWrapperTest(VertexWrapperTest actVW) {
+		this.vertexID = actVW.vertexID;
+		this.path = (LinkedList<Integer>) actVW.path.clone();
+		this.initId = actVW.initId;
+		this.actSize = actVW.actSize + 1;
 	}
 
-	/**
-	 * @param actualVW
-	 * @param adjVertex
-	 */
-	public VertexWrapperTest(VertexWrapperTest actualVW, int adjVertex) {
-		this.idVertex = adjVertex;
-		this.colorNode = actualVW.colorNode;
-		this.fatherNode = actualVW.idVertex;
-		this.sizes[0] = actualVW.getMinSize() + 1;
-		this.sizes[0] = 0;
-		this.from = new ArrayList<VertexWrapperTest>();
-		this.from.add(actualVW);
-	}
-	
-	public int getSize () {
-		return sizes[0] + sizes[1];
-	}
-	
-	public int getMinSize () {
-		if (sizes[0] < sizes[1]) {
-			return sizes[0];
-		}
-		return sizes[1];
-	}
+	public String toString() {
+        return vertexID + " | " + path + " | " + initId + " | " + actSize;
+    }
+
 }
