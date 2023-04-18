@@ -1,18 +1,18 @@
 import os
 import csv
 
-csvfile = open("timeResults.csv","w",newline='')
+csvfile = open("timeNano.csv","w",newline='')
 writer =  csv.writer(csvfile,delimiter=';')
 
 add_file = []
 sizes_file = []
 
 
-for filename in os.listdir("timeResults"):
+for filename in os.listdir("timeNano"):
     if "tiempos_" in filename:
-        add_file.append("timeResults/" + filename)
+        add_file.append("timeNano/" + filename)
     if "tiemposGrafo" in filename:
-        sizes_file.append("timeResults/" + filename)
+        sizes_file.append("timeNano/" + filename)
 
 writer.writerow(['Estructura','Tiempos','ID','SetDatos'])
 
@@ -26,7 +26,7 @@ for filename in add_file:
 #------------
 #------------
 
-csvfile_2 = open("sizeResults.csv","w",newline='')
+csvfile_2 = open("sizeNano.csv","w",newline='')
 writer_2 =  csv.writer(csvfile_2,delimiter=';')
 
 writer_2.writerow(["Estructura","SetDatos","TiempoCreacion","UsoMemoria"])
