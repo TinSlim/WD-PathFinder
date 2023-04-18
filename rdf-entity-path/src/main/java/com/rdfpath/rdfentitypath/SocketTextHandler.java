@@ -25,6 +25,8 @@ import com.rdfpath.graph.model.GraphCompDense;
 import com.rdfpath.graph.model.GraphFullNative;
 import com.rdfpath.graph.model.GraphNative;
 import com.rdfpath.graph.model.GraphWrapper;
+import com.rdfpath.graph.model.GraphWrapper2;
+import com.rdfpath.graph.model.GraphWrapperTest;
 import com.rdfpath.graph.model.IGraph;
 
 
@@ -34,6 +36,14 @@ public class SocketTextHandler extends TextWebSocketHandler {
 	
 	public SocketTextHandler () throws IOException, ParseException {
 		super();
+		
+		long heapSize = Runtime.getRuntime().totalMemory(); 
+		long heapMaxSize = Runtime.getRuntime().maxMemory();
+		long heapFreeSize = Runtime.getRuntime().freeMemory(); 
+
+		System.out.println(heapSize);
+		System.out.println(heapMaxSize);
+		System.out.println(heapFreeSize);
 		
 		String path = "subsets/";
 		String[] files = {"subset100000", "subset1000000", "subset10000000", "subset100000000","latest-truthy_small"};//{"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
@@ -76,12 +86,9 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		//graph = new GraphCompDense(path + files[index] + endComp, true, nodesSize[index]);
 		//graph = new GraphComp(path + files[index] + endComp, true, maxNodeId[index]);
 		//graph = new GraphFullNative(path + files[index] + end, path + files[index] + endNative, true, true, edgesSize[index], maxNodeId[index]);
-		graph = new GraphFullNative(
-				path + files[index] + end,
-				path + files[index] + endNative,
+		graph = new GraphComp(
+				path + files[index] + endComp,
 				true,
-				true,
-				edgesSize[index],
 				maxNodeId[index]);
 		
 		System.out.println("==    Grafo Cargado    ==\n");
@@ -92,9 +99,16 @@ public class SocketTextHandler extends TextWebSocketHandler {
 			throws InterruptedException, IOException {
 		String response = message.getPayload();
 		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
-		GraphWrapper graphWrapper = new GraphWrapper(graph);
+		//GraphWrapper graphWrapper = new GraphWrapper(graph);
+		//graphWrapper.setSession(session);
+		//graphWrapper.search(nodesNumbers, 2);
+		
+		GraphWrapper2 graphWrapper = new GraphWrapper2(graph);
 		graphWrapper.setSession(session);
-		graphWrapper.search(nodesNumbers, 2);
+		graphWrapper.search(nodesNumbers, 3);
+		
+		//GraphWrapperTest graphWrapper = new GraphWrapperTest(graph);
+		//graphWrapper.search(nodesNumbers, 3);
 		System.out.println("end");
 	}
 
