@@ -87,4 +87,15 @@ public interface IGraph {
 	 */
 	public String getStructName();
 
+	/**
+	 * @return
+	 */
+	public String edgeToText(Object edge);
+
+	/**
+	 * @param e
+	 * @return
+	 */
+	int getPredicateEdge(Object e);
+
 }
