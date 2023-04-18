@@ -222,6 +222,11 @@ public abstract class AbstractGraph implements IGraph {
             e.printStackTrace();
         }
 	}
+	
+	@Override
+	public String edgeToText(Object edge) {
+		return "{"+getOriginEdge(edge) + "->" + getPredicateEdge(edge) + "->" + getDestinationEdge(edge) + "}";
+	}
 
 
 }
