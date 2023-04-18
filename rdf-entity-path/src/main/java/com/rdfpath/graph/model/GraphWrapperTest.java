@@ -34,13 +34,13 @@ public class GraphWrapperTest implements Callable<String> {
 		for (int i : nodesNumbers) {
 			nodesHash.add(i);
 		}
-		
-		
+
 		LinkedList<LinkedList<Integer>> paths = new LinkedList<LinkedList<Integer>>();
 		LinkedList<VertexWrapperTest> stack = new LinkedList<VertexWrapperTest>();
 		
 		for (int x : nodesNumbers) {
-			stack.add(new VertexWrapperTest (x));
+			VertexWrapperTest vw = new VertexWrapperTest (x);
+			stack.add(vw);
 		}
 				
 		while (stack.size() > 0) {
@@ -50,27 +50,27 @@ public class GraphWrapperTest implements Callable<String> {
 			}
 			
 			HashSet<Integer> a = graph.getAdjacentVertex(actVW.vertexID);
-			
-			for (int i : actVW.path) {
-				a.remove(i);
-			}
+			VertexWrapperTest copyActVW = actVW;
+			do { 
+				a.remove(copyActVW.vertexID);
+				copyActVW = copyActVW.father;			}
+			while (copyActVW != null);
 			
 			
 			
 			for (int neighbor : a) {
-				
 				if (nodesHash.contains(neighbor) && neighbor != actVW.initId) {
-					LinkedList<Integer> secList = (LinkedList<Integer>) actVW.path.clone();
-					secList.add(neighbor);
-					//paths.add(secList);
-					System.out.println(secList);
-					System.out.println(stack.size());
-			
+					LinkedList<Integer> ans = new LinkedList<Integer>();
+					ans.add(neighbor);
+					copyActVW = actVW;
+					do { 
+						ans.add(copyActVW.vertexID);
+						copyActVW = copyActVW.father;
+					}
+					while (copyActVW != null);
 			}
 				else {
-					VertexWrapperTest dd = new VertexWrapperTest(actVW);
-					dd.vertexID = neighbor;
-					dd.path.add(neighbor);
+					VertexWrapperTest dd = new VertexWrapperTest(actVW, neighbor);
 					stack.add(dd);
 				}
 			}
@@ -90,7 +90,82 @@ public class GraphWrapperTest implements Callable<String> {
 	    return paths
 	 */
 
-	@Override
+	public void allPathsNew (int[] start, int maxSize) {
+		
+		HashSet<Integer> nodesHash = new HashSet<Integer>();
+		for (int i : start) {
+			nodesHash.add(i);
+		}
+		
+		for (int x : nodesHash) {
+			
+			int id = x;
+			
+			LinkedList<Integer> bits = new LinkedList();
+			int counter = 0;
+			while (counter < maxSize) {
+				bits.push(0);
+				counter++;
+			}
+			
+			LinkedList<Integer> path = new LinkedList();
+			path.push(x);
+			
+			int init = x;
+			
+			while (path.size() < bits.size()) {
+				HashSet<Integer> a = graph.getAdjacentVertex(id);
+				for (int i : path) {
+					a.remove(i);
+				}
+				Integer[] posibleNeighbors = a.toArray(new Integer[a.size()]);
+				int indexNewNeighbor = bits.get(path.size());
+				
+				if (posibleNeighbors.length <= indexNewNeighbor) { 
+					bits.set(path.size(), 0);
+					
+					if (path.size() > 1) {
+						bits.set(path.size() - 1, bits.get(path.size() - 1) + 1);
+						path.pop();
+						id = path.get(0);
+					}
+					
+					else {
+						break;
+					}
+				}
+				
+				else if (nodesHash.contains(posibleNeighbors[indexNewNeighbor]) && posibleNeighbors[indexNewNeighbor] != init) {
+					path.push(posibleNeighbors[indexNewNeighbor]);
+					System.out.println(path); // print		
+					System.out.println("or");
+					path.pop();
+					bits.set(path.size(),bits.get(path.size()) + 1);
+					id = path.get(0);
+				}
+				
+				else if (path.size() == bits.size() - 1) {
+					path.push(posibleNeighbors[indexNewNeighbor]);
+					id = posibleNeighbors[indexNewNeighbor];
+					path.pop();
+					id = path.get(0);
+					bits.set(path.size(), bits.get(path.size()) + 1);
+				}
+				
+				else {
+					path.push(posibleNeighbors[indexNewNeighbor]);
+					id = posibleNeighbors[indexNewNeighbor];
+				}
+				
+			}
+			
+		}
+		return;
+	}
+	
+
+
+	@Override  	
 	public String call() throws Exception {
 		// TODO Auto-generated method stub
 		return null;

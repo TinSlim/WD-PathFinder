@@ -14,7 +14,8 @@ import java.util.LinkedList;
  */
 public class VertexWrapperTest {
 	public int vertexID;
-	public LinkedList<Integer> path;
+	public VertexWrapperTest father;
+	//public LinkedList<Integer> path;
 	public int initId;
 	public int actSize;
 	
@@ -23,8 +24,9 @@ public class VertexWrapperTest {
 	 */
 	public VertexWrapperTest(int x) {
 		this.vertexID = x;
-		path = new LinkedList<Integer>();
-		path.add(x);
+		this.father = null;
+		//path = new LinkedList<Integer>();
+		//path.add(x);
 		this.initId = x;
 		this.actSize = 0;
 	}
@@ -32,15 +34,16 @@ public class VertexWrapperTest {
 	/**
 	 * @param actVW
 	 */
-	public VertexWrapperTest(VertexWrapperTest actVW) {
-		this.vertexID = actVW.vertexID;
-		this.path = (LinkedList<Integer>) actVW.path.clone();
+	public VertexWrapperTest(VertexWrapperTest actVW, int neighbor) {
+		this.vertexID = neighbor;
+		this.father = actVW;
+		//this.path = (LinkedList<Integer>) actVW.path.clone();
 		this.initId = actVW.initId;
 		this.actSize = actVW.actSize + 1;
 	}
 
 	public String toString() {
-        return vertexID + " | " + path + " | " + initId + " | " + actSize;
+        return vertexID + " | (" + father + ") | " + initId + " | " + actSize;
     }
 
 }

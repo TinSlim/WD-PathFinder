@@ -197,6 +197,9 @@ public class GraphWrapper {
 			}
 			session.sendMessage(new TextMessage(graph.edgeToJson(e,vList)));
 		}
+		else {
+			System.out.println(graph.getOriginEdge(e) + " -> "+ graph.getDestinationEdge(e));
+		}
 		edges.add(e);
 	}
 }
