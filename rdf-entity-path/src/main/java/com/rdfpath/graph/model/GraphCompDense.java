@@ -149,7 +149,9 @@ public class GraphCompDense extends AbstractGraph {
 		return edge[2];
 	}
 	
-	public int getPredicateEdge(int[] edge) {
+	@Override
+	public int getPredicateEdge(Object e) {
+		int[] edge = (int []) e;
 		if (edge[1] < 0) {
 			return -1 * edge[1];
 		}
@@ -200,5 +202,4 @@ public class GraphCompDense extends AbstractGraph {
     	
     	return message;
     }
-
 }

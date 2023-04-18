@@ -172,4 +172,10 @@ public class GraphNative extends AbstractGraph {
 		return edges[edgeNum][2];
 	}
 
+	@Override
+	public int getPredicateEdge(Object e) {
+		Integer edgeNum = (Integer) e;
+		return edges[edgeNum][1];
+	}
+
 }

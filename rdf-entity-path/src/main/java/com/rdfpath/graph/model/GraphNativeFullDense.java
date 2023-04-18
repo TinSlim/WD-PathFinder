@@ -199,4 +199,10 @@ public class GraphNativeFullDense extends AbstractGraph {
 		return edges[edgeNum][2];
 	}
 
+	@Override
+	public int getPredicateEdge(Object e) {
+    	int idEdge = (int) e;
+    	return edges[idEdge][1];
+	}
+
 }

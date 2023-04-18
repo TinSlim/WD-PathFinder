@@ -108,8 +108,8 @@ public class Graph extends AbstractGraph {
     	
     	// Edge
     	JSONObject edge = new JSONObject();
-    	edge.put("from", edgeF.origin);
-    	edge.put("to", edgeF.destination);
+    	edge.put("from", edgeF.origin.id);
+    	edge.put("to", edgeF.destination.id);
     	//edge.put("label", "K"+id);
     	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
     	edge.put("title", edgeLabel);
@@ -122,12 +122,12 @@ public class Graph extends AbstractGraph {
     	for (Integer idV : vertexList) {
     		Vertex v = nodes.get(idV);
     		String color = (v.father == v) ? "#cc76FC" : "#97C2FC";
-    		String vertexLabel = Utils.getEntityName("Q" + v);
+    		String vertexLabel = Utils.getEntityName("Q" + v.id);
         	String vertexLabelSmall = vertexLabel;
         	if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
     		vertexArray.put(
     				new JSONObject()
-    				.put("id", v)
+    				.put("id", v.id)
     				//.put("label",Utils.getEntityName("Q" + v) + "_" + v)
     				.put("label", vertexLabelSmall)
     				.put("title", vertexLabel)
@@ -161,5 +161,11 @@ public class Graph extends AbstractGraph {
 	public int getDestinationEdge(Object e) {
 		Edge edgeF = (Edge) e;
 		return edgeF.destination.id;
+	}
+
+	@Override
+	public int getPredicateEdge(Object e) {
+		Edge edgeF = (Edge) e;
+		return edgeF.id;
 	}
 }
