@@ -1,0 +1,16 @@
+
+
+run.sh
+export
+
+# Data R
+r_graficos/.Rproj.user
+r_graficos/.RData
+r_graficos/.Rhistory
+
+# Subsets
+rdf-entity-path/subsets
+rdf-entity-path/subsetsBorrar
+
+# Ambiente Frontend
+frontend/.env
