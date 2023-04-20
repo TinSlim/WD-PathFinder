@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.rdfpath.graph.main;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
