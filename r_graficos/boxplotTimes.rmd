@@ -39,9 +39,11 @@ ggplot(tiemposBusquedaVecino, aes(x=SetDatos, y=Tiempos, color=Estructura)) + # 
        x = "Set de datos") +
 
   theme(plot.title = element_text(hjust = 0.5)) +
-  scale_y_continuous(trans='log10')
+  scale_y_continuous(trans='log10', breaks = c(1,10,100,1000,10000,100000, 1000000, 10000000, 100000000, 1000000000))
+# c(1000, 1000000, 1000000000)
 
 ggsave(plot = last_plot(), filename = "searchTime.jpeg")
+ggsave(plot = last_plot(), filename = "searchTime.pdf")
 ```
 
 
@@ -63,9 +65,10 @@ ggplot(tiemposBusquedaVecinoFiltrado, aes(x=SetDatos, y=Tiempos, color=Estructur
        x = "Set de datos") +
 
   theme(plot.title = element_text(hjust = 0.5)) +
-  scale_y_continuous(trans='log10')
+  scale_y_continuous(trans='log10', breaks = c(1,10,100,1000,10000,100000, 1000000, 10000000, 100000000, 1000000000))
 
 ggsave(plot = last_plot(), filename = "searchTime2.jpeg")
+ggsave(plot = last_plot(), filename = "searchTime2.pdf")
 ```
 ```
 
