@@ -9,6 +9,7 @@ import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.GraphFullNative;
 import com.rdfpath.graph.model.GraphWrapper;
 import com.rdfpath.graph.model.GraphWrapper2;
+import com.rdfpath.graph.model.GraphWrapper3;
 import com.rdfpath.graph.model.GraphWrapperTest;
 import com.rdfpath.graph.model.IGraph;
 

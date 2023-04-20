@@ -30,13 +30,14 @@ public class GraphWrapper3 {
 		this.session = null;
 		this.totalEdges = 0;
 	}
+
 	
 	public void setSession (WebSocketSession session) {
 		this.session = session;
 	}
 
-	public void search (int [] nodesNumbers, int size) throws IOException, InterruptedException {
-		
+	public void search (int [] nodesNumbers, int size) {
+		System.out.println("INSIDE SEARCH");
 		LinkedList<VertexWrapper2> toSearch = new LinkedList<VertexWrapper2>();
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
 		
@@ -48,8 +49,9 @@ public class GraphWrapper3 {
 			toSearch.push(actVW);
 		}
 		
-
+		System.out.println("ss");
 		while (toSearch.size() > 0) {
+			System.out.println("rrr");
 			VertexWrapper2 actualVW = toSearch.pop();
 			
 			if (actualVW.sameColorDistance > (size/2) + size%2) {
@@ -58,7 +60,7 @@ public class GraphWrapper3 {
 			
 			// Revisa VÉRTICES adyacentes
 			for (Integer adjVertex : graph.getAdjacentVertex(actualVW.idVertex)) {
-				Thread.sleep(0);
+				
 				// NO ha sido visitado:
 				if (nodes.get(adjVertex) == null) {
 					VertexWrapper2 newVW = new VertexWrapper2 (actualVW, adjVertex);
@@ -109,15 +111,13 @@ public class GraphWrapper3 {
 					
 				}
 			}
-			Thread.sleep(0);
 		}
 	}
 	
-	public void backTracking(VertexWrapper2 vw, int maxSize, HashSet<Integer> nodesNumbers) throws InterruptedException {
+	public void backTracking(VertexWrapper2 vw, int maxSize, HashSet<Integer> nodesNumbers) {
 		LinkedList<VertexBackTracking> stack = new LinkedList<VertexBackTracking>();
 		stack.push(new VertexBackTracking(vw));
 		while (stack.size() > 0) {
-			Thread.sleep(0);
 			VertexBackTracking actualBT = stack.pop();
 			if (actualBT.colorDistance + actualBT.grade > maxSize) {
 				continue;
@@ -128,7 +128,6 @@ public class GraphWrapper3 {
 			}
 			
 			for (VertexWrapper2 vwFrom: actualBT.actVW.from) {
-				Thread.sleep(0);
 				if (! actualBT.nodes.contains(vwFrom.idVertex)) {
 					VertexBackTracking vbtNew = new VertexBackTracking(actualBT, vwFrom);
 					stack.push(vbtNew);
@@ -137,20 +136,19 @@ public class GraphWrapper3 {
 		}
 	}
 
-	public void makeEdges (LinkedList<Integer> nodesList) throws InterruptedException {
+	public void makeEdges (LinkedList<Integer> nodesList) {
 		if (nodesList.size() < 2) {
 			return;
 		}
 		int i = 0;
 		while (i < nodesList.size() - 1) {
-			Thread.sleep(0);
 			sendEdges(nodesList.get(i), nodesList.get(i + 1));
 			i++;
 		}
 		return;
 	}
 	
-	public void sendEdges (int v1, int v2) throws InterruptedException {
+	public void sendEdges (int v1, int v2) {
 		if (nodes.get(v1).hasEdgeWith(v2) && nodes.get(v2).hasEdgeWith(v1)) {
 		return;
 		}
@@ -173,7 +171,6 @@ public class GraphWrapper3 {
 		
 		for (Object edge : edges) {
 			//System.out.println(graph.edgeToText(edge));
-			Thread.sleep(0);
 			totalEdges+=1;
 			//try { 
 			//	session.sendMessage(new TextMessage(graph.edgeToJson(edge, vList)));
