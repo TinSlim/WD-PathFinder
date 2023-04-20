@@ -116,7 +116,7 @@ public class StatementCounter extends AbstractRDFHandler {
 		//double weight = 1.0 + (double) edgesCount.get(getPredicateId(strPredicate))/maxEdgeCount;
 ;
 		// Añade arista
-		Edge edge = new Edge(PredicateKey, subjectNode, objectNode, 0);
+		Edge edge = new Edge(PredicateKey, subjectNode, objectNode);
 		subjectNode.addEdge(edge);
 		objectNode.addEdge(edge);
 		edgesLoaded += 1; //Cuenta arista
