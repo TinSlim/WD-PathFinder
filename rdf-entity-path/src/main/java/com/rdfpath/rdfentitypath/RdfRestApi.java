@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.rdfpath.graph.algorithms.BFSMix;
 import com.rdfpath.graph.model.Edge;
 import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.Vertex;
@@ -26,29 +25,8 @@ import com.rdfpath.graph.utils.Utils;
 public class RdfRestApi {
 	Graph graph = null;
 
-	@RequestMapping("/querylol")
+	@RequestMapping("/querylol") // borrar
 	public String home() throws IOException {//throws IOException {
-		Vertex a = new Vertex (2);
-		System.out.println(a);
-		String filename = "/nt/star.nt";//"/nt/myGraph.nt";
-		graph = new Graph(filename,false); // TODO esta linea pide IOExcept
-		System.out.println(graph.getNodes().get(1).myFather);
-		System.out.println("graph2");
-		
-		BFSMix bfsAlg = new BFSMix(graph);
-		
-		Integer[] nodesNumbers = {18,20,19};
-		ArrayList<Vertex> listNodes = new ArrayList<Vertex> ();
-		String newName = "";
-		for (Integer i : nodesNumbers) {
-			listNodes.add(graph.getNodes().get(i));
-			newName = String.join("_",newName,Integer.toString(i));
-		}
-		
-		bfsAlg.setSearchNodes(listNodes);
-		ArrayList<Edge> edges = bfsAlg.getRoadsOnline(3);
-		System.out.println(edges);
-		System.out.println("-------------");
 	    return "---beser--";
 	}
 	
