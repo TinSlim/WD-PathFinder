@@ -25,8 +25,8 @@ public class VertexBackTracking {
 		this.actVW = actVW;
 		road.add(actVW.idVertex);
 		nodes.add(actVW.idVertex);
-		grade = actVW.grade;
-		colorDistance = actVW.colorDistance;
+		grade = actVW.sameColorDistance;
+		colorDistance = actVW.otherColorDistance;
 	}
 
 	/**
@@ -41,9 +41,9 @@ public class VertexBackTracking {
 		
 		colorDistance = actualBT.colorDistance + 1;
 		this.colorDistance = actualBT.colorDistance + 1;
-		if (vwFrom.colorDistance > colorDistance + 1) {
-			vwFrom.colorDistance = colorDistance + 1;
+		if (vwFrom.otherColorDistance > colorDistance + 1) {
+			vwFrom.otherColorDistance = colorDistance + 1;
 		}
-		grade = vwFrom.grade;
+		grade = vwFrom.sameColorDistance;
 	}
 }
