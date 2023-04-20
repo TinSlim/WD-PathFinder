@@ -13,11 +13,11 @@ import java.util.LinkedList;
 public class VertexWrapper2 {
 	public int idVertex;
 	public int colorNode;
-	public int grade;
+	public int sameColorDistance;
 	public HashSet<VertexWrapper2> from;
 	public LinkedList<Integer> added;
 	public Boolean inStack;
-	public int colorDistance;
+	public int otherColorDistance;
 	public HashSet<Integer> edgesWith;
 	//public int father;
 	
@@ -27,11 +27,11 @@ public class VertexWrapper2 {
 	public VertexWrapper2(int idSearch) {
 		this.idVertex = idSearch;
 		this.colorNode = idSearch;
-		this.grade = 0;
+		this.sameColorDistance = 0;
 		this.from = new HashSet<VertexWrapper2>();
 		this.added = new LinkedList<Integer>();
-		this.colorDistance = -1;
-		edgesWith = new HashSet();
+		this.otherColorDistance = -1;
+		edgesWith = new HashSet<Integer>();
 		//this.father = -1;
 	}
 
@@ -42,13 +42,13 @@ public class VertexWrapper2 {
 	public VertexWrapper2(VertexWrapper2 actualVW, int adjVertex) {
 		this.idVertex = adjVertex;
 		this.colorNode = actualVW.colorNode;
-		this.grade = actualVW.grade + 1;
+		this.sameColorDistance = actualVW.sameColorDistance + 1;
 		this.from = new HashSet<VertexWrapper2>();
 		this.from.add(actualVW);
 		this.added = new LinkedList<Integer>();
 		added.add(actualVW.idVertex);
-		this.colorDistance = -1;
-		edgesWith = new HashSet();
+		this.otherColorDistance = -1;
+		edgesWith = new HashSet<Integer>();
 		//this.father = actualVW.idVertex;
 	}
 	

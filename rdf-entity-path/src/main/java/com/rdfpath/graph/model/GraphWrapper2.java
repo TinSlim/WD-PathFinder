@@ -21,12 +21,14 @@ public class GraphWrapper2 {
 	private IGraph graph;
 	private HashSet<Integer> addedNodes;
 	private WebSocketSession session;
+	private int totalEdges;
 	
 	public GraphWrapper2 (IGraph graph2) {
 		this.graph = (IGraph) graph2;
 		this.nodes = new HashMap<Integer, VertexWrapper2>();
 		this.addedNodes = new HashSet<Integer>();
 		this.session = null;
+		this.totalEdges = 0;
 	}
 	
 	public void setSession (WebSocketSession session) {
@@ -50,7 +52,7 @@ public class GraphWrapper2 {
 		while (toSearch.size() > 0) {
 			VertexWrapper2 actualVW = toSearch.pop();
 			
-			if (actualVW.grade > (size/2) + size%2) {
+			if (actualVW.sameColorDistance > (size/2) + size%2) {
 				continue;
 			}
 
@@ -78,12 +80,11 @@ public class GraphWrapper2 {
 					if (actualVW.colorNode == adjVW.colorNode) {
 
 						// Revisar si se agregó, ESTÁ EN PATH
-						if (adjVW.colorDistance > -1 && adjVW.colorDistance + actualVW.grade <= size) {
+						if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance <= size) {
 							LinkedList<Integer> unionNodes = new LinkedList<Integer>();
 							unionNodes.push(adjVW.idVertex);
 							unionNodes.push(actualVW.idVertex);
 							makeEdges(unionNodes);
-							// TODO ojo acá,
 							backTracking(actualVW, size, nodesNumbersSet);
 						}
 						
@@ -93,10 +94,9 @@ public class GraphWrapper2 {
 					}
 					
 					else {
-						
-						if (adjVW.grade + actualVW.grade + 1 <= size) { //
-							adjVW.colorDistance = actualVW.grade + 1;
-							actualVW.colorDistance = adjVW.grade + 1;
+						if (adjVW.sameColorDistance + actualVW.sameColorDistance + 1 <= size) { //
+							adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
+							actualVW.otherColorDistance = adjVW.sameColorDistance + 1;
 							backTracking(adjVW, size, nodesNumbersSet);
 							LinkedList<Integer> unionNodes = new LinkedList<Integer>();
 							unionNodes.push(adjVW.idVertex);
@@ -169,7 +169,8 @@ public class GraphWrapper2 {
 		
 		for (Object edge : edges) {
 			//System.out.println(graph.edgeToText(edge));
-			
+			//Thread.sleep(0);
+			totalEdges+=1;
 			try { 
 				session.sendMessage(new TextMessage(graph.edgeToJson(edge, vList)));
 			} catch (IOException e) {
