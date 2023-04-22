@@ -1,4 +1,4 @@
-package com.rdfpath.graph.main;
+package com.rdfpath.graph.main.experiments;
 
 import java.io.FileReader;
 import java.io.FileWriter;
