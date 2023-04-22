@@ -1,16 +1,8 @@
 package com.rdfpath.graph.main;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-
 import com.rdfpath.graph.model.Graph;
-import com.rdfpath.graph.model.GraphFullNative;
-import com.rdfpath.graph.model.GraphWrapper;
 import com.rdfpath.graph.model.GraphWrapper2;
-import com.rdfpath.graph.model.GraphWrapper3;
-import com.rdfpath.graph.model.GraphWrapperTest;
 import com.rdfpath.graph.model.IGraph;
 
 /**

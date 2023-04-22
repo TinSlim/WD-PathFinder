@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -89,7 +88,7 @@ public class GraphComp extends AbstractGraph {
 	}
 
 	@Override
-	public ArrayList getEdges(int idVertex, int idVertex2) {
+	public ArrayList<int[]> getEdges(int idVertex, int idVertex2) {
 		// TODO Auto-generated method stub
 		ArrayList<int[]> edges = new ArrayList<int[]>();
 		int index = searchVertexIndex(idVertex);

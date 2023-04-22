@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,10 +36,6 @@ public class GraphNativeFullDense extends AbstractGraph {
 
 		String line = "";
         String[] tempArr;
-        
-        int countedStatements = 0;
-        int nodesLoaded = 0;
-        int edgesLoaded = 0;
 
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
     		//timeA = System.currentTimeMillis();
@@ -174,8 +169,10 @@ public class GraphNativeFullDense extends AbstractGraph {
 	}
 
 	@Override
-	public ArrayList getEdges(int idVertex, int idVertex2) {
-		ArrayList<Integer> result = new ArrayList();
+	public ArrayList<Integer> getEdges(int idVertex, int idVertex2) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		idVertex = searchVertexIndex(idVertex);
+		idVertex2 = searchVertexIndex(idVertex2);
 		Boolean lessEdges = nodes2[idVertex].length > nodes2[idVertex2].length;
 		int [] vFrom = lessEdges ? nodes2[idVertex2] : nodes2[idVertex];
 		int vTo = lessEdges ? idVertex : idVertex2;

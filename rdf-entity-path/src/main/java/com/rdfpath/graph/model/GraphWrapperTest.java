@@ -1,15 +1,10 @@
 package com.rdfpath.graph.model;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
-
-import org.locationtech.jts.awt.PointShapeFactory.X;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 
 /**
  *

@@ -40,10 +40,6 @@ public class GraphNative extends AbstractGraph {
 		String line = "";
         String[] tempArr;
         
-        int countedStatements = 0;
-        int nodesLoaded = 0;
-        int edgesLoaded = 0;
-
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
     		//timeA = System.currentTimeMillis();
     		//sendNotificationTime(10,"Nodos: " + nodesLoaded);
@@ -147,8 +143,8 @@ public class GraphNative extends AbstractGraph {
 	}
 
 	@Override
-	public ArrayList getEdges(int idVertex, int idVertex2) {
-		ArrayList<Integer> result = new ArrayList();
+	public ArrayList<Integer> getEdges(int idVertex, int idVertex2) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
 		Boolean lessEdges = nodes.get(idVertex).size() > nodes.get(idVertex2).size();
 		List<Integer> vFrom = lessEdges ? nodes.get(idVertex2) : nodes.get(idVertex);
 		int vTo = lessEdges ? idVertex : idVertex2;

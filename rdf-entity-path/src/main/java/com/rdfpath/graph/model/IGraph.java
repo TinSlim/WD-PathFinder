@@ -6,8 +6,6 @@ package com.rdfpath.graph.model;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-
 import org.json.simple.parser.ParseException;
 
 /**

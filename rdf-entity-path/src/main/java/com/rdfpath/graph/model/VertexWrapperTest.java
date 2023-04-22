@@ -3,9 +3,6 @@
  */
 package com.rdfpath.graph.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 /**
  *
  * @author Cristóbal Torres G.
