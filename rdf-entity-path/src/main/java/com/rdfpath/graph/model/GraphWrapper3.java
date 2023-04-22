@@ -22,13 +22,19 @@ public class GraphWrapper3 {
 	private HashSet<Integer> addedNodes;
 	private WebSocketSession session;
 	public int totalEdges;
+	public long startTime;
+	public int seconds = 60;
+	//public int[] nodesNumbers;
+	//public int size;
 	
-	public GraphWrapper3 (IGraph graph2) {
+	public GraphWrapper3 (IGraph graph2){//, int[] nums, int maxSize) {
 		this.graph = (IGraph) graph2;
 		this.nodes = new HashMap<Integer, VertexWrapper2>();
 		this.addedNodes = new HashSet<Integer>();
 		this.session = null;
 		this.totalEdges = 0;
+		//this.nodesNumbers = nums;
+		//this.size = maxSize;
 	}
 
 	
@@ -36,8 +42,10 @@ public class GraphWrapper3 {
 		this.session = session;
 	}
 
+	//@Override
+    //public void run() {
 	public void search (int [] nodesNumbers, int size) {
-		System.out.println("INSIDE SEARCH");
+		startTime = System.currentTimeMillis();
 		LinkedList<VertexWrapper2> toSearch = new LinkedList<VertexWrapper2>();
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
 		
@@ -48,10 +56,8 @@ public class GraphWrapper3 {
 			nodesNumbersSet.add(idSearch);
 			toSearch.push(actVW);
 		}
-		
-		System.out.println("ss");
-		while (toSearch.size() > 0) {
-			System.out.println("rrr");
+
+		while ( toSearch.size() > 0 && ((System.currentTimeMillis() - startTime) < seconds * 1000) ) {
 			VertexWrapper2 actualVW = toSearch.pop();
 			
 			if (actualVW.sameColorDistance > (size/2) + size%2) {
@@ -112,12 +118,14 @@ public class GraphWrapper3 {
 				}
 			}
 		}
+		System.out.print(totalEdges+";"+(System.currentTimeMillis() - startTime)+";");
+
 	}
 	
 	public void backTracking(VertexWrapper2 vw, int maxSize, HashSet<Integer> nodesNumbers) {
 		LinkedList<VertexBackTracking> stack = new LinkedList<VertexBackTracking>();
 		stack.push(new VertexBackTracking(vw));
-		while (stack.size() > 0) {
+		while (stack.size() > 0  && (System.currentTimeMillis() - startTime) < seconds * 1000) {
 			VertexBackTracking actualBT = stack.pop();
 			if (actualBT.colorDistance + actualBT.grade > maxSize) {
 				continue;
@@ -141,7 +149,7 @@ public class GraphWrapper3 {
 			return;
 		}
 		int i = 0;
-		while (i < nodesList.size() - 1) {
+		while ( (i < nodesList.size() - 1) && ((System.currentTimeMillis() - startTime) < seconds * 1000)) {
 			sendEdges(nodesList.get(i), nodesList.get(i + 1));
 			i++;
 		}
@@ -149,10 +157,9 @@ public class GraphWrapper3 {
 	}
 	
 	public void sendEdges (int v1, int v2) {
-		if (nodes.get(v1).hasEdgeWith(v2) && nodes.get(v2).hasEdgeWith(v1)) {
-		return;
+		if ((nodes.get(v1).hasEdgeWith(v2) && nodes.get(v2).hasEdgeWith(v1)) || ((System.currentTimeMillis() - startTime) >= seconds * 1000)) {
+			return;
 		}
-		
 		nodes.get(v1).addEdgeWith(v2);
 		nodes.get(v2).addEdgeWith(v1);
 		
@@ -169,17 +176,14 @@ public class GraphWrapper3 {
 			addedNodes.add(v2);
 		}
 		
+		if ((System.currentTimeMillis() - startTime) >= seconds * 1000) {
+			return;
+		}
+		
 		for (Object edge : edges) {
-			//System.out.println(graph.edgeToText(edge));
-			totalEdges+=1;
-			//try { 
-			//	session.sendMessage(new TextMessage(graph.edgeToJson(edge, vList)));
-			//} catch (IOException e) {
-			//	System.out.println("Error en session.sendMessage");
-			//	e.printStackTrace();
-			//}
-			
+			totalEdges+=1;		
 		}
 		
 	}
+
 }
