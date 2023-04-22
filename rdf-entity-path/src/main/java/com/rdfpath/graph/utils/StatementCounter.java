@@ -8,7 +8,6 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
 import com.rdfpath.graph.model.Edge;
-import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.Vertex;
 
 public class StatementCounter extends AbstractRDFHandler {

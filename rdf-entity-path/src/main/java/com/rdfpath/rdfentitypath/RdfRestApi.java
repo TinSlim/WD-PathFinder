@@ -3,22 +3,16 @@ package com.rdfpath.rdfentitypath;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.rdfpath.graph.model.Edge;
 import com.rdfpath.graph.model.Graph;
-import com.rdfpath.graph.model.Vertex;
 import com.rdfpath.graph.utils.Utils;
 
 @RestController
