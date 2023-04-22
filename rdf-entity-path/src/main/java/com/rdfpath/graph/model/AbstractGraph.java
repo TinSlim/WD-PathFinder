@@ -27,6 +27,10 @@ public abstract class AbstractGraph implements IGraph {
 	int minute = 0;
 	protected String structName = "graph";
 
+	protected int edgesLoaded = 0;
+	protected int countedStatements = 0;
+	protected int nodesLoaded = 0;
+    
 	public void printMemory () {
 		double maxHeapSize = Runtime.getRuntime().maxMemory();
 		double kbSize = maxHeapSize / 1024;

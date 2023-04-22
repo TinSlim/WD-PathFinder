@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,9 +21,6 @@ public class Graph extends AbstractGraph {
 
 		String line = "";
         String[] tempArr;
-        int edgesLoaded = 0;
-        int countedStatements = 0;
-        int nodesLoaded = 0;
         
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
     		//timeA = System.currentTimeMillis();
@@ -147,7 +143,7 @@ public class Graph extends AbstractGraph {
 	}
 
 	@Override
-	public ArrayList getEdges(int idVertex, int idVertex2) {
+	public ArrayList<Edge> getEdges(int idVertex, int idVertex2) {
 		return nodes.get(idVertex).getEdges(nodes.get(idVertex2));
 	}
 
