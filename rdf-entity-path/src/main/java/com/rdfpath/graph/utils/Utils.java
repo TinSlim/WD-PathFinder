@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -48,10 +47,10 @@ public class Utils {
 		try {
 			respuesta = peticionHttpGet(url);
 			JSONObject obj = new JSONObject(respuesta);
-			String label = (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
-			if (label != "" && label != null) {
-				return (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
-			};
+			if (obj.getJSONArray("search").length() > 0) {
+				String label = (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
+				return label;
+			}
 		} catch (Exception e) {
 			// Manejar excepción
 			e.printStackTrace();
