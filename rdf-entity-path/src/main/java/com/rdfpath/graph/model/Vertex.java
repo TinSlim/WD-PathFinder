@@ -8,14 +8,12 @@ import java.util.List;
 public class Vertex {
 
     public int id; // TODO hacer privado
-    private List<Edge> adjacentEdges = new LinkedList<>();
-    public ArrayList<Vertex> from; //TODO make private
-    public Vertex father;
-    public Vertex myFather;
+    private List<Edge> adjacentEdges;
+    
     
     public Vertex(Integer id) {
-    	this.from = new ArrayList<Vertex>();
-        this.id = id;
+    	this.adjacentEdges = new LinkedList<>();
+    	this.id = id;
     }
 
     public void addEdge(Edge edge) {
