@@ -78,7 +78,7 @@ public class GraphWrapper3 {
 				
 				// Revisa VÉRTICES adyacentes
 				for (Integer adjVertex : graph.getAdjacentVertex(actualVW.idVertex)) {
-					checkTime("Checking adj vertexes");												// Revisa tiempo
+					checkTime("Checking adj vertexes");	// TODO acá demora											// Revisa tiempo
 					
 					// Así no cicla en el mismo nodo
 					if (actualVW.idVertex == adjVertex) {
