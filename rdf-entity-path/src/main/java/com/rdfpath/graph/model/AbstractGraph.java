@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.json.simple.JSONArray;
@@ -231,6 +230,89 @@ public abstract class AbstractGraph implements IGraph {
 	public String edgeToText(Object edge) {
 		return "{"+getOriginEdge(edge) + "->" + getPredicateEdge(edge) + "->" + getDestinationEdge(edge) + "}";
 	}
+	
+	@Override
+	public CharSequence nodeToJson(int idSearch) {
+		String color = "#97C2FC";
+		
+		// Node
+		String vertexLabel = Utils.getEntityName("Q" + idSearch);
+    	String vertexLabelSmall = vertexLabel;
+    	if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
+    	
+    	JSONObject newVertex = new JSONObject();
+    	newVertex.put("label", vertexLabelSmall);
+    	newVertex.put("color",color);
+    	newVertex.put("title", vertexLabel);
+    	
+    	// Json
+    	JSONObject json = new JSONObject();
+    	json.put("type","vertex");
+    	json.put("data",newVertex);
+    	//newVertex.put("x",200);
+    	//newVertex.put("fixed",true);
+    	newVertex.put("id", idSearch);
+    	return json.toString();
+	}
+	
+	@Override
+	public CharSequence initNodeToJson(int idSearch, String color, float angle) {
+		
+		// Node
+		String vertexLabel = Utils.getEntityName("Q" + idSearch);
+    	String vertexLabelSmall = vertexLabel;
+    	if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
+    	
+    	JSONObject newVertex = new JSONObject();
+    	newVertex.put("label", vertexLabelSmall);
+    	newVertex.put("color",color);
+    	newVertex.put("title", vertexLabel);
+    	
+    	// Json
+    	JSONObject json = new JSONObject();
+    	json.put("type","vertex");
+    	json.put("data",newVertex);
+    	double angleR = Math.toRadians(angle);
+    	newVertex.put("x", Math.cos(angleR) * 500);
+    	newVertex.put("y", Math.sin(angleR) * 500);
+    	newVertex.put("fixed",true);
+    	newVertex.put("id", idSearch);
+    	return json.toString();
+	}
+	
+	public CharSequence edgeToJson(Object e) {
+    	JSONObject json = new JSONObject();
+    	
+    	// Edge data
+    	String edgeLabel = Utils.getEntityName("P"+	getPredicateEdge(e) +"&type=property");
+    	String edgeLabelSmall = edgeLabel;
+    	if (edgeLabel.length() > 7) {edgeLabelSmall = edgeLabel.substring(0,Math.min(edgeLabel.length(), 7)) + "...";}
 
-
+    	// Arrow Config
+    	JSONObject arrowInfo = new JSONObject();
+    	arrowInfo.put("enabled", true);
+    	arrowInfo.put("type", "arrow");
+    	
+    	JSONObject arrow = new JSONObject();
+    	arrow.put("to", arrowInfo);
+    	
+    	// Edge
+    	JSONObject edge = new JSONObject();
+    	edge.put("from", getOriginEdge(e));
+    	edge.put("to", getDestinationEdge(e));
+    	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
+    	edge.put("title", edgeLabel);
+    	edge.put("font", new JSONObject().put("align", "middle"));
+    	edge.put("color", new JSONObject().put("color", "#848484"));
+    	edge.put("arrows", arrow);
+    	edge.put("length", 500);
+    	
+    	json.put("type", "edge");
+    	json.put("data", edge);
+    	
+    	return json.toString();
+    }
+	
+	
+	
 }

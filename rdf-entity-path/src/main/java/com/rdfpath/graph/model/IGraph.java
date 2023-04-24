@@ -54,15 +54,6 @@ public interface IGraph {
 	 */
 	public int getDestinationEdge(Object e);
 
-	/**
-	 * Convierte una abstracción de arista a una sequencia Json que usa el cliente para dibujar
-	 * la arista, también usa una lista que incluye nodos que también debe dibujar.
-	 * 
-	 * @param e				Arista
-	 * @param vList			Lista de ID de nodos
-	 * @return				Json que lee VisJS en el cliente
-	 */
-	public CharSequence edgeToJson(Object e, ArrayList<Integer> vList);
 
 	/**
 	 * @throws ParseException 
@@ -96,4 +87,27 @@ public interface IGraph {
 	 */
 	int getPredicateEdge(Object e);
 
+	/**
+	 * @param idSearch
+	 * @return
+	 */
+	public CharSequence nodeToJson(int idSearch);
+	
+	/**
+	 * Convierte una abstracción de arista a una sequencia Json que usa el cliente para dibujar
+	 * la arista.
+	 * 
+	 * @param e				Arista
+	 * @return				Json que lee VisJS en el cliente
+	 */
+	public CharSequence edgeToJson(Object e);
+
+	/**
+	 * 
+	 * @param idSearch
+	 * @param color
+	 * @param angle
+	 * @return
+	 */
+	public CharSequence initNodeToJson(int idSearch, String color, float angle);
 }
