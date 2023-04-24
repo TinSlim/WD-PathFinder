@@ -2,7 +2,7 @@
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
     <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/rdf-entity-path/src/main/java/com/rdfpath/graph/main/GetSearchTimes.java"/>
+        <listEntry value="/rdf-entity-path/src/main/java/com/rdfpath/graph/main/experiments/PathFindTest.java"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
@@ -11,8 +11,9 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.rdfpath.graph.main.GetSearchTimes"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.rdfpath.graph.main.experiments.PathFindTest"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="rdf-entity-path"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="rdf-entity-path"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dsubset=&quot;subset1000000&quot; -Dgraph=&quot;graphNativeFullDense&quot;"/>
 </launchConfiguration>
