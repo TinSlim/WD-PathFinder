@@ -34,9 +34,9 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		String endComp = "_compressed.gz";
 		String endNative = "_native.gz";
 		
-		int [] nodesSize = {92654, 829794, 8159611, 87110322, 99609308};
+		//int [] nodesSize = {92654, 829794, 8159611, 87110322, 99609308};
 		int [] maxNodeId = {100000, 1000000, 10000000, 99999996, 117288116};
-		int [] edgesSize = {600493, 5977585, 42682387, 652319619, 715906922};
+		//int [] edgesSize = {600493, 5977585, 42682387, 652319619, 715906922};
 		
 
 		String actFile = (System.getProperty("graph-data") != null) ?
