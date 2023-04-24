@@ -91,10 +91,20 @@ export function startGraph (values) {
     socket.onmessage = function(event) {
       //console.log(`[message] Data received from server: ${event.data}`);
       let newData = JSON.parse(event.data);
-      for (let newVertex of newData.vertex) {
-          nodes.add(newVertex);
+      
+      if (newData.type == "vertex") {
+        nodes.add(newData.data);
       }
-      edges.add(newData.edge);
+
+      else if (newData.type == "edge") {
+        edges.add(newData.data);
+        console.log(newData.data);
+        }
+      
+      //for (let newVertex of newData.vertex) {
+      //    nodes.add(newVertex);
+      //}
+      //edges.add(newData.edge);
     };
 
     socket.onclose = function(event) {
