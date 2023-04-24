@@ -16,7 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
  *
  */
 public class GraphWrapper2 {
-
+	private String[] palette = {"#ADF7B6","#A0CED9","#FCF5C7"};
 	private HashMap<Integer, VertexWrapper2> nodes;
 	private IGraph graph;
 	private HashSet<Integer> addedNodes;
@@ -40,12 +40,27 @@ public class GraphWrapper2 {
 		LinkedList<VertexWrapper2> toSearch = new LinkedList<VertexWrapper2>();
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
 		
-		// Los añade a lista para buscar
+		
+		int index = 0;
 		for (int idSearch : nodesNumbers) {
 			VertexWrapper2 actVW = new VertexWrapper2(idSearch);
 			nodes.put(idSearch, actVW);
 			nodesNumbersSet.add(idSearch);
 			toSearch.push(actVW);
+			
+			addedNodes.add(idSearch);
+			session.sendMessage(new TextMessage(
+					graph.initNodeToJson(
+							idSearch,
+							palette[index],
+							(360/nodesNumbers.length)*index)));
+			index++;
+			float a = (360/nodesNumbers.length)*index;
+			System.out.println(a);
+			System.out.println(Math.cos(a));
+			System.out.println(Math.sin(a));
+			System.out.println("-");
+			//session.sendMessage(new TextMessage(graph.nodeToJson(idSearch)));
 		}
 		
 
@@ -58,6 +73,11 @@ public class GraphWrapper2 {
 
 			// Revisa VÉRTICES adyacentes
 			for (Integer adjVertex : graph.getAdjacentVertex(actualVW.idVertex)) {
+
+				// Así no cicla en el mismo nodo
+				if (actualVW.idVertex == adjVertex) {
+					continue;
+				}
 
 				// NO ha sido visitado:
 				if (nodes.get(adjVertex) == null) {
@@ -158,23 +178,28 @@ public class GraphWrapper2 {
 		ArrayList<Integer> vList = new ArrayList<Integer>();
 		// AddedNodes se puede borrar usando size de edgesNodes
 		if (!addedNodes.contains(v1)) {
-			vList.add(v1);
 			addedNodes.add(v1);
+			try {
+				session.sendMessage(new TextMessage(graph.nodeToJson(v1)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if (!addedNodes.contains(v2)) {
-			vList.add(v2);
 			addedNodes.add(v2);
+			try {
+				session.sendMessage(new TextMessage(graph.nodeToJson(v2)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		for (Object edge : edges) {
-			//System.out.println(graph.edgeToText(edge));
-			//Thread.sleep(0);
 			totalEdges+=1;
 			try { 
-				session.sendMessage(new TextMessage(graph.edgeToJson(edge, vList)));
+				session.sendMessage(new TextMessage(graph.edgeToJson(edge)));
 			} catch (IOException e) {
-				System.out.println("Error en session.sendMessage");
 				e.printStackTrace();
 			}
 			
