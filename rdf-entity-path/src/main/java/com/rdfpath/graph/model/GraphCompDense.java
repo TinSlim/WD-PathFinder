@@ -4,10 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.rdfpath.graph.utils.Utils;
 
 /**
  *
@@ -17,22 +13,15 @@ import com.rdfpath.graph.utils.Utils;
  */
 
 public class GraphCompDense extends AbstractGraph {
-	// NODES = 98347590
 	public int[][][] nodes;
-	//public HashMap<Integer,Integer> idNodes; /// HASHMAP TODO
 	public int edgesSize;
 	
 	public GraphCompDense (String filename, Boolean isGz, int edgesSize) throws IOException {
 		structName = "graphCompDense";
-		//String filename2 = "C:/Users/Cristóbal/Documents/RDF-Path-server/python/prearchivo/compressed_struct.gz";
-		//98347590
-		// TODO set 36 - 98347590 FILE
-		
-		
+
 		nodes = new int[edgesSize][][];
 		this.edgesSize = edgesSize;
-		
-		//idNodes = new HashMap<Integer, Integer>();
+
 		BufferedReader fileBuff = readFile(filename, isGz);
 		
 		String line = "";
@@ -40,25 +29,20 @@ public class GraphCompDense extends AbstractGraph {
         int node_id = 0;
 
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
-    		//timeA = System.currentTimeMillis();
-
-    		//sendNotificationTime(10,"Nodos: " + node_id);
-    		
-    		tempArr = line.split(" ");
-    		int id[] = {Integer.parseInt(tempArr[0])};					// line 	= "18 -22.16.32 23.17"
-    		//idNodes.put(id[0], node_id);								// temArr 	= {"18", "-22.16.32", "23.17"}
+    		tempArr = line.split(" ");									// line 	= "18 -22.16.32 23.17"
+    		int id[] = {Integer.parseInt(tempArr[0])};					// temArr 	= {"18", "-22.16.32", "23.17"}				
     		int[][] numbers = new int[tempArr.length][];				// id 		= {18}
-    		numbers[0] = id;											// numbers	= {{18}  }
+    		numbers[0] = id;											// numbers	= {18, ...}						
            
-    		// Para cada grupo [pred, obj] ó [pred, obj1, obj2, ...]	// Usando el "-22.16.32":
+    		// Para cada grupo [pred, obj] ó [pred, obj1, obj2, ...]	
     		for(int i = 1;i < tempArr.length;i++)
     		{
-        	   String[] temp_arr3 = tempArr[i].split("\\.");			// temp_arr3	= {"-22", "16", "32} 
-        	   int [] conn = new int[temp_arr3.length];
-        	   for (int j = 0;j < temp_arr3.length;j++) {
-        		   conn[j] = Integer.parseInt(temp_arr3[j]);			// conn	= {-22, 16, 32} 
+        	   String[] temp_arr3 = tempArr[i].split("\\.");			// Usando el "-22.16.32":
+        	   int [] conn = new int[temp_arr3.length];					// temp_arr3	= {"-22", "16", "32}
+        	   for (int j = 0;j < temp_arr3.length;j++) {				// conn	= {-22, 16, 32} 
+        		   conn[j] = Integer.parseInt(temp_arr3[j]);
         	   }
-        	   numbers[i] = conn;										// numbers = {{18}, {-22, 16, 32}, {23, 17}} 
+        	   numbers[i] = conn;										// numbers = {{18}, {-22, 16, 32}, {23, 17}} 			
            }
            
            nodes[node_id] = numbers;
@@ -68,9 +52,13 @@ public class GraphCompDense extends AbstractGraph {
 		return;
 	}
 	
-	
+	/**
+	 * Búsqueda binaria para encontrar el índice que corresponde con el ID de un nodo. Si no lo encuentra
+	 * retorna -1
+	 * @param id			ID del nodo que se va a buscar
+	 * @return				Índice del nodo buscado en el arreglo
+	 */
 	public int searchVertexIndex (int id) {
-		// Búsqueda binaria
 		int actIndexLeft = 0;
 		int actIndexRight = edgesSize - 1;
 		int actIndex = 0;
@@ -87,7 +75,6 @@ public class GraphCompDense extends AbstractGraph {
 			}
 		}
 		return -1;
-		//return idNodes.get(id);
 	}
 	
 	@Override
@@ -108,6 +95,25 @@ public class GraphCompDense extends AbstractGraph {
 		return answer;
 	}
 
+	@Override
+	public HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException {
+		HashSet<Integer> answer = new HashSet<Integer>();
+		int index = searchVertexIndex(id);
+		int i = 1;
+		int j = -1;
+
+		while (i < nodes[index].length) {
+			j = 1;
+			while (j < nodes[index][i].length) {
+				checkTime(seconds,startTime);
+				answer.add(nodes[index][i][j]);
+				j+=1;
+			}
+			i+=1;
+		}
+		return answer;
+	}
+	
 	@Override
 	public ArrayList<int[]> getEdges(int idVertex, int idVertex2) {
 		ArrayList<int[]> edges = new ArrayList<int[]>();

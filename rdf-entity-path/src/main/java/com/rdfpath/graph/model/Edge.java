@@ -1,12 +1,5 @@
 package com.rdfpath.graph.model;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.rdfpath.graph.utils.Utils;
-
 public class Edge  {
     public final int id;
     public final Vertex origin;

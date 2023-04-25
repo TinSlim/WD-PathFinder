@@ -28,10 +28,34 @@ public class Vertex {
         return adjacentEdges;
     }
     
+    public void checkTime (int seconds, long startTime) throws InterruptedException {
+		if ( (System.currentTimeMillis() - startTime) > seconds * 1000 ) {
+			if (System.getProperty("debug") != null) {
+				System.out.println("GetAdjVertex");
+			}
+			throw new InterruptedException("Done Time");
+		}
+		/*
+		 if (Thread.interrupted()) {
+		    throw new InterruptedException();
+		}
+		 */
+	}
+    
     public HashSet<Integer> getAdjacentVertex() {
     	List<Edge> actEdges = getAdjacentEdges();
     	HashSet<Integer> vertexSet = new HashSet<Integer>();
     	for (Edge e : actEdges) {
+    		vertexSet.add(e.getOppositeVertex(this).getId());
+    	}
+    	return vertexSet;
+    }
+    
+    public HashSet<Integer> getAdjacentVertexTimeout(int seconds, long startTime) throws InterruptedException {
+    	List<Edge> actEdges = getAdjacentEdges();
+    	HashSet<Integer> vertexSet = new HashSet<Integer>();
+    	for (Edge e : actEdges) {
+    		checkTime(seconds, startTime);
     		vertexSet.add(e.getOppositeVertex(this).getId());
     	}
     	return vertexSet;

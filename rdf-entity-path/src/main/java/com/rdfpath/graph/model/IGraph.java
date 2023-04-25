@@ -54,7 +54,6 @@ public interface IGraph {
 	 */
 	public int getDestinationEdge(Object e);
 
-
 	/**
 	 * @throws ParseException 
 	 * 
@@ -102,12 +101,7 @@ public interface IGraph {
 	 */
 	public CharSequence edgeToJson(Object e);
 
-	/**
-	 * 
-	 * @param idSearch
-	 * @param color
-	 * @param angle
-	 * @return
-	 */
-	public CharSequence initNodeToJson(int idSearch, String color, float angle);
+
+	HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException;
+
 }

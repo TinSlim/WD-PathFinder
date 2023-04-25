@@ -4,10 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.rdfpath.graph.utils.Utils;
 
 /**
 *
@@ -21,14 +17,8 @@ public class GraphFullNative extends AbstractGraph {
 	private int[][] edges;
 	private int[][] nodes2;
 	
-	private int edgesSize;
-	private int nodesSize;
-	
 	public GraphFullNative (String filename, String filename2, Boolean isGz, Boolean isGz2, int edgesSize, int nodesSize) throws IOException {
 		structName = "graphNativeFull";
-		this.edgesSize = edgesSize; 
-		this.nodesSize = nodesSize;
-
 		edges = new int[edgesSize][3];
 		nodes2 = new int[nodesSize + 1][];
 		
@@ -39,8 +29,6 @@ public class GraphFullNative extends AbstractGraph {
         
 
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
-    		//timeA = System.currentTimeMillis();
-    		//sendNotificationTime(10,"Edges: " + edgesLoaded);
     		
     		tempArr = line.split(" ");									// line 	= "<...> <...> <...> ."
     		
@@ -93,7 +81,18 @@ public class GraphFullNative extends AbstractGraph {
 		}
 		return adjVL;
 	}
-
+	
+	public HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException {
+		int[] edgesOfV = nodes2[id];
+		HashSet<Integer> adjVL = new HashSet<Integer>();
+		for (int edgeId : edgesOfV) {
+			checkTime(seconds,startTime);
+			int adjID = (edges[edgeId][0] == id) ? edges[edgeId][2] : edges[edgeId][0];
+			adjVL.add(adjID);
+		}
+		return adjVL;
+	}
+	
 	@Override
 	public ArrayList<Integer> getEdges(int idVertex, int idVertex2) {
 		ArrayList<Integer> result = new ArrayList<Integer>();

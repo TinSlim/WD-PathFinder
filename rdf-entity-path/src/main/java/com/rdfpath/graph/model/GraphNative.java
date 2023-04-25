@@ -10,10 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.rdfpath.graph.utils.Utils;
 
 /**
 *
@@ -22,16 +18,12 @@ import com.rdfpath.graph.utils.Utils;
 *
 */
 public class GraphNative extends AbstractGraph {
-	
-	
+
     private HashMap<Integer, LinkedList<Integer>> nodes;
 	private int[][] edges;
-	private int edgesSize;
-	
+
 	public GraphNative (String filename, Boolean isGz, int edgesSize) throws IOException {
 		structName = "graphNative";
-		this.edgesSize = edgesSize; 
-		
 		nodes = new HashMap<Integer, LinkedList<Integer>>();
 		edges = new int[edgesSize][3];
 		
@@ -93,6 +85,17 @@ public class GraphNative extends AbstractGraph {
 		LinkedList<Integer> edgesOfV = nodes.get(id);
 		HashSet<Integer> adjVL = new HashSet<Integer>();
 		for (Integer ig : edgesOfV) {
+			int adjID = (edges[ig][0] == id) ? edges[ig][2] : edges[ig][0]; 
+			adjVL.add(adjID);
+		}
+		return adjVL;
+	}
+	
+	public HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException {
+		LinkedList<Integer> edgesOfV = nodes.get(id);
+		HashSet<Integer> adjVL = new HashSet<Integer>();
+		for (Integer ig : edgesOfV) {
+			checkTime(seconds,startTime);
 			int adjID = (edges[ig][0] == id) ? edges[ig][2] : edges[ig][0]; 
 			adjVL.add(adjID);
 		}

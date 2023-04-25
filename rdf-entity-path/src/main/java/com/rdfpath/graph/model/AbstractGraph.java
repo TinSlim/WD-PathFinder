@@ -42,6 +42,20 @@ public abstract class AbstractGraph implements IGraph {
 		System.out.println("HeapSize gB:" + gbSize);
 	}
 	
+	public void checkTime (int seconds, long startTime) throws InterruptedException {
+		if ( (System.currentTimeMillis() - startTime) > seconds * 1000 ) {
+			if (System.getProperty("debug") != null) {
+				System.out.println("GetAdjVertex");
+			}
+			throw new InterruptedException("Done Time");
+		}
+		/*
+		 if (Thread.interrupted()) {
+		    throw new InterruptedException();
+		}
+		 */
+	}
+
 	public String getStructName() {
 		return structName;
 	}
@@ -254,31 +268,7 @@ public abstract class AbstractGraph implements IGraph {
     	newVertex.put("id", idSearch);
     	return json.toString();
 	}
-	
-	@Override
-	public CharSequence initNodeToJson(int idSearch, String color, float angle) {
-		
-		// Node
-		String vertexLabel = Utils.getEntityName("Q" + idSearch);
-    	String vertexLabelSmall = vertexLabel;
-    	if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
-    	
-    	JSONObject newVertex = new JSONObject();
-    	newVertex.put("label", vertexLabelSmall);
-    	newVertex.put("color",color);
-    	newVertex.put("title", vertexLabel);
-    	
-    	// Json
-    	JSONObject json = new JSONObject();
-    	json.put("type","vertex");
-    	json.put("data",newVertex);
-    	double angleR = Math.toRadians(angle);
-    	newVertex.put("x", Math.cos(angleR) * 500);
-    	newVertex.put("y", Math.sin(angleR) * 500);
-    	newVertex.put("fixed",true);
-    	newVertex.put("id", idSearch);
-    	return json.toString();
-	}
+
 	
 	public CharSequence edgeToJson(Object e) {
     	JSONObject json = new JSONObject();

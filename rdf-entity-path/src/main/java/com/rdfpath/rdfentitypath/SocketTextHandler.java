@@ -9,8 +9,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.rdfpath.graph.model.GraphComp;
-import com.rdfpath.graph.model.GraphWrapper2;
 import com.rdfpath.graph.model.IGraph;
+import com.rdfpath.graph.wrapper.GraphWrapperServer;
 
 
 @Component
@@ -86,7 +86,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		//graphWrapper.setSession(session);
 		//graphWrapper.search(nodesNumbers, 2);
 		
-		GraphWrapper2 graphWrapper = new GraphWrapper2(graph);
+		GraphWrapperServer graphWrapper = new GraphWrapperServer(graph);
 		graphWrapper.setSession(session);
 		graphWrapper.search(nodesNumbers, 3);
 		

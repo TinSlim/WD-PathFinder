@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.rdfpath.graph.model;
+package com.rdfpath.graph.wrapper;
 
 /**
  *

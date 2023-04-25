@@ -5,10 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.rdfpath.graph.utils.Utils;
 
 public class Graph extends AbstractGraph {
 	private HashMap<Integer, Vertex> nodes;
@@ -23,9 +19,6 @@ public class Graph extends AbstractGraph {
         String[] tempArr;
         
         while((line = fileBuff.readLine()) != null) {					// Ejemplo:
-    		//timeA = System.currentTimeMillis();
-
-    		//sendNotificationTime(10,"Nodos: " + nodesLoaded);
     		
     		tempArr = line.split(" ");									// line 	= "<...> <...> <...> ."
     		
@@ -87,14 +80,16 @@ public class Graph extends AbstractGraph {
 	public void setNodes(HashMap<Integer, Vertex> nodes) {
         this.nodes = nodes;
     }
-	
-	public void printGrafo () {
-		System.out.println("Grafo");
-	}
 
 	@Override
 	public HashSet<Integer> getAdjacentVertex(int id) {
 		HashSet<Integer> nList = nodes.get(id).getAdjacentVertex();
+		return nList;
+	}
+	
+	@Override
+	public HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException {
+		HashSet<Integer> nList = nodes.get(id).getAdjacentVertexTimeout(seconds, startTime);
 		return nList;
 	}
 
