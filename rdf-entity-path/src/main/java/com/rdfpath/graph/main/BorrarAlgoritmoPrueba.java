@@ -6,8 +6,8 @@ package com.rdfpath.graph.main;
 import java.io.IOException;
 
 import com.rdfpath.graph.model.GraphComp;
-import com.rdfpath.graph.model.GraphWrapper2;
 import com.rdfpath.graph.model.IGraph;
+import com.rdfpath.graph.wrapper.GraphWrapperServer;
 
 /**
  *
@@ -18,11 +18,11 @@ import com.rdfpath.graph.model.IGraph;
 public class BorrarAlgoritmoPrueba {
 	
 	public static void main (String[] args) throws IOException {
-		//String path = "subsetsBorrar/";
-		//IGraph graph = new GraphComp(path + "ciclo2", false, 4);
-		//GraphWrapper2 gw2 = new GraphWrapper2(graph);
+		String path = "subsetsBorrar/";
+		IGraph graph = new GraphComp(path + "ciclo2", false, 4);
+		GraphWrapperServer gw2 = new GraphWrapperServer(graph);
 		int[] a = {2,4};
 		//int[] b = a + 2;
-		//gw2.search(a,5);
+		gw2.search(a,5);
 	}
 }
