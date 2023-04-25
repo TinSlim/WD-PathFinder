@@ -14,9 +14,9 @@ import com.rdfpath.graph.model.GraphCompDense;
 import com.rdfpath.graph.model.GraphFullNative;
 import com.rdfpath.graph.model.GraphNative;
 import com.rdfpath.graph.model.GraphNativeFullDense;
-import com.rdfpath.graph.model.GraphWrapper3;
 import com.rdfpath.graph.model.IGraph;
 import com.rdfpath.graph.utils.Utils;
+import com.rdfpath.graph.wrapper.GraphWrapperTimeTest;
 
 /**
  *
@@ -94,6 +94,7 @@ public class PathFindTest {
 
 		
 		int i = 0;
+		int seconds = 60;
 		System.out.println("Estructura;ID;Aristas;Tiempo;Memoria");
 		MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
 		
@@ -104,15 +105,13 @@ public class PathFindTest {
 			
 			long memoryBefore = mbean.getHeapMemoryUsage().getUsed();
 			int[] a = {ids[i][0], ids[i][1]};
-			GraphWrapper3 nGW = new GraphWrapper3(graph);
-			WeakReference a1 = new WeakReference(nGW);
+			GraphWrapperTimeTest nGW = new GraphWrapperTimeTest(graph,seconds);
 			nGW.search(a, 3);
+			//System.gc();
 			System.out.println((mbean.getHeapMemoryUsage().getUsed() - memoryBefore));
-			nGW = null;
-
-			while (a1.get() != null) {
-				System.gc();
-			}
+			System.gc();
+			
+			
 			i++;
 		}
 		
