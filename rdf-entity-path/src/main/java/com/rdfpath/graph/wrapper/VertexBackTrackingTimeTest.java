@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.rdfpath.graph.model;
+package com.rdfpath.graph.wrapper;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,14 +9,14 @@ import java.util.LinkedList;
  * @github Tinslim
  *
  */
-public class VertexBackTracking {
+public class VertexBackTrackingTimeTest {
 	LinkedList<Integer> road;
 	HashSet<Integer> nodes;
-	VertexWrapper2 actVW;
+	VertexWrapperTimeTest actVW;
 	public int colorDistance;
 	public int grade;
 	
-	public VertexBackTracking (VertexWrapper2 actVW) {
+	public VertexBackTrackingTimeTest (VertexWrapperTimeTest actVW) {
 		road = new LinkedList<>();
 		nodes = new HashSet<>();
 		this.actVW = actVW;
@@ -29,10 +26,11 @@ public class VertexBackTracking {
 		colorDistance = actVW.otherColorDistance;
 	}
 
+	
 	/**
 	 * @param actualBT
 	 */
-	public VertexBackTracking(VertexBackTracking actualBT, VertexWrapper2 vwFrom) {
+	public VertexBackTrackingTimeTest(VertexBackTrackingTimeTest actualBT, VertexWrapperTimeTest vwFrom) {
 		road = (LinkedList<Integer>) actualBT.road.clone();
 		nodes = (HashSet<Integer>) actualBT.nodes.clone();
 		road.add(vwFrom.idVertex);

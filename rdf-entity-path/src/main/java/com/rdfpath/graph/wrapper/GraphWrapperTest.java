@@ -1,10 +1,12 @@
-package com.rdfpath.graph.model;
+package com.rdfpath.graph.wrapper;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
+
+import com.rdfpath.graph.model.IGraph;
 
 /**
  *

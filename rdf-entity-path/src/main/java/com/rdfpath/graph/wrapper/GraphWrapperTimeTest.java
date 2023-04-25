@@ -1,4 +1,4 @@
-package com.rdfpath.graph.model;
+package com.rdfpath.graph.wrapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,30 +9,33 @@ import java.util.LinkedList;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.rdfpath.graph.model.IGraph;
+
 /**
  *
  * @author Cristóbal Torres G.
  * @github Tinslim
  *
  */
-public class GraphWrapper3 {
+public class GraphWrapperTimeTest {
 
-	private HashMap<Integer, VertexWrapper2> nodes;
+	private HashMap<Integer, VertexWrapperTimeTest> nodes;
 	private IGraph graph;
 	private HashSet<Integer> addedNodes;
 	private WebSocketSession session;
 	public int totalEdges;
 	public long startTime;
-	public int seconds = 60;
+	public int seconds;
 	//public int[] nodesNumbers;
 	//public int size;
 	
-	public GraphWrapper3 (IGraph graph2){//, int[] nums, int maxSize) {
+	public GraphWrapperTimeTest (IGraph graph2, int seconds){
 		this.graph = (IGraph) graph2;
-		this.nodes = new HashMap<Integer, VertexWrapper2>();
+		this.nodes = new HashMap<Integer, VertexWrapperTimeTest>();
 		this.addedNodes = new HashSet<Integer>();
 		this.session = null;
 		this.totalEdges = 0;
+		this.seconds = seconds;
 		//this.nodesNumbers = nums;
 		//this.size = maxSize;
 	}
@@ -42,13 +45,18 @@ public class GraphWrapper3 {
 		this.session = session;
 	}
 
-	public void checkTime (String message) throws Exception {
+	public void checkTime (String message) throws InterruptedException {
 		if ( (System.currentTimeMillis() - startTime) > seconds * 1000 ) {
 			if (System.getProperty("debug") != null) {
 				System.out.println(message);
 			}
-			throw new Exception("Done Time");
+			throw new InterruptedException("Done Time");
 		}
+		/*
+		 if (Thread.interrupted()) {
+		    throw new InterruptedException();
+		}
+		 */
 	}
 	
 	//@Override
@@ -56,29 +64,29 @@ public class GraphWrapper3 {
 	public void search (int [] nodesNumbers, int size) {
 		startTime = System.currentTimeMillis();
 		try {
-			LinkedList<VertexWrapper2> toSearch = new LinkedList<VertexWrapper2>();
+			LinkedList<VertexWrapperTimeTest> toSearch = new LinkedList<VertexWrapperTimeTest>();
 			HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
 			
 			// Los añade a lista para buscar
 			for (int idSearch : nodesNumbers) {
-				VertexWrapper2 actVW = new VertexWrapper2(idSearch);
+				VertexWrapperTimeTest actVW = new VertexWrapperTimeTest(idSearch);
 				nodes.put(idSearch, actVW);
 				nodesNumbersSet.add(idSearch);
 				toSearch.push(actVW);
 			}
 	
 			while ( toSearch.size() > 0) {
-				checkTime("Before pop");													// Revisa tiempo
+				//checkTime("Before pop");													// Revisa tiempo
 				
-				VertexWrapper2 actualVW = toSearch.pop();
+				VertexWrapperTimeTest actualVW = toSearch.pop();
 				
 				if (actualVW.sameColorDistance > (size/2) + size%2) {
 					continue;
 				}
 				
 				// Revisa VÉRTICES adyacentes
-				for (Integer adjVertex : graph.getAdjacentVertex(actualVW.idVertex)) {
-					checkTime("Checking adj vertexes");	// TODO acá demora											// Revisa tiempo
+				for (Integer adjVertex : graph.getAdjacentVertexTimeout(actualVW.idVertex, seconds, startTime)) {
+					//checkTime("Checking adj vertexes");									// Revisa tiempo
 					
 					// Así no cicla en el mismo nodo
 					if (actualVW.idVertex == adjVertex) {
@@ -87,14 +95,14 @@ public class GraphWrapper3 {
 					
 					// NO ha sido visitado:
 					if (nodes.get(adjVertex) == null) {
-						VertexWrapper2 newVW = new VertexWrapper2 (actualVW, adjVertex);
+						VertexWrapperTimeTest newVW = new VertexWrapperTimeTest (actualVW, adjVertex);
 						nodes.put(adjVertex, newVW);
 						toSearch.add(newVW);
 					}
 					
 					// SI ha sido visitado
 					else {
-						VertexWrapper2 adjVW = nodes.get(adjVertex);
+						VertexWrapperTimeTest adjVW = nodes.get(adjVertex);
 						
 						// Si es el que lo agregó a la lista
 						if (actualVW.fromFather(adjVW)) {
@@ -136,7 +144,7 @@ public class GraphWrapper3 {
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
@@ -146,12 +154,12 @@ public class GraphWrapper3 {
 		}
 	}
 	
-	public void backTracking(VertexWrapper2 vw, int maxSize, HashSet<Integer> nodesNumbers) throws Exception {
-		LinkedList<VertexBackTracking> stack = new LinkedList<VertexBackTracking>();
-		stack.push(new VertexBackTracking(vw));
+	public void backTracking(VertexWrapperTimeTest vw, int maxSize, HashSet<Integer> nodesNumbers) throws InterruptedException {
+		LinkedList<VertexBackTrackingTimeTest> stack = new LinkedList<VertexBackTrackingTimeTest>();
+		stack.push(new VertexBackTrackingTimeTest(vw));
 		while (stack.size() > 0) {
-			checkTime("Inside backTracking");														// Revisa tiempo
-			VertexBackTracking actualBT = stack.pop();
+			//checkTime("Inside backTracking");												// Revisa tiempo
+			VertexBackTrackingTimeTest actualBT = stack.pop();
 			if (actualBT.colorDistance + actualBT.grade > maxSize) {
 				continue;
 			}
@@ -160,30 +168,30 @@ public class GraphWrapper3 {
 				makeEdges(actualBT.road);
 			}
 			
-			for (VertexWrapper2 vwFrom: actualBT.actVW.from) {
+			for (VertexWrapperTimeTest vwFrom: actualBT.actVW.from) {
 				checkTime("For vertex in BT");
 				if (! actualBT.nodes.contains(vwFrom.idVertex)) {
-					VertexBackTracking vbtNew = new VertexBackTracking(actualBT, vwFrom);
+					VertexBackTrackingTimeTest vbtNew = new VertexBackTrackingTimeTest(actualBT, vwFrom);
 					stack.push(vbtNew);
 				}				
 			}
 		}
 	}
 
-	public void makeEdges (LinkedList<Integer> nodesList) throws Exception {
+	public void makeEdges (LinkedList<Integer> nodesList) throws InterruptedException {
 		if (nodesList.size() < 2) {
 			return;
 		}
 		int i = 0;
 		while ( i < nodesList.size() - 1) {
-			checkTime("Inside makeEdges");														// Revisa tiempo
+			//checkTime("Inside makeEdges");													// Revisa tiempo
 			sendEdges(nodesList.get(i), nodesList.get(i + 1));
 			i++;
 		}
 		return;
 	}
 	
-	public void sendEdges (int v1, int v2) throws Exception {
+	public void sendEdges (int v1, int v2) throws InterruptedException {
 		if ((nodes.get(v1).hasEdgeWith(v2) && nodes.get(v2).hasEdgeWith(v1)) || ((System.currentTimeMillis() - startTime) >= seconds * 1000)) {
 			return;
 		}
@@ -205,7 +213,7 @@ public class GraphWrapper3 {
 		
 		
 		for (Object edge : edges) {
-			checkTime("For edge in sendEdges");														// Revisa tiempo
+			checkTime("For edge in sendEdges");													// Revisa tiempo
 			totalEdges+=1;
 		}
 		

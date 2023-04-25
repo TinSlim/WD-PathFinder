@@ -1,4 +1,4 @@
-package com.rdfpath.graph.model;
+package com.rdfpath.graph.wrapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.rdfpath.graph.model.IGraph;
 import com.rdfpath.graph.utils.Utils;
 
 /**
@@ -18,20 +19,20 @@ import com.rdfpath.graph.utils.Utils;
  * @github Tinslim
  *
  */
-public class GraphWrapper2 {
+public class GraphWrapperServer {
 	private String[] palette = {"#ADF7B6","#A0CED9","#FCF5C7","#FFEE93", "#FFC09F"};
 	
 	private int[][] paletteRGB = {
 		{173,247,182}, {160,206,217}, {252,245,199}, {255,238,147}, {255,192,159}
 		};
 	
-	private HashMap<Integer, VertexWrapper2> nodes;
+	private HashMap<Integer, VertexWrapperServer> nodes;
 	private IGraph graph;
 	private HashSet<Integer> addedNodes;
 	private WebSocketSession session;
 	private int totalEdges;
 	
-	public CharSequence vertexWrapperToJson (VertexWrapper2 vw, float angle) {
+	public CharSequence vertexWrapperToJson (VertexWrapperServer vw, float angle) {
 		// Node
 		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex);
 	    String vertexLabelSmall = vertexLabel;
@@ -57,9 +58,9 @@ public class GraphWrapper2 {
 	    return json.toString();
 	}
 	
-	public GraphWrapper2 (IGraph graph2) {
+	public GraphWrapperServer (IGraph graph2) {
 		this.graph = (IGraph) graph2;
-		this.nodes = new HashMap<Integer, VertexWrapper2>();
+		this.nodes = new HashMap<Integer, VertexWrapperServer>();
 		this.addedNodes = new HashSet<Integer>();
 		this.session = null;
 		this.totalEdges = 0;
@@ -71,13 +72,13 @@ public class GraphWrapper2 {
 
 	public void search (int [] nodesNumbers, int size) throws IOException {
 		
-		LinkedList<VertexWrapper2> toSearch = new LinkedList<VertexWrapper2>();
+		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
 		
 		
 		int index = 0;
 		for (int idSearch : nodesNumbers) {
-			VertexWrapper2 actVW = new VertexWrapper2(idSearch);
+			VertexWrapperServer actVW = new VertexWrapperServer(idSearch);
 			actVW.color = paletteRGB[index];
 			
 			nodes.put(idSearch, actVW);
@@ -95,7 +96,7 @@ public class GraphWrapper2 {
 		
 
 		while (toSearch.size() > 0) {
-			VertexWrapper2 actualVW = toSearch.pop();
+			VertexWrapperServer actualVW = toSearch.pop();
 			
 			if (actualVW.sameColorDistance > (size/2) + size%2) {
 				continue;
@@ -111,14 +112,14 @@ public class GraphWrapper2 {
 
 				// NO ha sido visitado:
 				if (nodes.get(adjVertex) == null) {
-					VertexWrapper2 newVW = new VertexWrapper2 (actualVW, adjVertex);
+					VertexWrapperServer newVW = new VertexWrapperServer (actualVW, adjVertex);
 					nodes.put(adjVertex, newVW);
 					toSearch.add(newVW);
 				}
 				
 				// SI ha sido visitado
 				else {
-					VertexWrapper2 adjVW = nodes.get(adjVertex);
+					VertexWrapperServer adjVW = nodes.get(adjVertex);
 					
 					// Si es el que lo agregó a la lista
 					if (actualVW.fromFather(adjVW)) {
@@ -175,11 +176,11 @@ public class GraphWrapper2 {
 		}
 	}
 	
-	public void backTracking(VertexWrapper2 vw, int maxSize, HashSet<Integer> nodesNumbers) {
-		LinkedList<VertexBackTracking> stack = new LinkedList<VertexBackTracking>();
-		stack.push(new VertexBackTracking(vw));
+	public void backTracking(VertexWrapperServer vw, int maxSize, HashSet<Integer> nodesNumbers) {
+		LinkedList<VertexBackTrackingServer> stack = new LinkedList<VertexBackTrackingServer>();
+		stack.push(new VertexBackTrackingServer(vw));
 		while (stack.size() > 0) {
-			VertexBackTracking actualBT = stack.pop();
+			VertexBackTrackingServer actualBT = stack.pop();
 			if (actualBT.colorDistance + actualBT.grade > maxSize) {
 				continue;
 			}
@@ -188,9 +189,9 @@ public class GraphWrapper2 {
 				makeEdges(actualBT.road);
 			}
 			
-			for (VertexWrapper2 vwFrom: actualBT.actVW.from) {
+			for (VertexWrapperServer vwFrom: actualBT.actVW.from) {
 				if (! actualBT.nodes.contains(vwFrom.idVertex)) {
-					VertexBackTracking vbtNew = new VertexBackTracking(actualBT, vwFrom);
+					VertexBackTrackingServer vbtNew = new VertexBackTrackingServer(actualBT, vwFrom);
 					stack.push(vbtNew);
 				}				
 			}
@@ -210,8 +211,8 @@ public class GraphWrapper2 {
 	}
 	
 	public void sendEdges (int v1, int v2) {
-		VertexWrapper2 vw1 = nodes.get(v1);
-		VertexWrapper2 vw2 = nodes.get(v2);
+		VertexWrapperServer vw1 = nodes.get(v1);
+		VertexWrapperServer vw2 = nodes.get(v2);
 		if (vw1.hasEdgeWith(v2) && vw2.hasEdgeWith(v1)) {
 		return;
 		}

@@ -1,4 +1,4 @@
-package com.rdfpath.graph.model;
+package com.rdfpath.graph.wrapper;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,12 +9,11 @@ import java.util.LinkedList;
  * @github Tinslim
  *
  */
-public class VertexWrapper2 {
-	public int[] color;
+public class VertexWrapperTimeTest {
 	public int idVertex;
 	public int colorNode;
 	public int sameColorDistance;
-	public HashSet<VertexWrapper2> from;
+	public HashSet<VertexWrapperTimeTest> from;
 	public LinkedList<Integer> added;
 	public Boolean inStack;
 	public int otherColorDistance;
@@ -24,11 +23,11 @@ public class VertexWrapper2 {
 	/**
 	 * @param idSearch
 	 */
-	public VertexWrapper2(int idSearch) {
+	public VertexWrapperTimeTest(int idSearch) {
 		this.idVertex = idSearch;
 		this.colorNode = idSearch;
 		this.sameColorDistance = 0;
-		this.from = new HashSet<VertexWrapper2>();
+		this.from = new HashSet<VertexWrapperTimeTest>();
 		this.added = new LinkedList<Integer>();
 		this.otherColorDistance = -1;
 		edgesWith = new HashSet<Integer>();
@@ -39,22 +38,20 @@ public class VertexWrapper2 {
 	 * @param actualVW
 	 * @param adjVertex
 	 */
-	public VertexWrapper2(VertexWrapper2 actualVW, int adjVertex) {
+	public VertexWrapperTimeTest(VertexWrapperTimeTest actualVW, int adjVertex) {
 		this.idVertex = adjVertex;
 		this.colorNode = actualVW.colorNode;
 		this.sameColorDistance = actualVW.sameColorDistance + 1;
-		this.from = new HashSet<VertexWrapper2>();
+		this.from = new HashSet<VertexWrapperTimeTest>();
 		this.from.add(actualVW);
 		this.added = new LinkedList<Integer>();
 		added.add(actualVW.idVertex);
 		this.otherColorDistance = -1;
 		edgesWith = new HashSet<Integer>();
-		int[] newColor = {actualVW.color[0] - 26,actualVW.color[1] - 24,actualVW.color[2] - 25};
-		this.color = newColor;
 		//this.father = actualVW.idVertex;
 	}
 	
-	public Boolean addFrom (VertexWrapper2 actVW) {
+	public Boolean addFrom (VertexWrapperTimeTest actVW) {
 		if (!from.contains(actVW)) {
 			this.added.add(actVW.idVertex);
 			this.from.add(actVW);
@@ -69,7 +66,7 @@ public class VertexWrapper2 {
 	 * @param adjVW
 	 * @return
 	 */
-	public boolean fromFather(VertexWrapper2 adjVW) {
+	public boolean fromFather(VertexWrapperTimeTest adjVW) {
 		if (added.size() == 0) {
 			return false;
 		}
@@ -96,17 +93,4 @@ public class VertexWrapper2 {
 		edgesWith.add(v1);
 	}
 
-	
-	public String getHexColor() {
-		String ans = "#";
-		String num;
-		for (int i = 0;i<3;i++) {
-			num = Integer.toHexString(color[i]);
-			while (num.length() < 2) {
-				num = "0"+num;
-			}
-			ans = ans+num;
-		}
-		return ans;
-	}
 }
