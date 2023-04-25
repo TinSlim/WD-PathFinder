@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
-import java.lang.ref.WeakReference;
 import com.rdfpath.graph.model.Graph;
 import com.rdfpath.graph.model.GraphComp;
 import com.rdfpath.graph.model.GraphCompDense;
