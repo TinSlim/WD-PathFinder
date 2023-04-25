@@ -2,8 +2,8 @@ package com.rdfpath.graph.main;
 
 import java.io.IOException;
 import com.rdfpath.graph.model.Graph;
-import com.rdfpath.graph.model.GraphWrapper2;
 import com.rdfpath.graph.model.IGraph;
+import com.rdfpath.graph.wrapper.GraphWrapperServer;
 
 /**
  *
@@ -25,7 +25,7 @@ public class PathExample {
 		//GraphWrapperTest graphWrapper = new GraphWrapperTest(graph);
 		//graphWrapper.allPathsNew(nodesNumbers, 6);
 		
-		GraphWrapper2 graphWrapper = new GraphWrapper2(graph);
+		GraphWrapperServer graphWrapper = new GraphWrapperServer(graph);
 		graphWrapper.search(nodesNumbers, 6);
 	}
 }
