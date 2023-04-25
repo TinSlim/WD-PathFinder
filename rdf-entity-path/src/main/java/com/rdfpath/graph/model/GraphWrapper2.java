@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import org.json.simple.JSONObject;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+
+import com.rdfpath.graph.utils.Utils;
 
 /**
  *
@@ -16,12 +19,43 @@ import org.springframework.web.socket.WebSocketSession;
  *
  */
 public class GraphWrapper2 {
-	private String[] palette = {"#ADF7B6","#A0CED9","#FCF5C7"};
+	private String[] palette = {"#ADF7B6","#A0CED9","#FCF5C7","#FFEE93", "#FFC09F"};
+	
+	private int[][] paletteRGB = {
+		{173,247,182}, {160,206,217}, {252,245,199}, {255,238,147}, {255,192,159}
+		};
+	
 	private HashMap<Integer, VertexWrapper2> nodes;
 	private IGraph graph;
 	private HashSet<Integer> addedNodes;
 	private WebSocketSession session;
 	private int totalEdges;
+	
+	public CharSequence vertexWrapperToJson (VertexWrapper2 vw, float angle) {
+		// Node
+		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex);
+	    String vertexLabelSmall = vertexLabel;
+	    if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
+	    
+	    JSONObject newVertex = new JSONObject();
+	    newVertex.put("label", vertexLabelSmall);
+	    newVertex.put("color",vw.getHexColor());
+	    newVertex.put("title", vertexLabel);
+	    	
+	    // Json
+	    JSONObject json = new JSONObject();
+	    json.put("type","vertex");
+	    json.put("data",newVertex);
+	    
+	    double angleR = Math.toRadians(angle);
+	    if (angle != -1) {
+	    	newVertex.put("x", Math.cos(angleR) * 500);
+		    newVertex.put("y", Math.sin(angleR) * 500);
+		    newVertex.put("fixed",true);
+	    }
+	    newVertex.put("id", vw.idVertex);
+	    return json.toString();
+	}
 	
 	public GraphWrapper2 (IGraph graph2) {
 		this.graph = (IGraph) graph2;
@@ -44,22 +78,18 @@ public class GraphWrapper2 {
 		int index = 0;
 		for (int idSearch : nodesNumbers) {
 			VertexWrapper2 actVW = new VertexWrapper2(idSearch);
+			actVW.color = paletteRGB[index];
+			
 			nodes.put(idSearch, actVW);
 			nodesNumbersSet.add(idSearch);
 			toSearch.push(actVW);
 			
 			addedNodes.add(idSearch);
 			session.sendMessage(new TextMessage(
-					graph.initNodeToJson(
-							idSearch,
-							palette[index],
-							(360/nodesNumbers.length)*index)));
+					vertexWrapperToJson (actVW, (360/nodesNumbers.length)*index)));
+			
 			index++;
 			float a = (360/nodesNumbers.length)*index;
-			System.out.println(a);
-			System.out.println(Math.cos(a));
-			System.out.println(Math.sin(a));
-			System.out.println("-");
 			//session.sendMessage(new TextMessage(graph.nodeToJson(idSearch)));
 		}
 		
@@ -115,6 +145,19 @@ public class GraphWrapper2 {
 					
 					else {
 						if (adjVW.sameColorDistance + actualVW.sameColorDistance + 1 <= size) { //
+							int[] newColor = {
+									(adjVW.color[0] + actualVW.color[0]) / 2,
+									(adjVW.color[1] + actualVW.color[1]) / 2,
+									(adjVW.color[2] + actualVW.color[2]) / 2,
+							};
+							
+							if (adjVW.sameColorDistance == actualVW.sameColorDistance) {
+								adjVW.color = newColor;
+								actualVW.color = newColor;
+							}
+							else {
+								adjVW.color = newColor;
+							}
 							adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
 							actualVW.otherColorDistance = adjVW.sameColorDistance + 1;
 							backTracking(adjVW, size, nodesNumbersSet);
@@ -167,12 +210,14 @@ public class GraphWrapper2 {
 	}
 	
 	public void sendEdges (int v1, int v2) {
-		if (nodes.get(v1).hasEdgeWith(v2) && nodes.get(v2).hasEdgeWith(v1)) {
+		VertexWrapper2 vw1 = nodes.get(v1);
+		VertexWrapper2 vw2 = nodes.get(v2);
+		if (vw1.hasEdgeWith(v2) && vw2.hasEdgeWith(v1)) {
 		return;
 		}
 		
-		nodes.get(v1).addEdgeWith(v2);
-		nodes.get(v2).addEdgeWith(v1);
+		vw1.addEdgeWith(v2);
+		vw2.addEdgeWith(v1);
 		
 		ArrayList edges = graph.getEdges(v1, v2);
 		ArrayList<Integer> vList = new ArrayList<Integer>();
@@ -180,7 +225,8 @@ public class GraphWrapper2 {
 		if (!addedNodes.contains(v1)) {
 			addedNodes.add(v1);
 			try {
-				session.sendMessage(new TextMessage(graph.nodeToJson(v1)));
+				session.sendMessage(new TextMessage(vertexWrapperToJson(vw1,-1)));
+						//graph.nodeToJson(v1)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -189,7 +235,8 @@ public class GraphWrapper2 {
 		if (!addedNodes.contains(v2)) {
 			addedNodes.add(v2);
 			try {
-				session.sendMessage(new TextMessage(graph.nodeToJson(v2)));
+				session.sendMessage(new TextMessage(vertexWrapperToJson(vw2,-1)));
+						//graph.nodeToJson(v2)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

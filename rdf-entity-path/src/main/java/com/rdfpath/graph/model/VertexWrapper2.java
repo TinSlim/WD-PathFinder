@@ -10,6 +10,7 @@ import java.util.LinkedList;
  *
  */
 public class VertexWrapper2 {
+	public int[] color;
 	public int idVertex;
 	public int colorNode;
 	public int sameColorDistance;
@@ -48,6 +49,8 @@ public class VertexWrapper2 {
 		added.add(actualVW.idVertex);
 		this.otherColorDistance = -1;
 		edgesWith = new HashSet<Integer>();
+		int[] newColor = {actualVW.color[0] - 26,actualVW.color[1] - 24,actualVW.color[2] - 25};
+		this.color = newColor;
 		//this.father = actualVW.idVertex;
 	}
 	
@@ -91,5 +94,19 @@ public class VertexWrapper2 {
 
 	public void addEdgeWith(int v1) {
 		edgesWith.add(v1);
+	}
+
+	
+	public String getHexColor() {
+		String ans = "#";
+		String num;
+		for (int i = 0;i<3;i++) {
+			num = Integer.toHexString(color[i]);
+			while (num.length() < 2) {
+				num = "0"+num;
+			}
+			ans = ans+num;
+		}
+		return ans;
 	}
 }
