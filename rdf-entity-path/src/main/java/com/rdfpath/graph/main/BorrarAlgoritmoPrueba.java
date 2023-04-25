@@ -18,10 +18,11 @@ import com.rdfpath.graph.model.IGraph;
 public class BorrarAlgoritmoPrueba {
 	
 	public static void main (String[] args) throws IOException {
-		String path = "subsetsBorrar/";
-		IGraph graph = new GraphComp(path + "ciclo2", false, 4);
-		GraphWrapper2 gw2 = new GraphWrapper2(graph);
-		int[] a = {1,4};
-		gw2.search(a,5);
+		//String path = "subsetsBorrar/";
+		//IGraph graph = new GraphComp(path + "ciclo2", false, 4);
+		//GraphWrapper2 gw2 = new GraphWrapper2(graph);
+		int[] a = {2,4};
+		int[] b = a + 2;
+		//gw2.search(a,5);
 	}
 }
