@@ -100,7 +100,7 @@ public class PathFindTest {
 		
 		while (i < ids.length) {
 			
-			
+			System.gc();
 			System.out.print(graph.getStructName()+";"+i+";");
 			
 			long memoryBefore = mbean.getHeapMemoryUsage().getUsed();
