@@ -195,7 +195,7 @@ public class GraphWrapper {
 				vList.add(graph.getDestinationEdge(e));
 				sentVertex.add(graph.getDestinationEdge(e));
 			}
-			session.sendMessage(new TextMessage(graph.edgeToJson(e,vList)));
+			//session.sendMessage(new TextMessage(graph.edgeToJson(e,vList)));
 		}
 		else {
 			System.out.println(graph.getOriginEdge(e) + " -> "+ graph.getDestinationEdge(e));

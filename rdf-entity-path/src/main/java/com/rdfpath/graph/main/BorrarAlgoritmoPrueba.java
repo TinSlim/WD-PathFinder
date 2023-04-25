@@ -22,7 +22,7 @@ public class BorrarAlgoritmoPrueba {
 		//IGraph graph = new GraphComp(path + "ciclo2", false, 4);
 		//GraphWrapper2 gw2 = new GraphWrapper2(graph);
 		int[] a = {2,4};
-		int[] b = a + 2;
+		//int[] b = a + 2;
 		//gw2.search(a,5);
 	}
 }
