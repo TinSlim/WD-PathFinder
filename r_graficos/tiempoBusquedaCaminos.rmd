@@ -16,7 +16,7 @@ library(ggplot2)
 
 ```{r}
 tiemposBusquedaCamino <- read.csv("datos/timePathFinding.csv", sep = ";")
-tBCgC <- read.csv("datos/timePathFinding/gC_latest-truthy.csv", sep = ";")
+#tBCgC <- read.csv("datos/timePathFinding/gC_latest-truthy.csv", sep = ";")
 ```
 
 ### Trabajo datos
@@ -24,28 +24,32 @@ tBCgC <- read.csv("datos/timePathFinding/gC_latest-truthy.csv", sep = ";")
 ```{r}
 options(scipen = 999)
 tiemposBusquedaCamino$memMegaByte = tiemposBusquedaCamino$Memoria / 1000000
-tBCgC$memMegaByte = tBCgC$Memoria / 1000000
+#tiemposBusquedaCamino$grupos = "pares"
+tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "penta"] <- "5"
+tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "cuadra"] <- "4"
+tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "triple"] <- "3"
+#tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "double"] <- "2"
 ```
 
 ### Gráfico tiemposBusquedaVecino
 
 ```{r}
-ggplot(tiemposBusquedaCamino, aes(x= ID, y=Aristas))# + # fill=Estructura
+ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Aristas, color=Estructura)) + #fill=Estructura
 
-  geom_boxplot()# +
+  geom_boxplot() +
 
-  #labs(title= "Tiempos de búsqueda de vecinos (10000 datos)",
-  #     color = "Estructura del Grafo",
-  #     y = "Tiempo [ns] (log10)",
-  #     x = "Set de datos") +
+  labs(title= "Aristas encontradas 60 segundos",
+       color = "Estructura del Grafo",
+       y = "Aristas encontradas",
+       x = "Cantidad de Entidades") +
   #
   #theme(plot.title = element_text(hjust = 0.5)) +
   #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
-  #scale_y_continuous(trans='log10', breaks = c(1,10,100,1000,10000,100000, 1000000, 10000000, 100000000, 1000000000, #10000000000, 100000000000, 1000000000000))
+  scale_y_continuous(trans='log2')#, breaks = c(2,4,8,16,32,64,128,256,512,1024,2048,4096))
 # c(1000, 1000000, 1000000000)
 
-#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.png", width=8, height=5, dpi=300)
-#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.pdf", width=8, height=5, dpi=300)
+#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.png", width=8, height=5, dpi=300)
+#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.pdf", width=8, height=5, dpi=300)
 # width=4, height=4, dpi=300
 ```
 
