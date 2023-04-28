@@ -108,35 +108,35 @@ public class GraphNativeFullDense extends AbstractGraph {
 	 */
 	private int searchVertexIndex(int id) {
 		// Búsqueda binaria
-				int actIndexLeft = 0;
-				int actIndexRight = nodesSize - 1;
-				int actIndex = 0;
-				while (actIndexLeft <= actIndexRight) {
-					actIndex = (actIndexRight + actIndexLeft) / 2;
-					if (nodes2[actIndex][0] < id) {
-						actIndexLeft = actIndex + 1;
-					}
-					else if (nodes2[actIndex][0] > id){
-						actIndexRight = actIndex - 1;
-					}
-					else {
-						return actIndex;
-					}
-				}
-				return -1;
-				//return idNodes.get(id);
+		int actIndexLeft = 0;
+		int actIndexRight = nodesSize - 1;
+		int actIndex = 0;
+		while (actIndexLeft <= actIndexRight) {
+			actIndex = (actIndexRight + actIndexLeft) / 2;
+			if (nodes2[actIndex][0] < id) {
+				actIndexLeft = actIndex + 1;
+			}
+			else if (nodes2[actIndex][0] > id){
+				actIndexRight = actIndex - 1;
+			}
+			else {
+				return actIndex;
+			}
+		}
+		return -1;
+		//return idNodes.get(id);
 	}
 
 	@Override
 	public ArrayList<Integer> getEdges(int idVertex, int idVertex2) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		idVertex = searchVertexIndex(idVertex);
-		idVertex2 = searchVertexIndex(idVertex2);
-		Boolean lessEdges = nodes2[idVertex].length > nodes2[idVertex2].length;
-		int [] vFrom = lessEdges ? nodes2[idVertex2] : nodes2[idVertex];
-		int vTo = lessEdges ? idVertex : idVertex2;
-		for (int edgeAdj : vFrom) {
-			if (edges[edgeAdj][0] == vTo || edges[edgeAdj][2] == vTo) {
+		//idVertex2 = searchVertexIndex(idVertex2);
+		//Boolean lessEdges = nodes2[idVertex].length > nodes2[idVertex2].length;
+		//int [] vFrom = lessEdges ? nodes2[idVertex2] : nodes2[idVertex];
+		//int vTo = lessEdges ? idVertex : idVertex2;
+		for (int edgeAdj : nodes2[idVertex]) {
+			if (edges[edgeAdj][0] == idVertex2 || edges[edgeAdj][2] == idVertex2) {
 				result.add(edgeAdj);
 			}
 		}
