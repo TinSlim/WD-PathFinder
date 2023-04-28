@@ -76,7 +76,7 @@ public class GraphWrapperTimeTest {
 			}
 	
 			while ( toSearch.size() > 0) {
-				//checkTime("Before pop");													// Revisa tiempo
+				checkTime("Before pop");													// Revisa tiempo
 				
 				VertexWrapperTimeTest actualVW = toSearch.pop();
 				
@@ -86,7 +86,7 @@ public class GraphWrapperTimeTest {
 				
 				// Revisa VÉRTICES adyacentes
 				for (Integer adjVertex : graph.getAdjacentVertexTimeout(actualVW.idVertex, seconds, startTime)) {
-					//checkTime("Checking adj vertexes");									// Revisa tiempo
+					checkTime("Checking adj vertexes");									// Revisa tiempo
 					
 					// Así no cicla en el mismo nodo
 					if (actualVW.idVertex == adjVertex) {
@@ -158,7 +158,7 @@ public class GraphWrapperTimeTest {
 		LinkedList<VertexBackTrackingTimeTest> stack = new LinkedList<VertexBackTrackingTimeTest>();
 		stack.push(new VertexBackTrackingTimeTest(vw));
 		while (stack.size() > 0) {
-			//checkTime("Inside backTracking");												// Revisa tiempo
+			checkTime("Inside backTracking");												// Revisa tiempo
 			VertexBackTrackingTimeTest actualBT = stack.pop();
 			if (actualBT.colorDistance + actualBT.grade > maxSize) {
 				continue;
@@ -184,7 +184,7 @@ public class GraphWrapperTimeTest {
 		}
 		int i = 0;
 		while ( i < nodesList.size() - 1) {
-			//checkTime("Inside makeEdges");													// Revisa tiempo
+			checkTime("Inside makeEdges");													// Revisa tiempo
 			sendEdges(nodesList.get(i), nodesList.get(i + 1));
 			i++;
 		}
