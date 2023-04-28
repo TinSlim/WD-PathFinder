@@ -15,7 +15,7 @@ library(ggplot2)
 ### Importe Datos
 
 ```{r}
-tiemposBusquedaCamino <- read.csv("datos/timePathFinding.csv", sep = ";")
+tiemposBusquedaCamino <- read.csv("datos/timePathFinding2.csv", sep = ";")
 #tBCgC <- read.csv("datos/timePathFinding/gC_latest-truthy.csv", sep = ";")
 ```
 
@@ -28,7 +28,7 @@ tiemposBusquedaCamino$memMegaByte = tiemposBusquedaCamino$Memoria / 1000000
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "penta"] <- "5"
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "cuadra"] <- "4"
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "triple"] <- "3"
-#tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "double"] <- "2"
+tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "double"] <- "2"
 ```
 
 ### Gráfico tiemposBusquedaVecino

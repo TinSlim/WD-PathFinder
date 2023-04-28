@@ -48,8 +48,8 @@ ggplot(tiemposBusquedaVecino, aes(x=SetDatos, y=Tiempos, color=Estructura)) + # 
   scale_y_continuous(trans='log10', breaks = c(1,10,100,1000,10000,100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000))
 # c(1000, 1000000, 1000000000)
 
-ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.png", width=8, height=5, dpi=300)
-ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.pdf", width=8, height=5, dpi=300)
+#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.png", width=8, height=5, #dpi=300)
+#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.pdf", width=8, height=5, #dpi=300)
 # width=4, height=4, dpi=300
 ```
 
