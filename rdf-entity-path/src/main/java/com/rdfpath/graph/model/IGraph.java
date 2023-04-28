@@ -104,4 +104,10 @@ public interface IGraph {
 
 	HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException;
 
+	/**
+	 * @param ids
+	 * @return
+	 */
+	public ArrayList checkAdj(int[] ids);
+
 }
