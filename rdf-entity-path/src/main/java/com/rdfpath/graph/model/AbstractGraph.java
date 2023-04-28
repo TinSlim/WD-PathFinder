@@ -82,6 +82,17 @@ public abstract class AbstractGraph implements IGraph {
 		}
 	}
 	
+	public ArrayList<HashSet<Integer>> checkAdj (int[] ids) {
+		ArrayList<HashSet<Integer>> ans = new ArrayList();
+		for (int j = 0; j < ids.length; j++) {
+			int vertexId = ids[j];
+		
+			HashSet<Integer> adj = this.getAdjacentVertex(vertexId);
+			ans.add(adj);
+		}
+		return ans;
+	}
+	
 	public void sendNotificationTime (int perMinutes, String data) {
 		if ((((timeA - actualTime)/1000) / 60) >= perMinutes) {
 			actualTime = timeA;
