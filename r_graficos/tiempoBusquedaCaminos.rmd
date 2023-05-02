@@ -23,8 +23,15 @@ tiemposBusquedaCamino <- read.csv("datos/timePathFinding2.csv", sep = ";")
 
 ```{r}
 options(scipen = 999)
-tiemposBusquedaCamino$memMegaByte = tiemposBusquedaCamino$Memoria / 1000000
+#tiemposBusquedaCamino$memMegaByte = tiemposBusquedaCamino$Memoria / 1000000
 #tiemposBusquedaCamino$grupos = "pares"
+options(scipen = 999)
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphGt"] <- "Objetos de Java"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Comprimido con índices"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Comprimido"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFull"] <- "Arreglos nativos con índices"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFullDense"] <- "Arreglos nativos"
+
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "penta"] <- "5"
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "cuadra"] <- "4"
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "triple"] <- "3"
@@ -48,8 +55,8 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Aristas, color=Estructura)) + #fil
   scale_y_continuous(trans='log2')#, breaks = c(2,4,8,16,32,64,128,256,512,1024,2048,4096))
 # c(1000, 1000000, 1000000000)
 
-#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.png", width=8, height=5, dpi=300)
-#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.pdf", width=8, height=5, dpi=300)
 # width=4, height=4, dpi=300
 ```
 
