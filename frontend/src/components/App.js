@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { render } from "react-dom"
 //import useWebSocket from 'react-use-websocket';
 
+import {pauseGraph} from './../script/grafo.js'
+
 import Navbar from "./Navbar"
 import Content from "./Content"
 import Footer from "./Footer"
@@ -71,7 +73,7 @@ export default function App() {
                     <Typography variant="h6" component="div" >
                         Time: 00:00
                     </Typography>
-                    <Button color="inherit">Stop</Button>
+                    <Button color="inherit" onClick={pauseGraph}>Stop</Button>
                     </Toolbar>
             </AppBar>
 
