@@ -4,6 +4,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 
+
+import Box from '@mui/material/Box';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
 const { baseURL } = require('config');
 
 export default function Autocom(props) {
@@ -16,16 +22,20 @@ export default function Autocom(props) {
   
   const handleNewData = (data) => {
     setOptions([]);
-    setOptions(data.search.map((x) => ({label: x.label,id: x.id,url: x.concepturi})));
+    setOptions(data.search.map((x) => ({label: x.label, id: x.id, url: x.concepturi, description: x.description})));
     setIsLoading(false);
   }
 
   const handleAuto = (word) => {
     if (word != "" && word != null) {
       let url = `${baseURL}/autocomplete?entity=${word}`
-      fetch(url)
-        .then(response => response.json())
-        .then(data => handleNewData(data));
+      console.log(url);
+      // TODO DESCOMENTAR
+      //fetch(url)
+      //  .then(response => response.json())
+      //  .then(data => handleNewData(data));
+      // TODO BORRAR
+      handleNewData({"search":[{"concepturi":"http:\/\/www.wikidata.org\/entity\/Q298","description":"country in South America","label":"Chile","id":"Q298"},{"concepturi":"http:\/\/www.wikidata.org\/entity\/Q165199","description":"fruit of plants from the genus Capsicum, members of the nightshade family, Solanaceae","label":"chili pepper","id":"Q165199"},{"concepturi":"http:\/\/www.wikidata.org\/entity\/Q1045129","description":"asteroid","label":"4636 Chile","id":"Q1045129"},{"concepturi":"http:\/\/www.wikidata.org\/entity\/Q5490088","description":"Q5490088","label":"Corporación de Promoción y Defensa de los Derechos del Pueblo","id":"Q5490088"},{"concepturi":"http:\/\/www.wikidata.org\/entity\/Q18418541","description":"bus station in Buenos Aires, Argentina","label":"Chile","id":"Q18418541"},{"concepturi":"http:\/\/www.wikidata.org\/entity\/Q37446942","description":"family name","label":"Chile","id":"Q37446942"},{"concepturi":"http:\/\/www.wikidata.org\/entity\/Q99299995","description":"country of Chile as depicted in Star Trek","label":"Chile","id":"Q99299995"}]});
     }
     else {
       setOptions([]);
@@ -76,7 +86,27 @@ export default function Autocom(props) {
                 </React.Fragment>
               ),
             }}
-            />}
+          />
+        }
+        renderOption={(props, option) => {
+            return  <li {...props}>
+                      <Grid container alignItems="center">
+                        <Grid item>
+                          <Box
+                            //component={LocationOnIcon}
+                            //sx={{ color: 'text.secondary', mr: 2 }}
+                          />
+                        </Grid>
+                        <Grid item xs>
+                            {option.label}
+                          <Typography variant="body2" color="text.secondary">
+                            {option.description}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </li>
+          }
+        }
         
         
 
