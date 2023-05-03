@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { render } from "react-dom"
 //import useWebSocket from 'react-use-websocket';
 
-import {pauseGraph} from './../script/grafo.js'
+import {stopGraph} from './../script/grafo.js'
 
 import Navbar from "./Navbar"
 import Content from "./Content"
@@ -25,6 +25,7 @@ export default function App() {
     const [time, setTime] = useState("00:00");
     const [running, setRunning] = useState(false);
     const [stopwatchInterval, setStopWatchInterval] = useState(null);
+    const [runningTime, setRunningTime] = useState(0);
     /*
     const [websocket, setWebSocket] = useState(0);
     React.useEffect(() => {
@@ -59,7 +60,7 @@ export default function App() {
 
     //<div style={{height:'80vh', display: 'inline-flex'}} className='ml-3 mr-3 columns'> 
     
-    let runningTime = 0;
+    
     
     const playPause = () => {
         if (!running) {
@@ -85,11 +86,12 @@ export default function App() {
         console.log("start");
         let startTime = Date.now() - runningTime;
         // animacion esfera
-        stopwatchInterval = setInterval ( () => {
-            runningTime = Date.now() - startTime;
-            setTime(calculateTime(runningTime));
+        const stopwatchIntervalC = setInterval ( () => {
+            const runningTimeC = Date.now() - startTime;
+            setRunningTime(runningTimeC);
+            setTime(calculateTime(runningTimeC));
         }, 1000)
-        setStopWatchInterval(stopwatchInterval);
+        setStopWatchInterval(stopwatchIntervalC);
     }
     
     const pause = () => {
@@ -98,7 +100,8 @@ export default function App() {
 
     const stop = () => {
         setRunning(false);
-        runningTime = 0;
+        setRunningTime(0);
+        setTime("00:00");
         clearInterval(stopwatchInterval);
         setTime("00:00");
     }
@@ -120,7 +123,7 @@ export default function App() {
                     </Typography>
                     <Button color="inherit" onClick={playPause}>PlayPause</Button>
                     <Button color="inherit" onClick={stop}>Stoptops</Button>
-                    <Button color="inherit" onClick={pauseGraph}>Stop</Button>
+                    <Button color="inherit" onClick={stopGraph}>Stop</Button>
                     </Toolbar>
             </AppBar>
 

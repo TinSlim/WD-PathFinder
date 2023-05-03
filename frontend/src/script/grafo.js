@@ -119,3 +119,9 @@ export function startGraph (values) {
         console.log(`[error]`);
     };
 };
+
+export function stopGraph () {
+  if (socket != null) {
+    socket.close();
+  }
+}
