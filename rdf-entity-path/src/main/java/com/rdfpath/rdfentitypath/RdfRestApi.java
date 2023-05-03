@@ -53,7 +53,6 @@ public class RdfRestApi {
 			+ entityEncod
 			+ "&language=en&formatversion=2";
 		String respuesta = "";
-		
 		try {
 			// Petición y creación de respuesta (JSON)
 			respuesta = Utils.peticionHttpGet(url);
@@ -65,8 +64,19 @@ public class RdfRestApi {
 			for (int i = 0; i < arr.length(); i++) {
 				JSONObject obj = (JSONObject) arr.get(i);
 				JSONObject newObj = new JSONObject();
-				newObj.put("label", obj.getString("label"));
-				//newObj.put("description", obj.getString("description"));
+				if (obj.has("label")) {
+					newObj.put("label", obj.getString("label"));
+				}
+				else {
+					newObj.put("label","");
+				}
+				
+				if (obj.has("description")) {
+					newObj.put("description", obj.getString("description"));
+				}
+				else {
+					newObj.put("description",obj.getString("id"));
+				}
 				newObj.put("id", obj.getString("id"));
 				newObj.put("concepturi", obj.getString("concepturi"));
 				search.put(newObj);
