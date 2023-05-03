@@ -22,8 +22,9 @@ export default function App() {
     const [drawerState, setDrawerState] = useState(false);
     const [words, setWords] = useState([]);
     const [values, setValues] = useState([]);
-    const [time, setTime] = useState(0);
-    
+    const [time, setTime] = useState("00:00");
+    const [running, setRunning] = useState(false);
+    const [stopwatchInterval, setStopWatchInterval] = useState(null);
     /*
     const [websocket, setWebSocket] = useState(0);
     React.useEffect(() => {
@@ -58,6 +59,50 @@ export default function App() {
 
     //<div style={{height:'80vh', display: 'inline-flex'}} className='ml-3 mr-3 columns'> 
     
+    let runningTime = 0;
+    
+    const playPause = () => {
+        if (!running) {
+            setRunning(true);
+            start();
+        } else {
+            setRunning(false);
+            pause();
+        }
+    }
+
+    const calculateTime = runningTime => {
+        const total_seconds = Math.floor(runningTime / 1000);
+        const total_minutes = Math.floor(total_seconds / 60);
+    
+        const display_seconds = (total_seconds % 60).toString().padStart(2, "0");
+        const display_minutes = total_minutes.toString().padStart(2, "0");
+    
+        return `${display_minutes}:${display_seconds}`
+    }
+
+    const start = () => {
+        console.log("start");
+        let startTime = Date.now() - runningTime;
+        // animacion esfera
+        stopwatchInterval = setInterval ( () => {
+            runningTime = Date.now() - startTime;
+            setTime(calculateTime(runningTime));
+        }, 1000)
+        setStopWatchInterval(stopwatchInterval);
+    }
+    
+    const pause = () => {
+        clearInterval(stopwatchInterval);
+    }
+
+    const stop = () => {
+        setRunning(false);
+        runningTime = 0;
+        clearInterval(stopwatchInterval);
+        setTime("00:00");
+    }
+
     return (
         <div>           
             <AppBar position="fixed">
@@ -71,8 +116,10 @@ export default function App() {
                     </Typography>
 
                     <Typography variant="h6" component="div" >
-                        Time: 00:00
+                        Time: <div id="stopwatch" class="stopwatch">{time}</div>
                     </Typography>
+                    <Button color="inherit" onClick={playPause}>PlayPause</Button>
+                    <Button color="inherit" onClick={stop}>Stoptops</Button>
                     <Button color="inherit" onClick={pauseGraph}>Stop</Button>
                     </Toolbar>
             </AppBar>
