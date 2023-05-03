@@ -15,6 +15,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.web.socket.WebSocketSession;
 
 import com.rdfpath.graph.utils.Utils;
 
@@ -54,6 +55,12 @@ public abstract class AbstractGraph implements IGraph {
 		    throw new InterruptedException();
 		}
 		 */
+	}
+	
+	public void checkConn(WebSocketSession session) throws IOException {
+		if (!session.isOpen() ) {
+			throw new IOException();
+		}
 	}
 
 	public String getStructName() {

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.springframework.web.socket.WebSocketSession;
+
 public class Graph extends AbstractGraph {
 	private HashMap<Integer, Vertex> nodes;
 
@@ -84,6 +86,12 @@ public class Graph extends AbstractGraph {
 	@Override
 	public HashSet<Integer> getAdjacentVertex(int id) {
 		HashSet<Integer> nList = nodes.get(id).getAdjacentVertex();
+		return nList;
+	}
+	
+	@Override
+	public HashSet<Integer> getAdjacentVertexSession(int id, WebSocketSession session) throws IOException {
+		HashSet<Integer> nList = nodes.get(id).getAdjacentVertexSession(session);
 		return nList;
 	}
 	

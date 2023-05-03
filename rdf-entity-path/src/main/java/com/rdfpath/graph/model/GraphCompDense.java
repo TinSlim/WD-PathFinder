@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import org.springframework.web.socket.WebSocketSession;
+
 /**
  *
  * @author Cristóbal Torres G.
@@ -114,6 +116,26 @@ public class GraphCompDense extends AbstractGraph {
 		return answer;
 	}
 	
+	
+	@Override
+	public HashSet<Integer> getAdjacentVertexSession(int id, WebSocketSession session) throws IOException {
+		HashSet<Integer> answer = new HashSet<Integer>();
+		int index = searchVertexIndex(id);
+		int i = 1;
+		int j = -1;
+
+		while (i < nodes[index].length) {
+			j = 1;
+			while (j < nodes[index][i].length) {
+				checkConn(session);
+				answer.add(nodes[index][i][j]);
+				j+=1;
+			}
+			i+=1;
+		}
+		return answer;
+	}
+	
 	@Override
 	public ArrayList<int[]> getEdges(int idVertex, int idVertex2) {
 		ArrayList<int[]> edges = new ArrayList<int[]>();
@@ -162,4 +184,6 @@ public class GraphCompDense extends AbstractGraph {
 		}
 		return edge[1];
 	}
+
+	
 }

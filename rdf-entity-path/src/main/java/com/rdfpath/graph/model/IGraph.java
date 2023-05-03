@@ -3,10 +3,12 @@
  */
 package com.rdfpath.graph.model;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import org.json.simple.parser.ParseException;
+import org.springframework.web.socket.WebSocketSession;
 
 /**
  *
@@ -109,5 +111,7 @@ public interface IGraph {
 	 * @return
 	 */
 	public ArrayList checkAdj(int[] ids);
+
+	HashSet<Integer> getAdjacentVertexSession(int id, WebSocketSession session) throws IOException;
 
 }

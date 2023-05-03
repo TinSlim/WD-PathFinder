@@ -103,8 +103,8 @@ public class GraphWrapperServer {
 			}
 
 			// Revisa VÉRTICES adyacentes
-			for (Integer adjVertex : graph.getAdjacentVertex(actualVW.idVertex)) {
-
+			for (Integer adjVertex : graph.getAdjacentVertexSession(actualVW.idVertex, session)) {
+				checkConn();
 				// Así no cicla en el mismo nodo
 				if (actualVW.idVertex == adjVertex) {
 					continue;
@@ -176,7 +176,13 @@ public class GraphWrapperServer {
 		}
 	}
 	
-	public void backTracking(VertexWrapperServer vw, int maxSize, HashSet<Integer> nodesNumbers) {
+	private void checkConn() throws IOException {
+		if (!session.isOpen() ) {
+			throw new IOException();
+		}
+	}
+
+	public void backTracking(VertexWrapperServer vw, int maxSize, HashSet<Integer> nodesNumbers) throws IOException {
 		LinkedList<VertexBackTrackingServer> stack = new LinkedList<VertexBackTrackingServer>();
 		stack.push(new VertexBackTrackingServer(vw));
 		while (stack.size() > 0) {
@@ -198,7 +204,7 @@ public class GraphWrapperServer {
 		}
 	}
 
-	public void makeEdges (LinkedList<Integer> nodesList) {
+	public void makeEdges (LinkedList<Integer> nodesList) throws IOException {
 		if (nodesList.size() < 2) {
 			return;
 		}
@@ -210,7 +216,7 @@ public class GraphWrapperServer {
 		return;
 	}
 	
-	public void sendEdges (int v1, int v2) {
+	public void sendEdges (int v1, int v2) throws IOException {
 		VertexWrapperServer vw1 = nodes.get(v1);
 		VertexWrapperServer vw2 = nodes.get(v2);
 		if (vw1.hasEdgeWith(v2) && vw2.hasEdgeWith(v1)) {
@@ -225,32 +231,21 @@ public class GraphWrapperServer {
 		// AddedNodes se puede borrar usando size de edgesNodes
 		if (!addedNodes.contains(v1)) {
 			addedNodes.add(v1);
-			try {
-				session.sendMessage(new TextMessage(vertexWrapperToJson(vw1,-1)));
+			session.sendMessage(new TextMessage(vertexWrapperToJson(vw1,-1)));
 						//graph.nodeToJson(v1)));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			
 		}
 		
 		if (!addedNodes.contains(v2)) {
 			addedNodes.add(v2);
-			try {
-				session.sendMessage(new TextMessage(vertexWrapperToJson(vw2,-1)));
+			session.sendMessage(new TextMessage(vertexWrapperToJson(vw2,-1)));
 						//graph.nodeToJson(v2)));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			
 		}
 		
 		for (Object edge : edges) {
 			totalEdges+=1;
-			try { 
-				session.sendMessage(new TextMessage(graph.edgeToJson(edge)));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
+			session.sendMessage(new TextMessage(graph.edgeToJson(edge)));
 		}
 		
 	}

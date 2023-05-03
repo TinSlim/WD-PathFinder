@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -79,20 +80,29 @@ public class SocketTextHandler extends TextWebSocketHandler {
 	
 	@Override
 	public void handleTextMessage(WebSocketSession session, TextMessage message)
-			throws InterruptedException, IOException {
+			throws IOException {
 		String response = message.getPayload();
 		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
-		//GraphWrapper graphWrapper = new GraphWrapper(graph);
-		//graphWrapper.setSession(session);
-		//graphWrapper.search(nodesNumbers, 2);
 		
 		GraphWrapperServer graphWrapper = new GraphWrapperServer(graph);
 		graphWrapper.setSession(session);
-		graphWrapper.search(nodesNumbers, 3);
 		
-		//GraphWrapperTest graphWrapper = new GraphWrapperTest(graph);
-		//graphWrapper.search(nodesNumbers, 3);
-		System.out.println("end");
+		try {
+			graphWrapper.search(nodesNumbers, 3);
+		}
+		catch (IOException ioE) {
+			// Session is closed
+		}
+		
+		//System.out.println("Termina");
+		//System.out.println(session.isOpen());
+		//System.out.println("end");
+	}
+	
+	
+	@Override
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus){
+		System.out.println(closeStatus);
 	}
 
 }

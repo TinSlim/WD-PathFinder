@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.web.socket.WebSocketSession;
+
 /**
 *
 * @author Cristóbal Torres G.
@@ -101,6 +103,18 @@ public class GraphNative extends AbstractGraph {
 		}
 		return adjVL;
 	}
+	
+	@Override
+	public HashSet<Integer> getAdjacentVertexSession(int id, WebSocketSession session) throws IOException {
+		LinkedList<Integer> edgesOfV = nodes.get(id);
+		HashSet<Integer> adjVL = new HashSet<Integer>();
+		for (Integer ig : edgesOfV) {
+			checkConn(session);
+			int adjID = (edges[ig][0] == id) ? edges[ig][2] : edges[ig][0]; 
+			adjVL.add(adjID);
+		}
+		return adjVL;
+	}
 
 	@Override
 	public ArrayList<Integer> getEdges(int idVertex, int idVertex2) {
@@ -133,5 +147,8 @@ public class GraphNative extends AbstractGraph {
 		Integer edgeNum = (Integer) e;
 		return edges[edgeNum][1];
 	}
+
+
+	
 
 }

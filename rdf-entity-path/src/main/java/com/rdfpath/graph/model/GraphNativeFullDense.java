@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import org.springframework.web.socket.WebSocketSession;
+
 /**
 *
 * @author Cristóbal Torres G.
@@ -100,6 +102,20 @@ public class GraphNativeFullDense extends AbstractGraph {
 		}
 		return adjVL;
 	}
+	
+	@Override
+	public HashSet<Integer> getAdjacentVertexSession(int id, WebSocketSession session) throws IOException {
+		int index = searchVertexIndex(id);
+		int[] edgesOfV = nodes2[index];
+		HashSet<Integer> adjVL = new HashSet<Integer>();
+		for (int edgeNum=1;edgeNum<edgesOfV.length;edgeNum++) {
+			checkConn(session);
+			int edgeID = edgesOfV[edgeNum];
+			int adjID = (edges[edgeID][0] == id) ? edges[edgeID][2] : edges[edgeID][0];
+			adjVL.add(adjID);
+		}
+		return adjVL;
+	}
 		
 	
 	/**
@@ -160,5 +176,7 @@ public class GraphNativeFullDense extends AbstractGraph {
     	int idEdge = (int) e;
     	return edges[idEdge][1];
 	}
+
+	
 
 }

@@ -1,9 +1,12 @@
 package com.rdfpath.graph.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.springframework.web.socket.WebSocketSession;
 
 public class Vertex {
 
@@ -42,6 +45,12 @@ public class Vertex {
 		 */
 	}
     
+    private void checkConn(WebSocketSession session) throws IOException {
+		if (!session.isOpen() ) {
+			throw new IOException();
+		}
+	}
+    
     public HashSet<Integer> getAdjacentVertex() {
     	List<Edge> actEdges = getAdjacentEdges();
     	HashSet<Integer> vertexSet = new HashSet<Integer>();
@@ -60,6 +69,16 @@ public class Vertex {
     	}
     	return vertexSet;
     }
+    
+    public HashSet<Integer> getAdjacentVertexSession(WebSocketSession session) throws IOException {
+    	List<Edge> actEdges = getAdjacentEdges();
+    	HashSet<Integer> vertexSet = new HashSet<Integer>();
+    	for (Edge e : actEdges) {
+    		checkConn(session);
+    		vertexSet.add(e.getOppositeVertex(this).getId());
+    	}
+    	return vertexSet;
+	}
 
     public void setAdjacentEdges(List<Edge> adjacentEdges) {
         this.adjacentEdges = adjacentEdges;
@@ -91,5 +110,7 @@ public class Vertex {
     	}
     	return edges;
     }
+
+	
 
 }
