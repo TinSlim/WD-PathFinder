@@ -14,6 +14,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Drawer from '@mui/material/Drawer';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import Graph from './Graph';
 import Search from './Search';
@@ -60,18 +63,6 @@ export default function App() {
 
     //<div style={{height:'80vh', display: 'inline-flex'}} className='ml-3 mr-3 columns'> 
     
-    
-    
-    const playPause = () => {
-        if (!running) {
-            setRunning(true);
-            start();
-        } else {
-            setRunning(false);
-            pause();
-        }
-    }
-
     const calculateTime = runningTime => {
         const total_seconds = Math.floor(runningTime / 1000);
         const total_minutes = Math.floor(total_seconds / 60);
@@ -83,8 +74,10 @@ export default function App() {
     }
 
     const start = () => {
-        console.log("start");
-        let startTime = Date.now() - runningTime;
+        setRunning(true);
+        clearInterval(stopwatchInterval);
+        setTime("00:00");
+        let startTime = Date.now() - 0;
         // animacion esfera
         const stopwatchIntervalC = setInterval ( () => {
             const runningTimeC = Date.now() - startTime;
@@ -94,36 +87,27 @@ export default function App() {
         setStopWatchInterval(stopwatchIntervalC);
     }
     
-    const pause = () => {
-        clearInterval(stopwatchInterval);
-    }
-
     const stop = () => {
         setRunning(false);
-        setRunningTime(0);
-        setTime("00:00");
         clearInterval(stopwatchInterval);
-        setTime("00:00");
     }
 
     return (
         <div>           
             <AppBar position="fixed">
-                <Toolbar>
+                <Toolbar >
                     <Button color="inherit"
-                    onClick={openDrawer}>
+                        onClick={openDrawer}>
                         Menu</Button>
-
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Cosas
+                    <Typography variant="h3" component="div" sx={{ flexGrow: 1}}>
+                        W<img src={require('./../images/wool2.svg')}
+                            width="50px"/>olNet
                     </Typography>
 
                     <Typography variant="h6" component="div" >
-                        Time: <div id="stopwatch" class="stopwatch">{time}</div>
+                        Time: {time}
                     </Typography>
-                    <Button color="inherit" onClick={playPause}>PlayPause</Button>
-                    <Button color="inherit" onClick={stop}>Stoptops</Button>
-                    <Button color="inherit" onClick={stopGraph}>Stop</Button>
+                    <Button color="inherit" onClick={() => {stopGraph();stop();}}>Stop</Button>
                     </Toolbar>
             </AppBar>
 
@@ -132,8 +116,16 @@ export default function App() {
             <SwipeableDrawer
                 open={drawerState}
                 onClose={closeDrawer}>
+                
+                <div style={{display:"flex", alignItems:"center", justifyContent:"flex-end"}}>
+                    <IconButton onClick={closeDrawer}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                </div>
+
                 <div>
                     <Search 
+                        startCrono = {start}
                         words={words}
                         setWords={setWords}
                         values={values}
