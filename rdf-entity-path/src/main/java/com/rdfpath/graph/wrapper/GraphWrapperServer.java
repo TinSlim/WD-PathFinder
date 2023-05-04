@@ -31,6 +31,8 @@ public class GraphWrapperServer {
 	private HashSet<Integer> addedNodes;
 	private WebSocketSession session;
 	private int totalEdges;
+	private int[] nodesNumbers;
+	private int actualDistance;
 	
 	public CharSequence vertexWrapperToJson (VertexWrapperServer vw, float angle) {
 		// Node
@@ -58,6 +60,34 @@ public class GraphWrapperServer {
 	    return json.toString();
 	}
 	
+	public CharSequence vertexWrapperEditPositionJson (VertexWrapperServer vw, float angle) {
+		// Node
+		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex);
+	    String vertexLabelSmall = vertexLabel;
+	    if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
+	    
+	    JSONObject newVertex = new JSONObject();
+	    newVertex.put("label", vertexLabelSmall);
+	    newVertex.put("color",vw.getHexColor());
+	    newVertex.put("title", vertexLabel);
+	    	
+	    // Json
+	    JSONObject json = new JSONObject();
+	    json.put("type","edit");
+	    json.put("data",newVertex);
+	    
+	    double angleR = Math.toRadians(angle);
+	    if (angle != -1) {
+	    	newVertex.put("x", Math.cos(angleR) * actualDistance);
+		    newVertex.put("y", Math.sin(angleR) * actualDistance);
+		    newVertex.put("fixed",true);
+	    }
+	    newVertex.put("id", vw.idVertex);
+	    return json.toString();
+	}
+	
+	
+	
 	public GraphWrapperServer (IGraph graph2) {
 		this.graph = (IGraph) graph2;
 		this.nodes = new HashMap<Integer, VertexWrapperServer>();
@@ -71,11 +101,12 @@ public class GraphWrapperServer {
 	}
 
 	public void search (int [] nodesNumbers, int size) throws IOException {
+		this.nodesNumbers = nodesNumbers;
 		
 		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
 		
-		
+		actualDistance = 500;
 		int index = 0;
 		for (int idSearch : nodesNumbers) {
 			VertexWrapperServer actVW = new VertexWrapperServer(idSearch);
@@ -90,7 +121,6 @@ public class GraphWrapperServer {
 					vertexWrapperToJson (actVW, (360/nodesNumbers.length)*index)));
 			
 			index++;
-			float a = (360/nodesNumbers.length)*index;
 			//session.sendMessage(new TextMessage(graph.nodeToJson(idSearch)));
 		}
 		
@@ -245,6 +275,19 @@ public class GraphWrapperServer {
 		
 		for (Object edge : edges) {
 			totalEdges+=1;
+			
+			if (actualDistance + 24 < totalEdges * 10) {
+				actualDistance = totalEdges * 10;
+				int index = 0;
+				for (int idSearch : nodesNumbers) {
+					VertexWrapperServer editVW = nodes.get(idSearch);
+					session.sendMessage(new TextMessage(
+							vertexWrapperEditPositionJson(editVW, (360/nodesNumbers.length)*index)));
+					index++;
+				}
+			}
+			
+			
 			session.sendMessage(new TextMessage(graph.edgeToJson(edge)));
 		}
 		
