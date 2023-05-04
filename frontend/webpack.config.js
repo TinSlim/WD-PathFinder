@@ -35,7 +35,11 @@ module.exports = {
                       }
               }
           ]
-  }
+        },
+        {
+          test: /\.(png|jp(e*)g|svg|gif)$/,
+          type: "asset/resource",
+        }
       ]
     }
   };
