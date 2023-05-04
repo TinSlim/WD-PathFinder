@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ListT from "./ListT"
 import Autocom from "./Autocom"
-import {connect, makeGraph, startGraph} from './../script/grafo.js'
+import {connect, startGraph} from './../script/grafo.js'
 const { baseURL } = require('config');
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -47,6 +47,7 @@ export default function Search(props) {
         props.closeDrawer();
         let ids = props.values.map((entity) => (entity.id).replace("Q", ""));//})
         startGraph(ids);
+        props.startCrono();
         console.log(ids);
     }
 
