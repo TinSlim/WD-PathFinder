@@ -4,7 +4,31 @@ const { socketUrl,  baseURL} = require('config');
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
 
+/* 
+TODO example BORRAR:
+var nodes = new vis.DataSet([
+  {"id" : 0, "label" : "nodo0", "color" : "#cc76FC"},
+  {"id" : 1, "label" : "nodo1", "color" : "#cc76FC"}
+])
+var edges = new vis.DataSet([
+  {"from": 0,
+        "label":"Relacion",
+        "to":1 ,
+        "font": {"align": "middle"},
+        "color": {"color": '#848484'},
+        "arrows" : {
+            "to" : {
+                "enabled" : true,
+                "type" : "arrow",
+            }
+        }
+    }
+]);
+
+nodes.update({id: 1, label: "changed label"});
+*/
 // create a network
+
 var container = null;
 var data = {
     nodes: nodes,
@@ -22,7 +46,7 @@ window.onload = function() {
     network = new vis.Network(container, data, options);
 }
 
-
+// TODO BORRAR
 export function makeGraph() {
     // create an array with nodes and edges
     var nodes = new vis.DataSet([]);
@@ -39,8 +63,6 @@ export function makeGraph() {
         autoResize: true,
         width: (window.innerWidth - 25) + "px",
     };
-
-    console.log("erre");
 
     var network = new vis.Network(container, data, options);
 
@@ -99,7 +121,10 @@ export function startGraph (values) {
       else if (newData.type == "edge") {
         edges.add(newData.data);
         console.log(newData.data);
-        }
+      }
+      else if (newData.type == "edit") {
+        nodes.update(newData.data);
+      }
       
       //for (let newVertex of newData.vertex) {
       //    nodes.add(newVertex);
