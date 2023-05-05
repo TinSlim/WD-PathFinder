@@ -7,6 +7,9 @@ import {stopGraph} from './../script/grafo.js'
 import Navbar from "./Navbar"
 import Content from "./Content"
 import Footer from "./Footer"
+import VisNetwork from './VisNetwork';
+import WebSocketTemplate from './WebSocketTemplate';
+
 import Typography from '@mui/material/Typography';
 
 import AppBar from '@mui/material/AppBar';
@@ -91,9 +94,15 @@ export default function App() {
         setRunning(false);
         clearInterval(stopwatchInterval);
     }
+    
+    const initGraph = (ids) => {
+        
+        console.log(ids);
+    }
 
     return (
-        <div>           
+        <div> 
+            
             <AppBar position="fixed">
                 <Toolbar >
                     <Button color="inherit"
@@ -111,7 +120,11 @@ export default function App() {
                     </Toolbar>
             </AppBar>
 
+            
             <Graph words={words} values={values} ></Graph>
+            
+             {/* TODO <VisNetwork></VisNetwork>*/ }
+             <WebSocketTemplate></WebSocketTemplate>
             
             <SwipeableDrawer
                 open={drawerState}
@@ -125,6 +138,7 @@ export default function App() {
 
                 <div>
                     <Search 
+                        initGraph = {initGraph}
                         startCrono = {start}
                         words={words}
                         setWords={setWords}
