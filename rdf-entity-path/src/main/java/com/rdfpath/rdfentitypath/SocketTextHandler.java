@@ -81,7 +81,9 @@ public class SocketTextHandler extends TextWebSocketHandler {
 	@Override
 	public void handleTextMessage(WebSocketSession session, TextMessage message)
 			throws IOException {
+		System.out.println("UNA CONEXIÓN");
 		String response = message.getPayload();
+		System.out.println(response);
 		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
 		
 		GraphWrapperServer graphWrapper = new GraphWrapperServer(graph);
@@ -93,7 +95,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		catch (IOException ioE) {
 			// Session is closed
 		}
-		
+		System.out.println("Cierra Conexión");
 		//System.out.println("Termina");
 		//System.out.println(session.isOpen());
 		//System.out.println("end");
