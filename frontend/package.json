@@ -43,6 +43,8 @@
   },
   "dependencies": {
     "bulma": "^0.9.3",
+    "vis-data": "^7.1.6",
+    "vis-network": "^9.1.6",
     "@babel/runtime": "^7.17.9",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
