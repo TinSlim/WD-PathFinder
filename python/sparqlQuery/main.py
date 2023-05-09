@@ -9,7 +9,7 @@ def clear_val (x):
     ans = ans.replace("http://www.wikidata.org/entity/","")       # Q
     return ans
 
-with open("subsets/randomGroups/"+"latest-truthy_small_random_double.csv","r") as f:
+with open("subsets/sparqlGroups/"+"latest-truthy_small_random_double.csv","r") as f:
 
     for group in f.readline().split(";"):
         res = group.split(",")
@@ -58,7 +58,7 @@ WHERE {
         p_copy =  []
         q_copy =  []
 
-        print(results)
+        print(query_result['results']['bindings'])
         for i in range(len(results)):
             if z1_list[i]==None and q_list[i]==None:
                 counter+=1
