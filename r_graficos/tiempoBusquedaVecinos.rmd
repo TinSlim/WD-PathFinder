@@ -38,7 +38,7 @@ ggplot(tiemposBusquedaVecino, aes(x=SetDatos, y=Tiempos, color=Estructura)) + # 
 
   geom_boxplot() +
 
-  labs(title= "Tiempos de búsqueda de vecinos (10000 datos)",
+  labs(title= "Tiempos de búsqueda de vecinos",
        color = "Estructura del Grafo",
        y = "Tiempo [ns] (log10)",
        x = "Set de datos") +
