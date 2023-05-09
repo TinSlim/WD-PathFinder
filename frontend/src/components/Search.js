@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ListT from "./ListT"
 import Autocom from "./Autocom"
-import {connect, startGraph} from './../script/grafo.js'
 const { baseURL } = require('config');
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -46,13 +45,14 @@ export default function Search(props) {
     const launchGraph = () => {
         props.closeDrawer();
         let ids = props.values.map((entity) => (entity.id).replace("Q", ""));//})
-        startGraph(ids);
+        //startGraph(ids);
+        props.initGraph(ids);
         props.startCrono();
         console.log(ids);
     }
 
     return (
-        <div className='column has-background-secondary'>
+        <div className='column'>
 
             <div>
                 <button onClick={launchGraph} className='button is-info'> BUSCAR </button>

@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { render } from "react-dom"
-//import useWebSocket from 'react-use-websocket';
-
-import {stopGraph} from './../script/grafo.js'
+import { Network } from "vis-network";
+import { DataSet} from "vis-data";
 
 import Navbar from "./Navbar"
 import Content from "./Content"
 import Footer from "./Footer"
-import VisNetwork from './VisNetwork';
-import WebSocketTemplate from './WebSocketTemplate';
 
 import Typography from '@mui/material/Typography';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Drawer from '@mui/material/Drawer';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import Graph from './Graph';
 import Search from './Search';
+
+const { socketUrl } = require('config');
 
 export default function App() {
     const [drawerState, setDrawerState] = useState(false);
@@ -32,36 +28,17 @@ export default function App() {
     const [running, setRunning] = useState(false);
     const [stopwatchInterval, setStopWatchInterval] = useState(null);
     const [runningTime, setRunningTime] = useState(0);
-    /*
-    const [websocket, setWebSocket] = useState(0);
-    React.useEffect(() => {
-        const websocket = new WebSocket('ws://localhost:8080/query');
+    const container = useRef(null);
+    const [socket,setSocket] = useState(null);
     
-        websocket.onopen = () => {
-          console.log('connected TO REACT WS');
-        }
-    
-        websocket.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-        }
 
-        setWebSocket(websocket);
-
-        return () => {
-            websocket.close()
-        }
-        }, [])
-    */
 
     const openDrawer = () => {
-        //websocket.send("261, 298");
-        //websocket.send("1, 2");
         setDrawerState(true);
     }
 
     const closeDrawer = () => {
         setDrawerState(false);
-        console.log("CloseDrawer");
     }
 
     //<div style={{height:'80vh', display: 'inline-flex'}} className='ml-3 mr-3 columns'> 
@@ -93,15 +70,75 @@ export default function App() {
     const stop = () => {
         setRunning(false);
         clearInterval(stopwatchInterval);
+        if (socket != null) {
+            socket.close();
+        }
     }
     
+
+    
+
+    var nodes = new DataSet([]);
+    var edges = new DataSet([]);
+
+    const options = {
+        autoResize: true,
+        height: (window.innerHeight - 48) + "px",
+        width:  (window.innerWidth - 25) + "px",
+    };
+
     const initGraph = (ids) => {
+        if (socket != null) {
+            socket.close();
+        }
+        const data = { nodes: nodes, edges:edges };
+        const network =
+            container.current &&
+            new Network(container.current, data , options);
         
-        console.log(ids);
+        const newSocket = new WebSocket(`${socketUrl}/query`);
+        newSocket.onopen = function(e) {
+            console.log("[open] Connection established");
+            //resetGraph();
+            newSocket.send(ids);
+      
+        };
+      
+        newSocket.onmessage = function(event) {
+        let newData = JSON.parse(event.data);
+        
+        if (newData.type == "vertex") {
+            nodes.add(newData.data);
+        }
+    
+        else if (newData.type == "edge") {
+            edges.add(newData.data);
+            console.log(newData.data);
+        }
+        else if (newData.type == "edit") {
+            nodes.update(newData.data);
+        }
+        };
+      
+        newSocket.onclose = function(event) {
+        if (event.wasClean) {
+            console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+        } else {
+            console.log('[close] Connection died');
+        }
+        };
+      
+        newSocket.onerror = function(error) {
+            console.log(`[error]`);
+        };
+        setSocket(newSocket);
     }
 
+  
+
+
     return (
-        <div> 
+        <div className='hero is-fullheight'> 
             
             <AppBar position="fixed">
                 <Toolbar >
@@ -116,17 +153,24 @@ export default function App() {
                     <Typography variant="h6" component="div" >
                         Time: {time}
                     </Typography>
-                    <Button color="inherit" onClick={() => {stopGraph();stop();}}>Stop</Button>
+                    <Button color="inherit" onClick={stop}>Stop</Button>
                     </Toolbar>
             </AppBar>
 
             
-            <Graph words={words} values={values} ></Graph>
-            
-             {/* TODO <VisNetwork></VisNetwork>*/ }
-             <WebSocketTemplate></WebSocketTemplate>
+            {/*<Graph words={words} values={values} ></Graph>*/}
+            {/*<VisNetwork></VisNetwork>*/}
+            <div className='column mt-5 has-background-secondary'>
+                <div ref={container}/>
+            </div>
+            {/*<WebSocketTemplate></WebSocketTemplate>*/}
             
             <SwipeableDrawer
+                PaperProps={{
+                    sx: {
+                      backgroundColor: "#e3e6e8"
+                    }
+                  }}
                 open={drawerState}
                 onClose={closeDrawer}>
                 
@@ -150,6 +194,7 @@ export default function App() {
                  
             </SwipeableDrawer>
 
+            <Footer></Footer>
         </div>
     );
 }

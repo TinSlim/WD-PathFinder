@@ -6,7 +6,7 @@ export default function WebSocketTemplate () {
 
     useWebSocket("ws://localhost:8080/query", {
         onOpen: (e) => {
-          console.log('WebSocket connection established.');
+          console.log('WebSocket connection establishe3d.');
         },
         onMessage: (event) => {
             let newData = JSON.parse(event.data);
