@@ -31,7 +31,8 @@ export default function App() {
     const container = useRef(null);
     const [socket,setSocket] = useState(null);
     
-
+    
+   
 
     const openDrawer = () => {
         setDrawerState(true);
@@ -85,6 +86,9 @@ export default function App() {
         autoResize: true,
         height: (window.innerHeight - 48) + "px",
         width:  (window.innerWidth - 25) + "px",
+        nodes: {
+            shape: "box",
+          },
     };
 
     const initGraph = (ids) => {
@@ -134,11 +138,9 @@ export default function App() {
         setSocket(newSocket);
     }
 
-  
-
 
     return (
-        <div className='hero is-fullheight'> 
+        <div onLoad={openDrawer} className='hero is-fullheight'> 
             
             <AppBar position="fixed">
                 <Toolbar >
@@ -173,7 +175,6 @@ export default function App() {
                   }}
                 open={drawerState}
                 onClose={closeDrawer}>
-                
                 <div style={{display:"flex", alignItems:"center", justifyContent:"flex-end"}}>
                     <IconButton onClick={closeDrawer}>
                         <ChevronLeftIcon />
