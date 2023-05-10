@@ -43,6 +43,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		String actFile = (System.getProperty("graph-data") != null) ?
 					System.getProperty("graph-data") :
 					"subset1000000";
+					//"subset1000000";
 		String filename = path + actFile;
 		
 		int index = 0;
@@ -95,10 +96,8 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		catch (IOException ioE) {
 			// Session is closed
 		}
-		System.out.println("Cierra Conexión");
-		//System.out.println("Termina");
-		//System.out.println(session.isOpen());
-		//System.out.println("end");
+
+		//graphWrapper = null;
 	}
 	
 	
