@@ -54,9 +54,6 @@ export default function Search(props) {
     return (
         <div className='column'>
 
-            <div>
-                <button onClick={launchGraph} className='button is-info'> BUSCAR </button>
-            </div>
             <Autocom addEntity={(newWord) => props.setValues(prevArray => [...prevArray, newWord])}></Autocom>
 
             <ListT entities={props.values} deleteEntity={
@@ -66,6 +63,7 @@ export default function Search(props) {
             />
             <div>
                 <button onClick={clearWords} className='button is-danger'> CLEAR </button>
+                <button onClick={launchGraph} className='button is-info'> SEARCH </button>
             </div>
 
         </div>

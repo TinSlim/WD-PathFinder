@@ -71,9 +71,6 @@ export default function Autocom(props) {
             if (newValue != null) {
               props.addEntity(newValue);
             }
-            //setInputValue("");
-            //setOptions([]); //
-            //setValue(null); //
           }}
         inputValue={inputValue}
         onInputChange={(event, newInputValue, reason) => {
