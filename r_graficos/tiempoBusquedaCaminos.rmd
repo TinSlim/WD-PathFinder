@@ -15,7 +15,7 @@ library(ggplot2)
 ### Importe Datos
 
 ```{r}
-tiemposBusquedaCamino <- read.csv("datos/timePathFinding2.csv", sep = ";")
+tiemposBusquedaCamino <- read.csv("datos/timePathFinding.csv", sep = ";")
 #tBCgC <- read.csv("datos/timePathFinding/gC_latest-truthy.csv", sep = ";")
 ```
 
@@ -25,7 +25,6 @@ tiemposBusquedaCamino <- read.csv("datos/timePathFinding2.csv", sep = ";")
 options(scipen = 999)
 #tiemposBusquedaCamino$memMegaByte = tiemposBusquedaCamino$Memoria / 1000000
 #tiemposBusquedaCamino$grupos = "pares"
-options(scipen = 999)
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphGt"] <- "Objetos de Java"
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Comprimido con índices"
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Comprimido"
