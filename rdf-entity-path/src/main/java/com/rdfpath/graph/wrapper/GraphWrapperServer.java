@@ -43,24 +43,24 @@ public class GraphWrapperServer {
 	    int vLabelSize = vertexLabel.length();
 	    int spacePos = vertexLabel.indexOf(" ", (vertexLabel.length()/2) + 2);
 	    
-	    if (vLabelSize > 20) {
-	    	vertexLabelRes = "";
-	    	int actSize = 0;
-	    	while (vLabelSize - actSize > 60) {
-	    		int space = vertexLabel.indexOf(" ", 55);
-	    		vertexLabelRes += vertexLabel.substring(0,space) + "\n";
-	    		vertexLabel = vertexLabel.substring(spacePos+1);
-	    	}
-	    	if (vertexLabel.length() > 0) {
-	    		newVLabel += vertexLabel;
-	    	}
-	    	vertexLabel = newVLabel;
-	    }
+	    //if (vLabelSize > 20) {
+	    //	vertexLabelRes = "";
+	    //	int actSize = 0;
+	    //	while (vLabelSize - actSize > 60) {
+	    //		int space = vertexLabel.indexOf(" ", 55);
+	    //		vertexLabelRes += vertexLabel.substring(0,space) + "\n";
+	    //		vertexLabel = vertexLabel.substring(spacePos+1);
+	    //	}
+	    //	if (vertexLabel.length() > 0) {
+	    //		newVLabel += vertexLabel;
+	    //	}
+	    //	vertexLabel = newVLabel;
+	    //}
 	    
-	    if (spacePos > -1 && spacePos < (vLabelSize / 2) + 1 && spacePos < 20) {
-	    	vertexLabelSmall = vertexLabel.substring(0, spacePos) + "\n" + vertexLabel.substring(spacePos + 1);
-	    }
-	    else if (vLabelSize > 24) {	
+	    //if (spacePos > -1 && spacePos < (vLabelSize / 2) + 1 && spacePos < 20) {
+	    //	vertexLabelSmall = vertexLabel.substring(0, spacePos) + "\n" + vertexLabel.substring(spacePos + 1);
+	    //}
+	    if (vLabelSize > 24) {	
 	    	vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 20)) + "...";
 	    }
 	    
