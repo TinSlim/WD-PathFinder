@@ -162,7 +162,7 @@ export default function App() {
             
             {/*<Graph words={words} values={values} ></Graph>*/}
             {/*<VisNetwork></VisNetwork>*/}
-            <div className='column mt-5 has-background-secondary'>
+            <div className='column mt-5 has-background-grey-lighter'>
                 <div ref={container}/>
             </div>
             {/*<WebSocketTemplate></WebSocketTemplate>*/}
