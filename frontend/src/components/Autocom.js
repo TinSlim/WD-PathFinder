@@ -95,7 +95,7 @@ export default function Autocom(props) {
         sx={{ width: 300 }}
         renderInput={(params) => 
           <TextField {...params} 
-            label="Entidad"
+            label="Entity" //TODO Texto IDIOMA
             variant="filled"
             InputProps={{
               ...params.InputProps,
@@ -118,10 +118,13 @@ export default function Autocom(props) {
                           />
                         </Grid>
                         <Grid item xs>
-                            {option.label}
-                          <Typography variant="body2" color="text.secondary">
-                            {option.description}
-                          </Typography>
+                            {option.label}&nbsp;
+                            <Typography variant="caption" color="text.secondary" display="inline">
+                              {option.id}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {option.description}
+                            </Typography>
                         </Grid>
                       </Grid>
                     </li>
