@@ -19,7 +19,6 @@ public class VertexWrapperServer {
 	public Boolean inStack;
 	public int otherColorDistance;
 	public HashSet<Integer> edgesWith;
-	//public int father;
 	
 	/**
 	 * @param idSearch
@@ -43,12 +42,17 @@ public class VertexWrapperServer {
 		this.idVertex = adjVertex;
 		this.colorNode = actualVW.colorNode;
 		this.sameColorDistance = actualVW.sameColorDistance + 1;
+		
 		this.from = new HashSet<VertexWrapperServer>();
 		this.from.add(actualVW);
+		
 		this.added = new LinkedList<Integer>();
 		added.add(actualVW.idVertex);
+		
 		this.otherColorDistance = -1;
+		
 		edgesWith = new HashSet<Integer>();
+		
 		int[] newColor = {actualVW.color[0] - 26,actualVW.color[1] - 24,actualVW.color[2] - 25};
 		this.color = newColor;
 		//this.father = actualVW.idVertex;
