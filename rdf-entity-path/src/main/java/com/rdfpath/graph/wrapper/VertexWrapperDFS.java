@@ -9,9 +9,9 @@ package com.rdfpath.graph.wrapper;
  * @github Tinslim
  *
  */
-public class VertexWrapperTest {
+public class VertexWrapperDFS {
 	public int vertexID;
-	public VertexWrapperTest father;
+	public VertexWrapperDFS father;
 	//public LinkedList<Integer> path;
 	public int initId;
 	public int actSize;
@@ -19,7 +19,7 @@ public class VertexWrapperTest {
 	/**
 	 * @param x
 	 */
-	public VertexWrapperTest(int x) {
+	public VertexWrapperDFS(int x) {
 		this.vertexID = x;
 		this.father = null;
 		//path = new LinkedList<Integer>();
@@ -31,7 +31,7 @@ public class VertexWrapperTest {
 	/**
 	 * @param actVW
 	 */
-	public VertexWrapperTest(VertexWrapperTest actVW, int neighbor) {
+	public VertexWrapperDFS(VertexWrapperDFS actVW, int neighbor) {
 		this.vertexID = neighbor;
 		this.father = actVW;
 		//this.path = (LinkedList<Integer>) actVW.path.clone();

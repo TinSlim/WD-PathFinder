@@ -14,14 +14,14 @@ import com.rdfpath.graph.model.IGraph;
  * @github Tinslim
  *
  */
-public class GraphWrapperTest implements Callable<String> {
+public class GraphWrapperDFS {
 	
-	private HashMap<Integer, VertexWrapperTest> nodes;		// Almacena id y Nodo
-	private LinkedList<VertexWrapperTest> toSearch;
+	private HashMap<Integer, VertexWrapperDFS> nodes;		// Almacena id y Nodo
+	private LinkedList<VertexWrapperDFS> toSearch;
 	
 	private IGraph graph;									// Referencia al grafo
 	
-	public GraphWrapperTest (IGraph graph2) {
+	public GraphWrapperDFS (IGraph graph2) {
 		this.graph = (IGraph) graph2;
 	}
 
@@ -33,21 +33,21 @@ public class GraphWrapperTest implements Callable<String> {
 		}
 
 		LinkedList<LinkedList<Integer>> paths = new LinkedList<LinkedList<Integer>>();
-		LinkedList<VertexWrapperTest> stack = new LinkedList<VertexWrapperTest>();
+		LinkedList<VertexWrapperDFS> stack = new LinkedList<VertexWrapperDFS>();
 		
 		for (int x : nodesNumbers) {
-			VertexWrapperTest vw = new VertexWrapperTest (x);
+			VertexWrapperDFS vw = new VertexWrapperDFS (x);
 			stack.add(vw);
 		}
 				
 		while (stack.size() > 0) {
-			VertexWrapperTest actVW = stack.pop();
+			VertexWrapperDFS actVW = stack.pop();
 			if (actVW.actSize > maxSize) {
 				continue;
 			}
 			
 			HashSet<Integer> a = graph.getAdjacentVertex(actVW.vertexID);
-			VertexWrapperTest copyActVW = actVW;
+			VertexWrapperDFS copyActVW = actVW;
 			do { 
 				a.remove(copyActVW.vertexID);
 				copyActVW = copyActVW.father;			}
@@ -67,7 +67,7 @@ public class GraphWrapperTest implements Callable<String> {
 					while (copyActVW != null);
 			}
 				else {
-					VertexWrapperTest dd = new VertexWrapperTest(actVW, neighbor);
+					VertexWrapperDFS dd = new VertexWrapperDFS(actVW, neighbor);
 					stack.add(dd);
 				}
 			}
@@ -158,14 +158,6 @@ public class GraphWrapperTest implements Callable<String> {
 			
 		}
 		return;
-	}
-	
-
-
-	@Override  	
-	public String call() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
