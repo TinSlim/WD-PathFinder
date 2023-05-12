@@ -82,24 +82,59 @@ export default function App() {
     var nodes = new DataSet([]);
     var edges = new DataSet([]);
 
-    const options = {
-        autoResize: true,
-        height: (window.innerHeight - 48) + "px",
-        width:  (window.innerWidth - 25) + "px",
-        nodes: {
-            shape: "box",
-          },
-    };
+    
 
     const initGraph = (ids) => {
         if (socket != null) {
             socket.close();
         }
+        const options = {
+            autoResize: true,
+            height: (window.innerHeight - document.getElementById("app-bar").offsetHeight - document.getElementById("footer").offsetHeight) + "px",
+            width:  (window.innerWidth) + "px",
+            nodes: {
+                shape: "box",
+              },
+        };
+
         const data = { nodes: nodes, edges:edges };
         const network =
             container.current &&
             new Network(container.current, data , options);
+       
+        /*
+        EJEMPLO:: TODO BORRAR
         
+        nodes.add({id:1,label:"1"})
+        nodes.add({id:2,label:"2"})
+        nodes.add({id:3,label:"3"})
+        edges.add({
+            from:1,
+            to:2,
+            label:"4",
+            font: {
+                color: '#343434',
+                size: 24, // px
+                face: 'arial',
+                background: 'none',
+                strokeWidth: 2, // px
+                strokeColor: '#dbdbdb',
+                align: 'horizontal',
+                multi: false,
+                vadjust: 0,
+                bold: {
+                  color: '#343434',
+                  size: 14, // px
+                  face: 'arial',
+                  vadjust: 0,
+                  mod: 'bold'
+                }
+            }
+        })
+        edges.add({from:2,to:3,label:"5"})
+        edges.add({from:3,to:1,label:"6"})
+        */
+
         const newSocket = new WebSocket(`${socketUrl}/query`);
         newSocket.onopen = function(e) {
             console.log("[open] Connection established");
@@ -142,7 +177,7 @@ export default function App() {
     return (
         <div onLoad={openDrawer} className='hero is-fullheight'> 
             
-            <AppBar position="fixed">
+            <AppBar id="app-bar" position="static">
                 <Toolbar >
                     <Button color="inherit"
                         onClick={openDrawer}>
@@ -162,9 +197,9 @@ export default function App() {
             
             {/*<Graph words={words} values={values} ></Graph>*/}
             {/*<VisNetwork></VisNetwork>*/}
-            <div className='column mt-5 has-background-grey-lighter'>
-                <div ref={container}/>
-            </div>
+           
+                <div className='has-background-grey-lighter' ref={container}/>
+ 
             {/*<WebSocketTemplate></WebSocketTemplate>*/}
             
             <SwipeableDrawer
@@ -180,7 +215,6 @@ export default function App() {
                         <ChevronLeftIcon />
                     </IconButton>
                 </div>
-
                 <div>
                     <Search 
                         initGraph = {initGraph}

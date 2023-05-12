@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Footer() {
     return (
-        <footer class="footer mt-auto has-background-primary has-text-white">
+        <footer id="footer" class="footer mt-auto has-background-primary has-text-white">
             <div class="columns">
                 <div class="content has-text-centered column">
                     <p>
