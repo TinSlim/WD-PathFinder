@@ -310,9 +310,17 @@ public abstract class AbstractGraph implements IGraph {
     	edge.put("to", getDestinationEdge(e));
     	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
     	edge.put("title", edgeLabel);
-    	edge.put("font", new JSONObject().put("align", "middle"));
-    	edge.put("color", new JSONObject().put("color", "#848484"));
+    	
+    	JSONObject font = new JSONObject();
+    	font.put("align", "middle");
+    	font.put("strokeColor", "#dbdbdb"); // TODO color
+    	font.put("size", 18);
+    	edge.put("font", font);
+    	
+    	edge.put("color", new JSONObject().put("color", "#848484")); // TODO color
     	edge.put("arrows", arrow);
+    	
+    	// TODO Fuerza aristas
     	edge.put("length", 500);
     	
     	json.put("type", "edge");
