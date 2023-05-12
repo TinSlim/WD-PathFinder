@@ -5,6 +5,9 @@ const { baseURL } = require('config');
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
 export default function Search(props) {
     const [entity, setEntity] = useState('');
     const [ansEntity, setAnsEntity] = useState([]);
@@ -61,10 +64,12 @@ export default function Search(props) {
                     const newWords = props.values.filter((_, index) => index !== indEnt);
                     props.setValues(newWords);}}
             />
-            <div>
-                <button onClick={clearWords} className='button is-danger'> CLEAR </button>
-                <button onClick={launchGraph} className='button is-info'> SEARCH </button>
-            </div>
+            
+            <Stack spacing={2} direction="row" alignItems="center">
+                <Button onClick={clearWords} variant="contained" color="error" >Clear</Button>
+                <Button onClick={launchGraph} variant="contained">SEARCH</Button>
+            </Stack>
+
 
         </div>
     );
