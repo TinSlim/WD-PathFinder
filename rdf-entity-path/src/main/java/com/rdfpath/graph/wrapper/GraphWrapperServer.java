@@ -34,32 +34,14 @@ public class GraphWrapperServer {
 	private int[] nodesNumbers;
 	private int actualDistance;
 	
+	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperToJson (VertexWrapperServer vw, float angle) {
 		// Node
 		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex);
-		String vertexLabelRes = vertexLabel;
-	    String vertexLabelSmall = vertexLabel;
+		String vertexLabelSmall = vertexLabel;
 	    
 	    int vLabelSize = vertexLabel.length();
 	    int spacePos = vertexLabel.indexOf(" ", (vertexLabel.length()/2) + 2);
-	    
-	    //if (vLabelSize > 20) {
-	    //	vertexLabelRes = "";
-	    //	int actSize = 0;
-	    //	while (vLabelSize - actSize > 60) {
-	    //		int space = vertexLabel.indexOf(" ", 55);
-	    //		vertexLabelRes += vertexLabel.substring(0,space) + "\n";
-	    //		vertexLabel = vertexLabel.substring(spacePos+1);
-	    //	}
-	    //	if (vertexLabel.length() > 0) {
-	    //		newVLabel += vertexLabel;
-	    //	}
-	    //	vertexLabel = newVLabel;
-	    //}
-	    
-	    //if (spacePos > -1 && spacePos < (vLabelSize / 2) + 1 && spacePos < 20) {
-	    //	vertexLabelSmall = vertexLabel.substring(0, spacePos) + "\n" + vertexLabel.substring(spacePos + 1);
-	    //}
 	    if (vLabelSize > 24) {	
 	    	vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 20)) + "...";
 	    }
@@ -84,6 +66,7 @@ public class GraphWrapperServer {
 	    return json.toString();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperEditPositionJson (VertexWrapperServer vw, float angle) {
 		// Node
 		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex);
