@@ -16,9 +16,10 @@ import com.rdfpath.graph.model.GraphNativeFullDense;
 import com.rdfpath.graph.model.IGraph;
 import com.rdfpath.graph.utils.Utils;
 import com.rdfpath.graph.wrapper.GraphWrapperTimeTest;
+import com.rdfpath.graph.wrapper.GraphWrapperTimeTestOptMem;
 
 /**
- *
+ * Test de obtención de caminos. Imprime resultados
  * @author Cristóbal Torres G.
  * @github Tinslim
  *
@@ -125,7 +126,8 @@ public class PathFindTest {
 			
 			long memoryBefore = mbean.getHeapMemoryUsage().getUsed();
 			int[] a = ids[i];
-			GraphWrapperTimeTest nGW = new GraphWrapperTimeTest(graph,seconds);
+			// TODO aquí cambié el Wrapper
+			GraphWrapperTimeTestOptMem nGW = new GraphWrapperTimeTestOptMem(graph,seconds);
 			nGW.search(a, 3);
 			//System.gc();
 			System.out.println((mbean.getHeapMemoryUsage().getUsed() - memoryBefore));
