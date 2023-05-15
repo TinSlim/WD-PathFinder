@@ -8,9 +8,14 @@ import Tab from '@mui/material/Tab';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
+import  './i18n';
+import { useTranslation } from 'react-i18next';
+
 export default function Search(props) {
     const [entity, setEntity] = useState('');
     const [ansEntity, setAnsEntity] = useState([]);
+
+    const { t, i18n } = useTranslation();
 
     const handleEntitySubmit = async e => {
         e.preventDefault();
@@ -22,7 +27,6 @@ export default function Search(props) {
 
     const handleEntityChange = async (word) => {
         setEntity(word);
-        // TODO PROBLEMA DE COOKIE AQUI
         let url = `${baseURL}/autocomplete?entity=${word}`
         fetch(url)
             .then(response => response.json())
@@ -66,8 +70,8 @@ export default function Search(props) {
             />
             
             <Stack spacing={2} direction="row" alignItems="center">
-                <Button onClick={clearWords} variant="contained" color="error" >Clear</Button>
-                <Button onClick={launchGraph} variant="contained">SEARCH</Button>
+                <Button onClick={clearWords} variant="contained" color="error" >{t('Clear')}</Button>
+                <Button onClick={launchGraph} variant="contained">{t('Search')}</Button>
             </Stack>
 
 

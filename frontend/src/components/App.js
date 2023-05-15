@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import Select from '@mui/material/Select';
+import MenuItem from "@mui/material/MenuItem";
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -18,8 +20,14 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import Search from './Search';
 
+import  './i18n';
+import { useTranslation } from 'react-i18next';
+
 const { socketUrl } = require('config');
 
+
+
+  
 export default function App() {
     const [drawerState, setDrawerState] = useState(false);
     const [words, setWords] = useState([]);
@@ -30,8 +38,9 @@ export default function App() {
     const [runningTime, setRunningTime] = useState(0);
     const container = useRef(null);
     const [socket,setSocket] = useState(null);
-    
-    
+    const [lang, setLang] = useState('en');
+
+    const { t, i18n } = useTranslation();
    
 
     const openDrawer = () => {
@@ -42,8 +51,6 @@ export default function App() {
         setDrawerState(false);
     }
 
-    //<div style={{height:'80vh', display: 'inline-flex'}} className='ml-3 mr-3 columns'> 
-    
     const calculateTime = runningTime => {
         const total_seconds = Math.floor(runningTime / 1000);
         const total_minutes = Math.floor(total_seconds / 60);
@@ -77,6 +84,10 @@ export default function App() {
     }
     
 
+    const changeLanguage = (e) => {
+        setLang(e.target.value);
+        i18n.changeLanguage(e.target.value);
+    }
     
 
     var nodes = new DataSet([]);
@@ -139,7 +150,7 @@ export default function App() {
         newSocket.onopen = function(e) {
             console.log("[open] Connection established");
             //resetGraph();
-            newSocket.send(ids);
+            newSocket.send(ids.concat(i18n.language));
       
         };
       
@@ -175,22 +186,39 @@ export default function App() {
 
 
     return (
-        <div onLoad={openDrawer} className='hero is-fullheight'> 
+        <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
             
             <AppBar id="app-bar" position="static">
                 <Toolbar >
                     <Button color="inherit"
                         onClick={openDrawer}>
-                        Menu</Button>
+                        {t('Menu')}
+                    </Button>
+
                     <Typography variant="h3" component="div" sx={{ flexGrow: 1}}>
                         W<img src={require('./../images/wool2.svg')}
                             width="50px"/>olNet
                     </Typography>
 
+                    <Select
+                    variant="standard"
+                    className="selectBox"
+                    onChange={changeLanguage}
+                    name="lang"
+                    value={lang}
+                    >
+                         <MenuItem className="optionsMenu" value="en">
+                            {t('English')}
+                        </MenuItem>
+                        <MenuItem className="optionsMenu" value="es">
+                            {t('Spanish')}
+                        </MenuItem>
+                    </Select>
+                    
                     <Typography variant="h6" component="div" >
-                        Time: {time}
+                    {t('Time')}: {time}
                     </Typography>
-                    <Button color="inherit" onClick={stop}>Stop</Button>
+                    <Button color="inherit" onClick={stop}>{t('Stop')}</Button>
                     </Toolbar>
             </AppBar>
 
@@ -198,7 +226,7 @@ export default function App() {
             {/*<Graph words={words} values={values} ></Graph>*/}
             {/*<VisNetwork></VisNetwork>*/}
            
-                <div className='has-background-grey-lighter' ref={container}/>
+                <div className='has-background-white-ter' ref={container}/>
  
             {/*<WebSocketTemplate></WebSocketTemplate>*/}
             

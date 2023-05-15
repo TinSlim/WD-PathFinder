@@ -10,6 +10,9 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
+import  './i18n';
+import { useTranslation } from 'react-i18next';
+
 const { baseURL } = require('config');
 
 export default function Autocom(props) {
@@ -17,6 +20,8 @@ export default function Autocom(props) {
   const [value, setValue] = React.useState("");
   const [inputValue, setInputValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const { t, i18n } = useTranslation();
 
   const timeoutIdRef = React.useRef();
   
@@ -28,7 +33,7 @@ export default function Autocom(props) {
 
   const handleAuto = (word) => {
     if (word != "" && word != null) {
-      let url = `${baseURL}/autocomplete?entity=${word}`
+      let url = `${baseURL}/autocomplete?entity=${word}&language=${i18n.language}`
       fetch(url)
         .then(response => response.json())
         .then(data => handleNewData(data));
@@ -50,13 +55,13 @@ export default function Autocom(props) {
   
   const getDefaultText = () => {
     if (isLoading && inputValue != "") {
-      return "loading";
+      return t('LoadingSearch');
     }
     else if (inputValue == "") {
-      return "Esperando";
+      return t('WaitingSearch');
     }
     else {
-      return "nada";
+      return t('NoResultSearch');
     }
   }
   
@@ -95,7 +100,7 @@ export default function Autocom(props) {
         sx={{ width: 300 }}
         renderInput={(params) => 
           <TextField {...params} 
-            label="Entity" //TODO Texto IDIOMA
+            label={t("Entity")} //TODO Texto IDIOMA
             variant="filled"
             InputProps={{
               ...params.InputProps,
