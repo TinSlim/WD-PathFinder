@@ -47,11 +47,18 @@ public class RdfRestApi {
 	}
 	
 	@RequestMapping(value="/autocomplete",produces = MediaType.APPLICATION_JSON_VALUE)
-	public String autocomplete (@RequestParam String entity) {
+	public String autocomplete (@RequestParam String entity, @RequestParam String language) {
 		String entityEncod = URLEncoder.encode(entity, StandardCharsets.UTF_8);
-		String url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search="
-			+ entityEncod
-			+ "&language=en&formatversion=2";
+		String languageEncod = URLEncoder.encode(language, StandardCharsets.UTF_8);
+		
+		String url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json"
+			+ "&search=" + entityEncod
+			+ "&language=" + languageEncod
+			+ "&uselang=" + languageEncod
+			+ "&formatversion=2";
+		// language=es (query)
+		// uselange=es (response)
+		// https://www.wikidata.org/w/api.php?action=wbsearchentities&search=perro&language=es&uselang=fr
 		String respuesta = "";
 		try {
 			// Petición y creación de respuesta (JSON)

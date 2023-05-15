@@ -85,10 +85,13 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		System.out.println("UNA CONEXIÓN");
 		String response = message.getPayload();
 		System.out.println(response);
-		int[] nodesNumbers = Arrays.stream(response.split(",")).mapToInt(Integer::parseInt).toArray();  
+		
+		String[] splitAns = response.split(",");
+		int[] nodesNumbers = Arrays.stream(Arrays.copyOfRange(splitAns,0,splitAns.length - 1)).mapToInt(Integer::parseInt).toArray();  
 		
 		GraphWrapperServer graphWrapper = new GraphWrapperServer(graph);
 		graphWrapper.setSession(session);
+		graphWrapper.setLang(splitAns[splitAns.length - 1]);
 		
 		try {
 			graphWrapper.search(nodesNumbers, 3);
