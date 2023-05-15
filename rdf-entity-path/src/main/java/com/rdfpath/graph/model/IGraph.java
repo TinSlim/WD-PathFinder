@@ -88,20 +88,6 @@ public interface IGraph {
 	 */
 	int getPredicateEdge(Object e);
 
-	/**
-	 * @param idSearch
-	 * @return
-	 */
-	public CharSequence nodeToJson(int idSearch);
-	
-	/**
-	 * Convierte una abstracción de arista a una sequencia Json que usa el cliente para dibujar
-	 * la arista.
-	 * 
-	 * @param e				Arista
-	 * @return				Json que lee VisJS en el cliente
-	 */
-	public CharSequence edgeToJson(Object e);
 
 
 	HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException;
