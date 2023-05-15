@@ -33,11 +33,12 @@ public class GraphWrapperServer {
 	private int totalEdges;
 	private int[] nodesNumbers;
 	private int actualDistance;
+	private String lang;
 	
 	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperToJson (VertexWrapperServer vw, float angle) {
 		// Node
-		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex);
+		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex, lang);
 		String vertexLabelSmall = vertexLabel;
 	    
 	    int vLabelSize = vertexLabel.length();
@@ -69,7 +70,7 @@ public class GraphWrapperServer {
 	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperEditPositionJson (VertexWrapperServer vw, float angle) {
 		// Node
-		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex);
+		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex, lang);
 	    String vertexLabelSmall = vertexLabel;
 	    if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
 	    
@@ -293,10 +294,57 @@ public class GraphWrapperServer {
 					index++;
 				}
 			}
-			
-			
-			session.sendMessage(new TextMessage(graph.edgeToJson(edge)));
+			session.sendMessage(new TextMessage(edgeToJson(edge)));
 		}
+		
+	}
+	
+	public CharSequence edgeToJson(Object e) {
+    	JSONObject json = new JSONObject();
+    	
+    	// Edge data
+    	String edgeLabel = Utils.getEntityName("P"+	graph.getPredicateEdge(e) +"&type=property", lang);
+    	String edgeLabelSmall = edgeLabel;
+    	if (edgeLabel.length() > 7) {edgeLabelSmall = edgeLabel.substring(0,Math.min(edgeLabel.length(), 7)) + "...";}
+
+    	// Arrow Config
+    	JSONObject arrowInfo = new JSONObject();
+    	arrowInfo.put("enabled", true);
+    	arrowInfo.put("type", "arrow");
+    	
+    	JSONObject arrow = new JSONObject();
+    	arrow.put("to", arrowInfo);
+    	
+    	// Edge
+    	JSONObject edge = new JSONObject();
+    	edge.put("from", graph.getOriginEdge(e));
+    	edge.put("to", graph.getDestinationEdge(e));
+    	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
+    	edge.put("title", edgeLabel);
+    	
+    	JSONObject font = new JSONObject();
+    	font.put("align", "middle");
+    	font.put("strokeColor", "##f5f5f5"); // TODO color
+    	font.put("size", 18);
+    	edge.put("font", font);
+    	
+    	edge.put("color", new JSONObject().put("color", "#848484")); // TODO color
+    	edge.put("arrows", arrow);
+    	
+    	// TODO Fuerza aristas 500
+    	edge.put("length", 300);
+    	
+    	json.put("type", "edge");
+    	json.put("data", edge);
+    	
+    	return json.toString();
+    }
+
+	/**
+	 * @param string
+	 */
+	public void setLang(String language) {
+		this.lang = language;
 		
 	}
 }
