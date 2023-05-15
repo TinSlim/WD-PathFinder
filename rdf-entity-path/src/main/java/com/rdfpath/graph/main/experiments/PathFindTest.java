@@ -120,18 +120,19 @@ public class PathFindTest {
 		MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
 		
 		while (i < ids.length) {
-			
 			System.gc();
 			System.out.print(graph.getStructName()+";"+i+";"+groupNames[indexGroup]+";");
 			
 			long memoryBefore = mbean.getHeapMemoryUsage().getUsed();
 			int[] a = ids[i];
+
 			// TODO aquí cambié el Wrapper
 			GraphWrapperTimeTestOptMem nGW = new GraphWrapperTimeTestOptMem(graph,seconds);
 			nGW.search(a, 3);
-			//System.gc();
-			System.out.println((mbean.getHeapMemoryUsage().getUsed() - memoryBefore));
+			
 			System.gc();
+			System.out.println((mbean.getHeapMemoryUsage().getUsed() - memoryBefore));
+			//System.gc();
 			
 			
 			i++;
