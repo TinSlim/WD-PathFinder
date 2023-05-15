@@ -15,5 +15,5 @@
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="rdf-entity-path"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="rdf-entity-path"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dsubset=&quot;subset1000000&quot; -Dgraph=&quot;graphNativeFullDense&quot;"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dsubset=&quot;subset1000000&quot; -Dgraph=&quot;graphComp&quot; -Dgroup=&quot;double&quot;"/>
 </launchConfiguration>
