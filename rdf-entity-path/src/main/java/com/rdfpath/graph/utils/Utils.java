@@ -35,14 +35,17 @@ public class Utils {
 		System.out.println("Successfully wrote to the file.");
 	}
 	
-	public static String getEntityName (String id) {
+	public static String getEntityName (String id, String language) {
 		/*
 		 * String url = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids="
 				+ id
 				+ "&languages=en&formatversion=2";
 		 */
 
-		String url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search=" + id + "&language=en&formatversion=2";
+		String url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search=" + id
+				+ "&uselang=" + language
+				+ "&language=" + language 
+				+ "&formatversion=2";
 		String respuesta = "";
 		try {
 			respuesta = peticionHttpGet(url);
