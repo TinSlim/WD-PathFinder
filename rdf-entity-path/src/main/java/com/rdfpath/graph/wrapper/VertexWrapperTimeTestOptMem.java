@@ -28,7 +28,7 @@ public class VertexWrapperTimeTestOptMem {
 		this.sameColorDistance = 0;
 
 		this.from = new HashSet<VertexWrapperTimeTestOptMem>();
-		this.added = new LinkedList<Integer>();
+		//this.added = new LinkedList<Integer>();
 		
 		this.otherColorDistance = -1;
 
