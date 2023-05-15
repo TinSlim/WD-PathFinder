@@ -15,8 +15,8 @@ library(ggplot2)
 ### Importe Datos
 
 ```{r}
-tiemposBusquedaCamino <- read.csv("datos/timePathFinding.csv", sep = ";")
-#tBCgC <- read.csv("datos/timePathFinding/gC_latest-truthy.csv", sep = ";")
+tiemposBusquedaCamino <- read.csv("datos/TPF_OptMem.csv", sep = ";")
+#tiemposBusquedaCamino <- read.csv("datos/comparacion.csv", sep = ";")
 ```
 
 ### Trabajo datos
@@ -56,6 +56,9 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Aristas, color=Estructura)) + #fil
 
 ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+
+
+
 # width=4, height=4, dpi=300
 ```
 
@@ -80,6 +83,7 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Memoria, color=Estructura)) + #fil
 
 ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+
 # width=4, height=4, dpi=300
 
 ```
