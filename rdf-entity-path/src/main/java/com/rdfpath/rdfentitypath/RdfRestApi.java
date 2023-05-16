@@ -82,7 +82,7 @@ public class RdfRestApi {
 					newObj.put("description", obj.getString("description"));
 				}
 				else {
-					newObj.put("description",obj.getString("id"));
+					newObj.put("description","");
 				}
 				newObj.put("id", obj.getString("id"));
 				newObj.put("concepturi", obj.getString("concepturi"));
