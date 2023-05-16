@@ -324,7 +324,7 @@ public class GraphWrapperServer {
     	
     	JSONObject font = new JSONObject();
     	font.put("align", "middle");
-    	font.put("strokeColor", "##f5f5f5"); // TODO color
+    	font.put("strokeColor", "#f5f5f5"); // TODO color
     	font.put("size", 18);
     	edge.put("font", font);
     	
