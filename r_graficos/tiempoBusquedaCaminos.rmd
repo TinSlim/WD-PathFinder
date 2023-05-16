@@ -26,10 +26,10 @@ options(scipen = 999)
 #tiemposBusquedaCamino$memMegaByte = tiemposBusquedaCamino$Memoria / 1000000
 #tiemposBusquedaCamino$grupos = "pares"
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphGt"] <- "Objetos de Java"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Comprimido con índices"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Comprimido"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFull"] <- "Arreglos nativos con índices"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFullDense"] <- "Arreglos nativos"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Adjacency" #"Comprimido con índices"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Adjacency Dense"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFull"] <- "Triple"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFullDense"] <- "Triple Dense"
 
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "penta"] <- "5"
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "cuadra"] <- "4"

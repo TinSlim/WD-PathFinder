@@ -23,10 +23,10 @@ tiemposBusquedaVecino <- read.csv("datos/timeNano.csv", sep = ";")
 ```{r}
 options(scipen = 999)
 tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphGt"] <- "Objetos de Java"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphComp"] <- "Comprimido con índices"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphCompDense"] <- "Comprimido"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFull"] <- "Arreglos nativos con índices"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFullDense"] <- "Arreglos nativos"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphComp"] <- "Adjacency"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphCompDense"] <- "Adjacency Dense"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFull"] <- "Triple"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFullDense"] <- "Triple Dense"
 
 tiemposBusquedaVecino = tiemposBusquedaVecino[tiemposBusquedaVecino$Estructura !='graphNative',]
 ```
@@ -48,8 +48,8 @@ ggplot(tiemposBusquedaVecino, aes(x=SetDatos, y=Tiempos, color=Estructura)) + # 
   scale_y_continuous(trans='log10', breaks = c(1,10,100,1000,10000,100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000))
 # c(1000, 1000000, 1000000000)
 
-#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.png", width=8, height=5, #dpi=300)
-#ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.pdf", width=8, height=5, #dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaVecinos.pdf", width=8, height=5, dpi=300)
 # width=4, height=4, dpi=300
 ```
 

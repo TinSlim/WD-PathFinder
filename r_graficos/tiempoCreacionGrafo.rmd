@@ -23,10 +23,10 @@ dataCreacion <- read.csv("datos/sizeNano.csv", sep = ";")
 ```{r}
 options(scipen = 999)
 dataCreacion$Estructura[dataCreacion$Estructura == "graphGt"] <- "Objetos de Java"
-dataCreacion$Estructura[dataCreacion$Estructura == "graphComp"] <- "Comprimido con índices"
-dataCreacion$Estructura[dataCreacion$Estructura == "graphCompDense"] <- "Comprimido"
-dataCreacion$Estructura[dataCreacion$Estructura == "graphNativeFull"] <- "Arreglos nativos con índices"
-dataCreacion$Estructura[dataCreacion$Estructura == "graphNativeFullDense"] <- "Arreglos nativos"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphComp"] <- "Adjacency"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphCompDense"] <- "Adjacency Dense"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphNativeFull"] <- "Triple"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphNativeFullDense"] <- "Triple Dense"
 
 dataCreacion = dataCreacion[dataCreacion$Estructura !='graphNative',]
 ```
