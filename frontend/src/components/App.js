@@ -5,6 +5,7 @@ import { DataSet} from "vis-data";
 
 import Navbar from "./Navbar"
 import Content from "./Content"
+import Example from "./Example"
 import Footer from "./Footer"
 
 import Typography from '@mui/material/Typography';
@@ -42,6 +43,8 @@ export default function App() {
 
     const { t, i18n } = useTranslation();
    
+
+    var pares = {};
 
     const openDrawer = () => {
         setDrawerState(true);
@@ -96,9 +99,11 @@ export default function App() {
     
 
     const initGraph = (ids) => {
+        
         if (socket != null) {
             socket.close();
         }
+        pares = {};
         const options = {
             autoResize: true,
             height: (window.innerHeight - document.getElementById("app-bar").offsetHeight - document.getElementById("footer").offsetHeight) + "px",
@@ -155,6 +160,7 @@ export default function App() {
         };
       
         newSocket.onmessage = function(event) {
+            console.log(pares);
         let newData = JSON.parse(event.data);
         
         if (newData.type == "vertex") {
@@ -163,8 +169,59 @@ export default function App() {
     
         else if (newData.type == "edge") {
             edges.add(newData.data);
-            console.log(newData.data);
+
+            let item1 = nodes.get(newData.data.from,
+                {
+                    fields: ['id', 'a', 'b', 'size'],
+                }
+              );
+              console.log("==");
+              console.log(newData.data);
+              console.log("==");
+
+            let newLet = newData.data.labelWiki + "," + newData.data.to;
+            if (!item1.a) {
+                nodes.updateOnly({id: item1.id, a: newLet, size: 1});
+            }
+            else if (!item1.b) {
+                nodes.updateOnly({id: item1.id, b: newLet, size: 2});
+                if (item1.a+"_"+newLet in pares) {
+                    pares[item1.a+"_"+newLet] += 1;
+                }
+                else {
+                    pares[item1.a+"_"+newLet] = 1;
+                }
+            }
+            else {
+                nodes.updateOnly({id: item1.id, size: item1.size + 1});
+                pares[item1.a+"_"+newLet] -= 1;
+            }
+
+
+            let item2 = nodes.get(newData.data.to,
+                {
+                    fields: ['id', 'a', 'b', 'size'],
+                }
+              );
+            newLet = "-" + newData.data.labelWiki + "," + newData.data.from;
+            if (!item2.a) {
+                nodes.updateOnly({id: item2.id, a: newLet, size: 1});
+            }
+            else if (!item2.b) {
+                nodes.updateOnly({id: item2.id, b: newLet, size: 2});
+                if (item2.a + "_" + newLet in pares) {
+                    pares[item2.a+"_"+newLet] += 1;
+                }
+                else {
+                    pares[item2.a+"_"+newLet] = 1;
+                }
+            }
+            else {
+                nodes.updateOnly({id: item2.id, size: item2.size + 1});
+                pares[item2.a+"_"+newLet] -= 1;
+            }
         }
+
         else if (newData.type == "edit") {
             nodes.update(newData.data);
         }
@@ -186,7 +243,7 @@ export default function App() {
 
 
     return (
-        <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
+        <div onLoad={console.log("openDrawer")} className='hero is-fullheight has-background-white-ter'> 
             
             <AppBar id="app-bar" position="static">
                 <Toolbar >
@@ -226,8 +283,9 @@ export default function App() {
             {/*<Graph words={words} values={values} ></Graph>*/}
             {/*<VisNetwork></VisNetwork>*/}
            
-                <div className='has-background-white-ter' ref={container}/>
- 
+            <div className='has-background-white-ter' ref={container}/>
+
+            <Example></Example>
             {/*<WebSocketTemplate></WebSocketTemplate>*/}
             
             <SwipeableDrawer
