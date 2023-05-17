@@ -319,6 +319,7 @@ public class GraphWrapperServer {
     	JSONObject edge = new JSONObject();
     	edge.put("from", graph.getOriginEdge(e));
     	edge.put("to", graph.getDestinationEdge(e));
+    	edge.put("labelWiki", graph.getPredicateEdge(e));
     	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
     	edge.put("title", edgeLabel);
     	
