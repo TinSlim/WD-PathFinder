@@ -25,7 +25,7 @@ export default function Example(props) {
               },
         };
 
-        nodes.add({id:0, label:"0"});
+        nodes.add({id:0, shape: 'image', image: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Junior-Jaguar-Belize-Zoo.jpg'});
         nodes.add({id:1, label:"1"});
         nodes.add({id:2, label:"2"});
         nodes.add({id:3, label:"3"});
