@@ -23,8 +23,9 @@ tiemposBusquedaCamino <- read.csv("datos/TPF_OptMem.csv", sep = ";")
 
 ```{r}
 options(scipen = 999)
-#tiemposBusquedaCamino$memMegaByte = tiemposBusquedaCamino$Memoria / 1000000
-#tiemposBusquedaCamino$grupos = "pares"
+
+tiemposBusquedaCamino$memArista = tiemposBusquedaCamino$Memoria / tiemposBusquedaCamino$Aristas
+
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphGt"] <- "Objetos de Java"
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Adjacency" #"Comprimido con índices"
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Adjacency Dense"
@@ -83,6 +84,30 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Memoria, color=Estructura)) + #fil
 
 ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+
+# width=4, height=4, dpi=300
+
+```
+
+
+```{r}
+
+ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=memArista, color=Estructura)) + #fill=Estructura
+
+  geom_boxplot() +
+
+  labs(title= "Uso de memoria búsqueda 60 segundos",
+       color = "Estructura del Grafo",
+       y = "Memoria/Cantidad de Aristas [bytes]",
+       x = "Cantidad de Entidades") +
+  #
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  #scale_y_continuous(trans='log2')#, breaks = c(2,4,8,16,32,64,128,256,512,1024,2048,4096))
+  scale_y_continuous(trans='log10')
+
+ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.pdf", width=8, height=5, dpi=300)
 
 # width=4, height=4, dpi=300
 
