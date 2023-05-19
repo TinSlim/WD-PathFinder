@@ -41,10 +41,16 @@ export default function App() {
     const [socket,setSocket] = useState(null);
     const [lang, setLang] = useState('en');
 
+    const [network, setNetwork] = useState(null);
+
     const { t, i18n } = useTranslation();
    
 
-    var pares = {};
+    const [pares, setPares] = useState({});
+
+
+    const [nodes, setNodes] = useState(new DataSet([]));
+    const [edges, setEdges] = useState(new DataSet([]));
 
     const openDrawer = () => {
         setDrawerState(true);
@@ -86,24 +92,120 @@ export default function App() {
         }
     }
     
-
     const changeLanguage = (e) => {
         setLang(e.target.value);
         i18n.changeLanguage(e.target.value);
     }
     
 
-    var nodes = new DataSet([]);
-    var edges = new DataSet([]);
+    const encontrarInterseccion = (arr1, arr2) => {
+        var interseccion = [];
+
+        for (var i = 0; i < arr1.length; i++) {
+            var elemento = arr1[i];
+
+            if (arr2.includes(elemento)) {
+            interseccion.push(elemento);
+            }
+        }
+        
+        return interseccion;
+    }
+
+    const groupClusters = () => {
+        let grupos = {};
+        for (const [key, value] of Object.entries(pares)) {
+            if (value.length< 5) {
+                continue;
+            }
+            value.sort();
+            if (value in grupos) {
+                grupos[value].push(key)
+            }
+            else {
+                grupos[value] = [key]
+            }
+        }
+        /*
+        "id1,id2,id3" : [arista1,arista2]
+        */
+        
+
+        let grupos_comb = {}
+        Object.assign(grupos_comb,grupos) 
+        let claves = Object.keys(grupos)
+
+
+        for (var i = 0; i < claves.length; i++) {
+            for (var j = i + 1; j < claves.length; j++) {
+                var clave1 = claves[i].split(',').map( Number );
+                var clave2 = claves[j].split(',').map( Number );
+                var inter = encontrarInterseccion(clave1,clave2);
+                if (inter.length >= 5) {
+                    grupos_comb[inter] = [...new Set([...grupos[claves[i]], ...grupos[claves[j]]])];
+                }
+            }
+        }
+
+        //function decluster() {
+        for (let index of network.body.nodeIndices) {
+            if (network.isCluster(index) == true) {
+                network.openCluster(index);
+            }
+        }
+        //}
+
+        let clusterId = 0;
+        for (const [key, value] of Object.entries(grupos_comb)) {
+            
+            var idsData = key.split(',').map( Number );
+            for (let numberI of idsData) {    
+                let item = nodes.get(numberI);
+                if (item.size == value.length) {
+                    nodes.updateOnly({id: numberI, cluster: clusterId});
+                }
+            }
+
+            let clusterOptionsByData = {
+                joinCondition: function (childOptions) {
+                    return childOptions.cluster == clusterId;
+                },
+                processProperties: function (clusterOptions, childNodes, childEdges) {
+                    let text = childNodes.map(x => x.label).join(",")
+
+                    clusterOptions.title = text;
+                    clusterOptions.label = text.substring(0, 23);
+                    return clusterOptions;
+                },
+                clusterNodeProperties: {
+                  id: `${clusterId}cluster:`,
+                  //borderWidth: 3,
+                  //shape: "database",
+                  //label: childNodes.map(x => x.label).join(","),
+                },
+              };
+            network.cluster(clusterOptionsByData);
+            setNetwork(network);
+            clusterId += 1;
+        }
+    }
+    
 
     
 
     const initGraph = (ids) => {
-        
+        let pares = {};
+        setPares(pares);
+
+        let nodes = new DataSet([]);
+        setNodes(nodes);
+
+        let edges = new DataSet([]);
+        setEdges(edges);
+
         if (socket != null) {
             socket.close();
         }
-        pares = {};
         const options = {
             autoResize: true,
             height: (window.innerHeight - document.getElementById("app-bar").offsetHeight - document.getElementById("footer").offsetHeight) + "px",
@@ -114,10 +216,15 @@ export default function App() {
         };
 
         const data = { nodes: nodes, edges:edges };
-        const network =
+        
+        let network = new Network(container.current, data , options);
+        setNetwork(network);
+        
+        const networkCont =
             container.current &&
-            new Network(container.current, data , options);
+            network;
        
+        
         /*
         EJEMPLO:: TODO BORRAR
         
@@ -160,65 +267,129 @@ export default function App() {
         };
       
         newSocket.onmessage = function(event) {
-            console.log(pares);
+            
         let newData = JSON.parse(event.data);
         
         if (newData.type == "vertex") {
             nodes.add(newData.data);
+            setNodes(nodes);
         }
     
         else if (newData.type == "edge") {
             edges.add(newData.data);
-
+            setEdges(edges);
             let item1 = nodes.get(newData.data.from,
-                {
-                    fields: ['id', 'a', 'b', 'size'],
-                }
-              );
-              console.log("==");
-              console.log(newData.data);
-              console.log("==");
-
+                { fields: ['id','size'] }
+            );
+           
             let newLet = newData.data.labelWiki + "," + newData.data.to;
-            if (!item1.a) {
-                nodes.updateOnly({id: item1.id, a: newLet, size: 1});
-            }
-            else if (!item1.b) {
-                nodes.updateOnly({id: item1.id, b: newLet, size: 2});
-                if (item1.a+"_"+newLet in pares) {
-                    pares[item1.a+"_"+newLet] += 1;
-                }
-                else {
-                    pares[item1.a+"_"+newLet] = 1;
-                }
+            nodes.updateOnly({id: item1.id, size: item1.size + 1});
+            if (newLet in pares) {
+                pares[newLet].push(newData.data.from);
             }
             else {
-                nodes.updateOnly({id: item1.id, size: item1.size + 1});
-                pares[item1.a+"_"+newLet] -= 1;
+                pares[newLet] = [newData.data.from];
             }
-
-
+            
             let item2 = nodes.get(newData.data.to,
-                {
-                    fields: ['id', 'a', 'b', 'size'],
-                }
-              );
+                { fields: ['id', 'size'] }
+            );
             newLet = "-" + newData.data.labelWiki + "," + newData.data.from;
-            if (!item2.a) {
-                nodes.updateOnly({id: item2.id, a: newLet, size: 1});
-            }
-            else if (!item2.b) {
-                nodes.updateOnly({id: item2.id, b: newLet, size: 2});
-                if (item2.a + "_" + newLet in pares) {
-                    pares[item2.a+"_"+newLet] += 1;
-                }
-                else {
-                    pares[item2.a+"_"+newLet] = 1;
-                }
+            nodes.updateOnly({id: item2.id, size: item2.size + 1});
+            if (newLet in pares) {
+                pares[newLet].push(newData.data.to);
             }
             else {
-                nodes.updateOnly({id: item2.id, size: item2.size + 1});
-                pares[item2.a+"_"+newLet] -= 1;
+                pares[newLet] = [newData.data.to];
+            }
+
+            setPares({... pares});
+
+            if (edges.length % 30 == 0) {
+                
+                
+
+                let grupos = {};
+                for (const [key, value] of Object.entries(pares)) {
+                    if (value.length< 5) {
+                        continue;
+                    }
+                    value.sort();
+                    if (value in grupos) {
+                        grupos[value].push(key)
+                    }
+                    else {
+                        grupos[value] = [key]
+                    }
+                }
+                /*
+                "id1,id2,id3" : [arista1,arista2]
+                */
+                
+        
+                let grupos_comb = {}
+                Object.assign(grupos_comb,grupos) 
+                let claves = Object.keys(grupos)
+        
+        
+                for (var i = 0; i < claves.length; i++) {
+                    for (var j = i + 1; j < claves.length; j++) {
+                        var clave1 = claves[i].split(',').map( Number );
+                        var clave2 = claves[j].split(',').map( Number );
+                        var inter = encontrarInterseccion(clave1,clave2);
+                        if (inter.length >= 5) {
+                            grupos_comb[inter] = [...new Set([...grupos[claves[i]], ...grupos[claves[j]]])];
+                        }
+                    }
+                }
+        
+                //function decluster() {
+                for (let index of network.body.nodeIndices) {
+                    if (network.isCluster(index) == true) {
+                        network.openCluster(index);
+                    }
+                }
+                //}
+        
+                let clusterId = 0;
+                for (const [key, value] of Object.entries(grupos_comb)) {
+                    
+                    var idsData = key.split(',').map( Number );
+                    for (let numberI of idsData) {    
+                        let item = nodes.get(numberI);
+                        if (item.size == value.length) {
+                            nodes.updateOnly({id: numberI, cluster: clusterId});
+                        }
+                    }
+        
+                    let clusterOptionsByData = {
+                        joinCondition: function (childOptions) {
+                            return childOptions.cluster == clusterId;
+                        },
+                        processProperties: function (clusterOptions, childNodes, childEdges) {
+                            let text = childNodes.map(x => x.label).join(",")
+        
+                            clusterOptions.title = text;
+                            clusterOptions.label = text.substring(0, 23);
+                            return clusterOptions;
+                        },
+                        clusterNodeProperties: {
+                          id: `${clusterId}cluster:`,
+                          //borderWidth: 3,
+                          //shape: "database",
+                          //label: childNodes.map(x => x.label).join(","),
+                        },
+                      };
+                    network.cluster(clusterOptionsByData);
+                    setNetwork(network);
+                    clusterId += 1;
+                }
+
+
+
+
+
+
             }
         }
 
@@ -241,6 +412,7 @@ export default function App() {
         setSocket(newSocket);
     }
 
+    
 
     return (
         <div onLoad={console.log("openDrawer")} className='hero is-fullheight has-background-white-ter'> 
@@ -286,6 +458,8 @@ export default function App() {
             <div className='has-background-white-ter' ref={container}/>
 
             <Example></Example>
+            <Button onClick={groupClusters}> PRINT INFO </Button>
+
             {/*<WebSocketTemplate></WebSocketTemplate>*/}
             
             <SwipeableDrawer

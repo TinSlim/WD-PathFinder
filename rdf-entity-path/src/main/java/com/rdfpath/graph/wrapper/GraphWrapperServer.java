@@ -51,6 +51,8 @@ public class GraphWrapperServer {
 	    newVertex.put("label", vertexLabelSmall);
 	    newVertex.put("color",vw.getHexColor());
 	    newVertex.put("title", vertexLabel);
+	    newVertex.put("id", vw.idVertex);
+	    newVertex.put("size", 0);
 	    	
 	    // Json
 	    JSONObject json = new JSONObject();
@@ -63,7 +65,7 @@ public class GraphWrapperServer {
 		    newVertex.put("y", Math.sin(angleR) * 500);
 		    newVertex.put("fixed",true);
 	    }
-	    newVertex.put("id", vw.idVertex);
+	    
 	    return json.toString();
 	}
 	
