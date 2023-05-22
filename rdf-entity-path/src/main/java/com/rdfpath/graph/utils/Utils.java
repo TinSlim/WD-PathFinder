@@ -98,6 +98,12 @@ public class Utils {
 		}
 	}
 	
+	public static String getImage (String id) throws Exception {
+		String url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=claims&ids=Q" + id  + "&format=json";
+
+		System.out.println(peticionHttpGet(url));
+		return url;
+	}
 
 	public static String peticionHttpGet(String urlParaVisitar) throws Exception {
 		// Esto es lo que vamos a devolver
