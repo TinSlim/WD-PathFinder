@@ -89,6 +89,7 @@ export default function App() {
         clearInterval(stopwatchInterval);
         if (socket != null) {
             socket.close();
+            setSocket(socket);
         }
     }
     
@@ -189,9 +190,6 @@ export default function App() {
             clusterId += 1;
         }
     }
-    
-
-    
 
     const initGraph = (ids) => {
         let pares = {};
@@ -223,40 +221,6 @@ export default function App() {
         const networkCont =
             container.current &&
             network;
-       
-        
-        /*
-        EJEMPLO:: TODO BORRAR
-        
-        nodes.add({id:1,label:"1"})
-        nodes.add({id:2,label:"2"})
-        nodes.add({id:3,label:"3"})
-        edges.add({
-            from:1,
-            to:2,
-            label:"4",
-            font: {
-                color: '#343434',
-                size: 24, // px
-                face: 'arial',
-                background: 'none',
-                strokeWidth: 2, // px
-                strokeColor: '#dbdbdb',
-                align: 'horizontal',
-                multi: false,
-                vadjust: 0,
-                bold: {
-                  color: '#343434',
-                  size: 14, // px
-                  face: 'arial',
-                  vadjust: 0,
-                  mod: 'bold'
-                }
-            }
-        })
-        edges.add({from:2,to:3,label:"5"})
-        edges.add({from:3,to:1,label:"6"})
-        */
 
         const newSocket = new WebSocket(`${socketUrl}/query`);
         newSocket.onopen = function(e) {
