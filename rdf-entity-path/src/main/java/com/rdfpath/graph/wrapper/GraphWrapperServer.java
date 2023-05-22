@@ -54,12 +54,12 @@ public class GraphWrapperServer {
 	    newVertex.put("color",vw.getHexColor());
 	    newVertex.put("title", vertexLabel);
 	    newVertex.put("id", vw.idVertex);
-	    newVertex.put("size", 0);
+	    newVertex.put("edgeSize", 0);
 	    
-	    System.out.println("Busca imagen");
+	    newVertex.put("size", 18);
+	    
 	    try {
 			String imageUrl = Utils.getImage("Q" + vw.idVertex);
-			System.out.println(imageUrl);
 			if (imageUrl != "") {
 				newVertex.put("shape", "image");
 				newVertex.put("image", imageUrl);
@@ -96,8 +96,8 @@ public class GraphWrapperServer {
 	    newVertex.put("label", vertexLabelSmall);
 	    newVertex.put("color",vw.getHexColor());
 	    newVertex.put("title", vertexLabel);
-	    	
-	    
+	    newVertex.put("size", 18);
+
 	    // Json
 	    JSONObject json = new JSONObject();
 	    json.put("type","edit");
@@ -303,7 +303,7 @@ public class GraphWrapperServer {
 		for (Object edge : edges) {
 			totalEdges+=1;
 			
-			if (actualDistance + 24 < totalEdges * 10) {
+			if (actualDistance + 24 < totalEdges * 11) {
 				actualDistance = totalEdges * 10;
 				int index = 0;
 				for (int idSearch : nodesNumbers) {

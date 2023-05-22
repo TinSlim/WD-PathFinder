@@ -88,7 +88,9 @@ export default function App() {
         setRunning(false);
         clearInterval(stopwatchInterval);
         if (socket != null) {
+            console.log("socket close");
             socket.close();
+            console.log("socket clos3de");
             setSocket(socket);
         }
     }
@@ -162,7 +164,7 @@ export default function App() {
             var idsData = key.split(',').map( Number );
             for (let numberI of idsData) {    
                 let item = nodes.get(numberI);
-                if (item.size == value.length) {
+                if (item.edgeSize == value.length) {
                     nodes.updateOnly({id: numberI, cluster: clusterId});
                 }
             }
@@ -211,6 +213,13 @@ export default function App() {
             nodes: {
                 shape: "box",
               },
+            //repulsion: {
+            //    centralGravity: 0.2,
+            //    springLength: 200,
+            //    springConstant: 0.05,
+            //    nodeDistance: 500,
+            //    damping: 0.09
+            //  },
         };
 
         const data = { nodes: nodes, edges:edges };
@@ -243,11 +252,11 @@ export default function App() {
             edges.add(newData.data);
             setEdges(edges);
             let item1 = nodes.get(newData.data.from,
-                { fields: ['id','size'] }
+                { fields: ['id','edgeSize'] }
             );
            
             let newLet = newData.data.labelWiki + "," + newData.data.to;
-            nodes.updateOnly({id: item1.id, size: item1.size + 1});
+            nodes.updateOnly({id: item1.id, edgeSize: item1.edgeSize + 1});
             if (newLet in pares) {
                 pares[newLet].push(newData.data.from);
             }
@@ -256,10 +265,10 @@ export default function App() {
             }
             
             let item2 = nodes.get(newData.data.to,
-                { fields: ['id', 'size'] }
+                { fields: ['id', 'edgeSize'] }
             );
             newLet = "-" + newData.data.labelWiki + "," + newData.data.from;
-            nodes.updateOnly({id: item2.id, size: item2.size + 1});
+            nodes.updateOnly({id: item2.id, edgeSize: item2.edgeSize + 1});
             if (newLet in pares) {
                 pares[newLet].push(newData.data.to);
             }
@@ -321,7 +330,7 @@ export default function App() {
                     var idsData = key.split(',').map( Number );
                     for (let numberI of idsData) {    
                         let item = nodes.get(numberI);
-                        if (item.size == value.length) {
+                        if (item.edgeSize == value.length) {
                             nodes.updateOnly({id: numberI, cluster: clusterId});
                         }
                     }
@@ -379,7 +388,7 @@ export default function App() {
     
 
     return (
-        <div onLoad={console.log("openDrawer")} className='hero is-fullheight has-background-white-ter'> 
+        <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
             
             <AppBar id="app-bar" position="static">
                 <Toolbar >

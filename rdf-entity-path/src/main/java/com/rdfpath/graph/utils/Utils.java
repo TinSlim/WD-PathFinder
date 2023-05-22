@@ -105,8 +105,6 @@ public class Utils {
 	
 	public static String getImage (String id) throws JSONException, IOException, NoSuchAlgorithmException {
 		String url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=claims&ids=" + id  + "&format=json";
-		System.out.println("url");
-		System.out.println(url);
 		JSONObject ans = new JSONObject(peticionHttpGet(url));
 		String[] imageProps = {"P18", "P41", "P94", "P154", "P158", "P242", "P291", "P2910"};
 		
