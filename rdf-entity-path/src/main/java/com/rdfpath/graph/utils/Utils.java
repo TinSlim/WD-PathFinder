@@ -5,14 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.rdfpath.graph.model.Edge;
@@ -98,14 +103,43 @@ public class Utils {
 		}
 	}
 	
-	public static String getImage (String id) throws Exception {
-		String url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=claims&ids=Q" + id  + "&format=json";
-
-		System.out.println(peticionHttpGet(url));
-		return url;
+	public static String getImage (String id) throws JSONException, IOException, NoSuchAlgorithmException {
+		String url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=claims&ids=" + id  + "&format=json";
+		System.out.println("url");
+		System.out.println(url);
+		JSONObject ans = new JSONObject(peticionHttpGet(url));
+		String[] imageProps = {"P18", "P41", "P94", "P154", "P158", "P242", "P291", "P2910"};
+		
+		ans = ans.getJSONObject("entities");
+		ans = ans.getJSONObject(id);
+		ans = ans.getJSONObject("claims");
+		for (String prop : imageProps) {
+			if (ans.has(prop)) {
+				JSONArray ret = ans.getJSONArray(prop);
+				for (int i = 0, size = ret.length(); i < size; i++) {
+					JSONObject imageData = ret.getJSONObject(i);
+					imageData = imageData.getJSONObject("mainsnak");
+					imageData = imageData.getJSONObject("datavalue");
+					String imageUrl = imageData.getString("value");
+					imageUrl = imageUrl.replace(" ", "_");
+					
+					MessageDigest md5 = MessageDigest.getInstance("MD5");
+					md5.update(StandardCharsets.UTF_8.encode(imageUrl));
+					String imageHash = String.format("%032x", new BigInteger(1, md5.digest()));
+					String newUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/"
+							+ imageHash.charAt(0) + "/"
+							+ imageHash.charAt(0) + imageHash.charAt(1) + "/"
+							+ imageUrl + "/300px-Sample.png";
+					return newUrl;
+				}
+				
+			}
+		}
+		
+		return "";
 	}
 
-	public static String peticionHttpGet(String urlParaVisitar) throws Exception {
+	public static String peticionHttpGet(String urlParaVisitar) throws IOException {
 		// Esto es lo que vamos a devolver
 		StringBuilder resultado = new StringBuilder();
 		// Crear un objeto de tipo URL

@@ -1,11 +1,13 @@
 package com.rdfpath.graph.wrapper;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -53,6 +55,20 @@ public class GraphWrapperServer {
 	    newVertex.put("title", vertexLabel);
 	    newVertex.put("id", vw.idVertex);
 	    newVertex.put("size", 0);
+	    
+	    System.out.println("Busca imagen");
+	    try {
+			String imageUrl = Utils.getImage("Q" + vw.idVertex);
+			System.out.println(imageUrl);
+			if (imageUrl != "") {
+				newVertex.put("shape", "image");
+				newVertex.put("image", imageUrl);
+			}
+		} catch (Exception e) {
+			
+		}
+		
+	    
 	    	
 	    // Json
 	    JSONObject json = new JSONObject();
@@ -81,6 +97,7 @@ public class GraphWrapperServer {
 	    newVertex.put("color",vw.getHexColor());
 	    newVertex.put("title", vertexLabel);
 	    	
+	    
 	    // Json
 	    JSONObject json = new JSONObject();
 	    json.put("type","edit");

@@ -22,6 +22,7 @@ def get_images_from_wikidata(entity_id):
     # Realizar la solicitud a la API de Wikidata
     response = requests.get(url, params=params)
     data = response.json()
+    print(response.url)
 
     # Obtener las imágenes del resultado
     images = []
