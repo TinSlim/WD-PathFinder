@@ -1,0 +1,114 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+### Importe de Bibliotecas
+
+```{r}
+library(ggplot2)
+```
+
+## Tiempo de Búsqueda de caminos
+
+### Importe Datos
+
+```{r}
+tiemposBusquedaCamino <- read.csv("datos/TPF_OptMem.csv", sep = ";")
+#tiemposBusquedaCamino <- read.csv("datos/comparacion.csv", sep = ";")
+```
+
+### Trabajo datos
+
+```{r}
+options(scipen = 999)
+
+tiemposBusquedaCamino$memArista = tiemposBusquedaCamino$Memoria / tiemposBusquedaCamino$Aristas
+
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphGt"] <- "Objetos de Java"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Adjacency" #"Comprimido con índices"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Adjacency Dense"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFull"] <- "Triple"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFullDense"] <- "Triple Dense"
+
+tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "penta"] <- "5"
+tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "cuadra"] <- "4"
+tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "triple"] <- "3"
+tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "double"] <- "2"
+```
+
+### Gráfico tiemposBusquedaVecino
+
+```{r}
+ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Aristas, color=Estructura)) + #fill=Estructura
+
+  geom_boxplot() +
+
+  labs(title= "Aristas encontradas 60 segundos",
+       color = "Estructura del Grafo",
+       y = "Aristas encontradas (log2)",
+       x = "Cantidad de Entidades") +
+  #
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  scale_y_continuous(trans='log2', breaks = c(2^4, 2^7,2^10,2^13,2^16,2^19,2^22))
+# c(1000, 1000000, 1000000000)
+
+ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+
+
+
+# width=4, height=4, dpi=300
+```
+
+### Gráfico Memoria Busqueda de Caminos
+
+```{r}
+
+ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Memoria, color=Estructura)) + #fill=Estructura
+
+  geom_boxplot() +
+
+  labs(title= "Uso de memoria búsqueda 60 segundos",
+       color = "Estructura del Grafo",
+       y = "Memoria [bytes]",
+       x = "Cantidad de Entidades") +
+  #
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  #scale_y_continuous(trans='log2')#, breaks = c(2,4,8,16,32,64,128,256,512,1024,2048,4096))
+  scale_y_continuous(breaks = c(2500000000,5000000000,7500000000,10000000000,12500000000,15000000000,17500000000))
+
+
+ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+
+# width=4, height=4, dpi=300
+
+```
+
+
+```{r}
+
+ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=memArista, color=Estructura)) + #fill=Estructura
+
+  geom_boxplot() +
+
+  labs(title= "Uso de memoria búsqueda 60 segundos",
+       color = "Estructura del Grafo",
+       y = "Memoria/Cantidad de Aristas [bytes]",
+       x = "Cantidad de Entidades") +
+  #
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  #scale_y_continuous(trans='log2')#, breaks = c(2,4,8,16,32,64,128,256,512,1024,2048,4096))
+  scale_y_continuous(trans='log10')
+
+ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+
+# width=4, height=4, dpi=300
+
+```

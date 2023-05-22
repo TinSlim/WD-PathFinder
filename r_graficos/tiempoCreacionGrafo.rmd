@@ -1,0 +1,115 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+### Importe de Bibliotecas
+
+```{r}
+library(ggplot2)
+```
+
+## Tiempo de Creación Grafo
+
+### Importe Datos
+
+```{r}
+dataCreacion <- read.csv("datos/sizeNano.csv", sep = ";")
+```
+
+### Trabajo datos
+
+```{r}
+options(scipen = 999)
+dataCreacion$Estructura[dataCreacion$Estructura == "graphGt"] <- "Objetos de Java"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphComp"] <- "Adjacency"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphCompDense"] <- "Adjacency Dense"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphNativeFull"] <- "Triple"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphNativeFullDense"] <- "Triple Dense"
+
+dataCreacion = dataCreacion[dataCreacion$Estructura !='graphNative',]
+```
+
+
+### Gráfico tiempo de creación
+
+```{r}
+ggplot(dataCreacion, aes(x=SetDatos, y=TiempoCreacion, color=Estructura,group=Estructura)) + # fill=Estructura
+
+  geom_line(size=0.5) + geom_point() +
+
+  labs(title= "Tiempo de creación grafo",
+       color = "Estructura del Grafo",
+       y = "Tiempo [ms]",
+       x = "Set de datos") +
+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(breaks = c(0,125000,250000,375000,500000,625000,750000,875000,1000000))
+# c(1000, 1000000, 1000000000)
+
+ggsave(plot = last_plot(), filename = "export/4_TiempoCreacion.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_TiempoCreacion.pdf", width=8, height=5, dpi=300)
+# width=4, height=4, dpi=300
+```
+
+```{r}
+ggplot(dataCreacion, aes(x=SetDatos, y=TiempoCreacion, color=Estructura,group=Estructura)) + # fill=Estructura
+
+  geom_line(size=0.5) + geom_point() +
+
+  labs(title= "Tiempo de creación grafo (log10)",
+       color = "Estructura del Grafo",
+       y = "Tiempo [ms] (log10)",
+       x = "Set de datos") +
+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(trans='log10', breaks = c(0,10,100,1000,10000,100000,1000000,100000))
+# c(1000, 1000000, 1000000000)
+
+ggsave(plot = last_plot(), filename = "export/4_TiempoCreacionLog.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_TiempoCreacionLog.pdf", width=8, height=5, dpi=300)
+# width=4, height=4, dpi=300
+```
+
+
+### Gráfico uso memoria
+
+```{r}
+ggplot(dataCreacion, aes(x=SetDatos, y=UsoMemoria, color=Estructura, group=Estructura)) + # fill=Estructura
+
+  geom_line() + geom_point() +
+
+  labs(title= "Uso de memoria",
+       color = "Estructura del Grafo",
+       y = "Memoria usada [Bytes]",
+       x = "Set de datos") +
+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(breaks = c(0,5000000000,10000000000,15000000000,20000000000,25000000000,30000000000,35000000000,40000000000,45000000000))
+# c(1000, 1000000, 1000000000)
+
+ggsave(plot = last_plot(), filename = "export/4_UsoMemoria.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_UsoMemoria.pdf", width=8, height=5, dpi=300)
+# width=4, height=4, dpi=300
+```
+
+```{r}
+ggplot(dataCreacion, aes(x=SetDatos, y=UsoMemoria, color=Estructura, group=Estructura)) + # fill=Estructura
+
+  geom_line() + geom_point() +
+
+  labs(title= "Uso de memoria",
+       color = "Estructura del Grafo",
+       y = "Memoria usada [Bytes] (log10)",
+       x = "Set de datos") +
+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(trans='log10', breaks = c(0,1,10,100,1000,10000,100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000))
+# c(1000, 1000000, 1000000000)
+
+ggsave(plot = last_plot(), filename = "export/4_UsoMemoriaLog.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_UsoMemoriaLog.pdf", width=8, height=5, dpi=300)
+# width=4, height=4, dpi=300
+```
+
