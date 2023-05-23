@@ -94,7 +94,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		graphWrapper.setLang(splitAns[splitAns.length - 1]);
 		
 		try {
-			graphWrapper.search(nodesNumbers, 3);
+			graphWrapper.search(nodesNumbers, 3, 10000);
 		}
 		catch (IOException ioE) {
 			// Session is closed

@@ -21,7 +21,7 @@ import com.rdfpath.graph.utils.Utils;
  * @github Tinslim
  *
  */
-public class GraphWrapperServer {
+public class GraphWrapperServerOldVersion {
 	private String[] palette = {"#ADF7B6","#A0CED9","#FCF5C7","#FFEE93", "#FFC09F"};
 	
 	private int[][] paletteRGB = {
@@ -112,8 +112,10 @@ public class GraphWrapperServer {
 	    newVertex.put("id", vw.idVertex);
 	    return json.toString();
 	}
-
-	public GraphWrapperServer (IGraph graph2) {
+	
+	
+	
+	public GraphWrapperServerOldVersion (IGraph graph2) {
 		this.graph = (IGraph) graph2;
 		this.nodes = new HashMap<Integer, VertexWrapperServer>();
 		this.addedNodes = new HashSet<Integer>();
@@ -125,7 +127,7 @@ public class GraphWrapperServer {
 		this.session = session;
 	}
 
-	public void search (int [] nodesNumbers, int size, int maxEdgeSize) throws IOException {
+	public void search (int [] nodesNumbers, int size) throws IOException {
 		this.nodesNumbers = nodesNumbers;
 		
 		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
@@ -136,29 +138,30 @@ public class GraphWrapperServer {
 		for (int idSearch : nodesNumbers) {
 			VertexWrapperServer actVW = new VertexWrapperServer(idSearch);
 			actVW.color = paletteRGB[index];
+			
 			nodes.put(idSearch, actVW);
 			nodesNumbersSet.add(idSearch);
 			toSearch.push(actVW);
 			
-			//addedNodes.add(idSearch);			OPTMEM
+			addedNodes.add(idSearch);
 			session.sendMessage(new TextMessage(
 					vertexWrapperToJson (actVW, (360/nodesNumbers.length)*index)));
+			
 			index++;
+			//session.sendMessage(new TextMessage(graph.nodeToJson(idSearch)));
 		}
 		
 
 		while (toSearch.size() > 0) {
-			checkConn();
-
 			VertexWrapperServer actualVW = toSearch.pop();
+			
 			if (actualVW.sameColorDistance > (size/2) + size%2) {
 				continue;
 			}
 
 			// Revisa VÉRTICES adyacentes
-			for (Integer adjVertex : graph.getAdjacentVertexSessionLimited(actualVW.idVertex, session, maxEdgeSize)) {
+			for (Integer adjVertex : graph.getAdjacentVertexSession(actualVW.idVertex, session)) {
 				checkConn();
-
 				// Así no cicla en el mismo nodo
 				if (actualVW.idVertex == adjVertex) {
 					continue;
@@ -200,7 +203,6 @@ public class GraphWrapperServer {
 					
 					else {
 						if (adjVW.sameColorDistance + actualVW.sameColorDistance + 1 <= size) { //
-							// Configuración de color TODO quitar o mantener
 							int[] newColor = {
 									(adjVW.color[0] + actualVW.color[0]) / 2,
 									(adjVW.color[1] + actualVW.color[1]) / 2,
@@ -214,7 +216,6 @@ public class GraphWrapperServer {
 							else {
 								adjVW.color = newColor;
 							}
-							
 							adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
 							actualVW.otherColorDistance = adjVW.sameColorDistance + 1;
 							backTracking(adjVW, size, nodesNumbersSet);
@@ -224,9 +225,9 @@ public class GraphWrapperServer {
 							makeEdges(unionNodes);
 							backTracking(actualVW, size, nodesNumbersSet);
 						}
-
+					
 					}
-
+					
 				}
 			}
 		}
@@ -242,7 +243,6 @@ public class GraphWrapperServer {
 		LinkedList<VertexBackTrackingServer> stack = new LinkedList<VertexBackTrackingServer>();
 		stack.push(new VertexBackTrackingServer(vw));
 		while (stack.size() > 0) {
-			checkConn();
 			VertexBackTrackingServer actualBT = stack.pop();
 			if (actualBT.colorDistance + actualBT.grade > maxSize) {
 				continue;
@@ -253,7 +253,6 @@ public class GraphWrapperServer {
 			}
 			
 			for (VertexWrapperServer vwFrom: actualBT.actVW.from) {
-				checkConn();
 				if (! actualBT.nodes.contains(vwFrom.idVertex)) {
 					VertexBackTrackingServer vbtNew = new VertexBackTrackingServer(actualBT, vwFrom);
 					stack.push(vbtNew);
@@ -268,7 +267,6 @@ public class GraphWrapperServer {
 		}
 		int i = 0;
 		while (i < nodesList.size() - 1) {
-			checkConn();
 			sendEdges(nodesList.get(i), nodesList.get(i + 1));
 			i++;
 		}
@@ -276,41 +274,35 @@ public class GraphWrapperServer {
 	}
 	
 	public void sendEdges (int v1, int v2) throws IOException {
-		checkConn();
 		VertexWrapperServer vw1 = nodes.get(v1);
 		VertexWrapperServer vw2 = nodes.get(v2);
-		if (vw1.hasEdgeWith(v2) || vw2.hasEdgeWith(v1)) {
+		if (vw1.hasEdgeWith(v2) && vw2.hasEdgeWith(v1)) {
 		return;
 		}
 		
-		if (vw1.edgesWith != null) {
-			vw1.addEdgeWith(v2);
-		}
-		else {
-			vw2.addEdgeWith(v1);
-		}
-		
-		//vw1.addEdgeWith(v2);
-		//vw2.addEdgeWith(v1);
+		vw1.addEdgeWith(v2);
+		vw2.addEdgeWith(v1);
 		
 		ArrayList edges = graph.getEdges(v1, v2);
+		ArrayList<Integer> vList = new ArrayList<Integer>();
 		// AddedNodes se puede borrar usando size de edgesNodes
 		if (!addedNodes.contains(v1)) {
 			addedNodes.add(v1);
 			session.sendMessage(new TextMessage(vertexWrapperToJson(vw1,-1)));
+						//graph.nodeToJson(v1)));
 			
 		}
 		
 		if (!addedNodes.contains(v2)) {
 			addedNodes.add(v2);
 			session.sendMessage(new TextMessage(vertexWrapperToJson(vw2,-1)));
+						//graph.nodeToJson(v2)));
+			
 		}
 		
 		for (Object edge : edges) {
-			checkConn();
 			totalEdges+=1;
-		
-			// TODO extensión del grafo
+			
 			if (actualDistance + 24 < totalEdges * 11) {
 				actualDistance = totalEdges * 10;
 				int index = 0;
@@ -326,7 +318,6 @@ public class GraphWrapperServer {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	public CharSequence edgeToJson(Object e) {
     	JSONObject json = new JSONObject();
     	

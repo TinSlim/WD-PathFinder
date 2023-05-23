@@ -59,7 +59,7 @@ public class GraphWrapperTimeTestOptMem {
 	
 	//@Override
     //public void run() {
-	public void search (int [] nodesNumbers, int size) {
+	public void search (int [] nodesNumbers, int size, int maxEdgeSize) {
 		startTime = System.currentTimeMillis();
 		try {
 			LinkedList<VertexWrapperTimeTestOptMem> toSearch = new LinkedList<VertexWrapperTimeTestOptMem>();
@@ -82,7 +82,7 @@ public class GraphWrapperTimeTestOptMem {
 				}
 				
 				// Revisa VÉRTICES adyacentes
-				for (Integer adjVertex : graph.getAdjacentVertexTimeout(actualVW.idVertex, seconds, startTime)) {
+				for (Integer adjVertex : graph.getAdjacentVertexTimeoutLimited(actualVW.idVertex, seconds, startTime, maxEdgeSize)) {
 					checkTime("Checking adj vertexes");									// Revisa tiempo
 					
 					// Así no cicla en el mismo nodo

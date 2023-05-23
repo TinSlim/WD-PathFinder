@@ -92,6 +92,8 @@ public interface IGraph {
 
 	HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException;
 
+	HashSet<Integer> getAdjacentVertexTimeoutLimited(int id, int seconds, long startTime, int maxEdgeSize) throws InterruptedException;
+	
 	/**
 	 * @param ids
 	 * @return
@@ -99,5 +101,8 @@ public interface IGraph {
 	public ArrayList checkAdj(int[] ids);
 
 	HashSet<Integer> getAdjacentVertexSession(int id, WebSocketSession session) throws IOException;
+	
+	HashSet<Integer> getAdjacentVertexSessionLimited(int id, WebSocketSession session, int maxEdgeSize) throws IOException;
+	
 
 }

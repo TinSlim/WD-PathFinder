@@ -28,10 +28,8 @@ public class VertexWrapperServer {
 		this.colorNode = idSearch;
 		this.sameColorDistance = 0;
 		this.from = new HashSet<VertexWrapperServer>();
-		this.added = new LinkedList<Integer>();
 		this.otherColorDistance = -1;
-		edgesWith = new HashSet<Integer>();
-		//this.father = -1;
+		edgesWith = null;
 	}
 
 	/**
@@ -51,16 +49,29 @@ public class VertexWrapperServer {
 		
 		this.otherColorDistance = -1;
 		
-		edgesWith = new HashSet<Integer>();
+		edgesWith = null;
 		
 		int[] newColor = {actualVW.color[0] - 26,actualVW.color[1] - 24,actualVW.color[2] - 25};
 		this.color = newColor;
-		//this.father = actualVW.idVertex;
+	}
+	
+	public void addVertexAdded (int idVertex) {
+		if (added == null) {
+			this.added = new LinkedList<Integer>();
+		}
+		added.add(idVertex);
+	}
+	
+	public void removeFather () {
+		added.pop();
+		if (added.size() == 0) {
+			this.added = null;
+		}
 	}
 	
 	public Boolean addFrom (VertexWrapperServer actVW) {
 		if (!from.contains(actVW)) {
-			this.added.add(actVW.idVertex);
+			addVertexAdded(actVW.idVertex);
 			this.from.add(actVW);
 			return true;
 		}
@@ -74,7 +85,7 @@ public class VertexWrapperServer {
 	 * @return
 	 */
 	public boolean fromFather(VertexWrapperServer adjVW) {
-		if (added.size() == 0) {
+		if (added == null) {
 			return false;
 		}
 		else if (added.get(0) == adjVW.idVertex) {
@@ -82,24 +93,25 @@ public class VertexWrapperServer {
 		}
 		return false;
 	}
-	
-	public void removeFather( ) {
-		added.pop();
-		
-	}
 
+	
 	/**
 	 * @param v1
 	 * @return
 	 */
 	public boolean hasEdgeWith(int v1) {
+		if (edgesWith == null) {
+			return false;
+		}
 		return edgesWith.contains(v1);
 	}
 
 	public void addEdgeWith(int v1) {
+		if (edgesWith == null) {
+			edgesWith = new HashSet<Integer>();
+		}
 		edgesWith.add(v1);
 	}
-
 	
 	public String getHexColor() {
 		String ans = "#";

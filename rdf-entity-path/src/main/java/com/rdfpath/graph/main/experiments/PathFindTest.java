@@ -31,7 +31,9 @@ public class PathFindTest {
 
 		if (System.getProperty("subset") == null ||
 				System.getProperty("graph") == null ||
-				System.getProperty("group") == null) {
+				System.getProperty("group") == null ||
+				System.getProperty("maxEdgeSize") == null
+				) {
 			System.out.println("-Dsubset -Dgraph -Dgroup");
 			return;
 		}		
@@ -48,11 +50,11 @@ public class PathFindTest {
 		
 		String[] groupNames = {"double", "triple", "cuadra", "penta"};
 		int[] groupSizes = {2, 3, 4, 5};
-
 		
 		String actSubset = System.getProperty("subset");
 		String graphName = System.getProperty("graph");
 		String groupName = System.getProperty("group");
+		int maxEdgeSize = Integer.parseInt(System.getProperty("maxEdgeSize"));
 		
 		int indexGroup = 0;
 		while (true) {
@@ -128,7 +130,7 @@ public class PathFindTest {
 
 			// TODO aquí cambié el Wrapper
 			GraphWrapperTimeTestOptMem nGW = new GraphWrapperTimeTestOptMem(graph,seconds);
-			nGW.search(a, 3);
+			nGW.search(a, 3, maxEdgeSize);
 			
 			System.gc();
 			System.out.println((mbean.getHeapMemoryUsage().getUsed() - memoryBefore));

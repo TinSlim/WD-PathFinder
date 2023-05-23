@@ -258,6 +258,22 @@ public abstract class AbstractGraph implements IGraph {
         }
 	}
 	
+	public HashSet<Integer> getAdjacentVertexSessionLimited (int id, WebSocketSession session, int maxEdgeSize) throws IOException {
+		HashSet<Integer> adjVertex = getAdjacentVertexSession(id, session);
+		if (maxEdgeSize == -1 || adjVertex.size() < maxEdgeSize) {
+			return adjVertex;
+		}
+		return new HashSet<Integer>();
+	}
+	
+	public HashSet<Integer> getAdjacentVertexTimeoutLimited(int id, int seconds, long startTime, int maxEdgeSize) throws InterruptedException {
+		HashSet<Integer> adjVertex = getAdjacentVertexTimeout(id, seconds, startTime);
+		if (maxEdgeSize == -1 || adjVertex.size() < maxEdgeSize) {
+			return adjVertex;
+		}
+		return new HashSet<Integer>();
+	}
+
 	@Override
 	public String edgeToText(Object edge) {
 		return "{"+getOriginEdge(edge) + "->" + getPredicateEdge(edge) + "->" + getDestinationEdge(edge) + "}";
