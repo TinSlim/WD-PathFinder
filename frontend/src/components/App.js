@@ -47,6 +47,7 @@ export default function App() {
    
 
     const [pares, setPares] = useState({});
+    const [nodoPar, setNodoPar] = useState({});
 
 
     const [nodes, setNodes] = useState(new DataSet([]));
@@ -197,6 +198,9 @@ export default function App() {
         let pares = {};
         setPares(pares);
 
+        let nodoPar = {};
+        setNodoPar(nodoPar);
+
         let nodes = new DataSet([]);
         setNodes(nodes);
 
@@ -251,123 +255,69 @@ export default function App() {
         else if (newData.type == "edge") {
             edges.add(newData.data);
             setEdges(edges);
-            let item1 = nodes.get(newData.data.from,
-                { fields: ['id','edgeSize'] }
-            );
-           
-            let newLet = newData.data.labelWiki + "," + newData.data.to;
-            nodes.updateOnly({id: item1.id, edgeSize: item1.edgeSize + 1});
-            if (newLet in pares) {
-                pares[newLet].push(newData.data.from);
-            }
-            else {
-                pares[newLet] = [newData.data.from];
-            }
-            
-            let item2 = nodes.get(newData.data.to,
-                { fields: ['id', 'edgeSize'] }
-            );
-            newLet = "-" + newData.data.labelWiki + "," + newData.data.from;
-            nodes.updateOnly({id: item2.id, edgeSize: item2.edgeSize + 1});
-            if (newLet in pares) {
-                pares[newLet].push(newData.data.to);
-            }
-            else {
-                pares[newLet] = [newData.data.to];
-            }
 
+
+            let item1 = nodes.get(newData.data.from, { fields: ['id'] } );
+            let actEdge = newData.data.labelWiki + "," + newData.data.to;
+            if (!item1.id in nodoPar) {
+                console.log("agregar");
+                if (actEdge in pares) {
+                    pares[actEdge].push(item1.id);
+                }
+                else {
+                    pares[actEdge] = [item1.id];
+                }
+                nodoPar[item1.id] = actEdge;
+            }
+            // posee aristas, nodo1
+            /*
+            else {
+                // Lo borra
+                pares[nodoPar[item1.id]] = pares[nodoPar[item1.id]].filter((ele) => {return ele != item1.id})
+                
+                nodoPar[item1.id].push(actEdge);
+                nodoPar[item1.id].sort();
+
+                if (nodoPar[item1.id] in pares) {
+                    pares[nodoPar[item1.id]].push(item1.id);
+                }
+                else {
+                    pares[nodoPar[item1.id]] = [item1.id];
+                }
+            }
+            */
+            console.log("------------");
+            console.log("Pares: ");
+            console.log(pares);
+            console.log("NodoPares: ");
+            console.log(nodoPar);
             setPares({... pares});
-
-            if (edges.length % 30 == 0) {
-                
-                
-
-                let grupos = {};
-                for (const [key, value] of Object.entries(pares)) {
-                    if (value.length< 5) {
-                        continue;
-                    }
-                    value.sort();
-                    if (value in grupos) {
-                        grupos[value].push(key)
-                    }
-                    else {
-                        grupos[value] = [key]
-                    }
+            console.log("Pares: ");
+            console.log(pares);
+            console.log("NodoPares: ");
+            console.log(nodoPar);
+            console.log("--------------");
+            // No posee aristas, nodo2
+            /*
+            let item2 = nodes.get(newData.data.to, { fields: ['id','allEdges'] } );
+            if (item2.allEdges == -1) {
+                let actEdge = "-" + newData.data.labelWiki + "," + newData.data.from;
+                if (actEdge in pares) {
+                    pares[actEdge].push(item2.id);
                 }
-                /*
-                "id1,id2,id3" : [arista1,arista2]
-                */
-                
-        
-                let grupos_comb = {}
-                Object.assign(grupos_comb,grupos) 
-                let claves = Object.keys(grupos)
-        
-        
-                for (var i = 0; i < claves.length; i++) {
-                    for (var j = i + 1; j < claves.length; j++) {
-                        var clave1 = claves[i].split(',').map( Number );
-                        var clave2 = claves[j].split(',').map( Number );
-                        var inter = encontrarInterseccion(clave1,clave2);
-                        if (inter.length >= 5) {
-                            grupos_comb[inter] = [...new Set([...grupos[claves[i]], ...grupos[claves[j]]])];
-                        }
-                    }
+                else {
+                    pares[actEdge] = [item2.id];
                 }
-        
-                //function decluster() {
-                for (let index of network.body.nodeIndices) {
-                    if (network.isCluster(index) == true) {
-                        network.openCluster(index);
-                    }
-                }
-                //}
-        
-                let clusterId = 0;
-                for (const [key, value] of Object.entries(grupos_comb)) {
-                    
-                    var idsData = key.split(',').map( Number );
-                    for (let numberI of idsData) {    
-                        let item = nodes.get(numberI);
-                        if (item.edgeSize == value.length) {
-                            nodes.updateOnly({id: numberI, cluster: clusterId});
-                        }
-                    }
-        
-                    let clusterOptionsByData = {
-                        joinCondition: function (childOptions) {
-                            return childOptions.cluster == clusterId;
-                        },
-                        processProperties: function (clusterOptions, childNodes, childEdges) {
-                            let text = childNodes.map(x => x.label).join(",")
-        
-                            clusterOptions.title = text;
-                            clusterOptions.label = text.substring(0, 23);
-                            return clusterOptions;
-                        },
-                        clusterNodeProperties: {
-                          id: `${clusterId}cluster:`,
-                          //borderWidth: 3,
-                          //shape: "database",
-                          //label: childNodes.map(x => x.label).join(","),
-                        },
-                      };
-                    network.cluster(clusterOptionsByData);
-                    setNetwork(network);
-                    clusterId += 1;
-                }
-
-
-
-
-
-
+                nodes.updateOnly({id: item2.id, allEdges: actEdge});
             }
+            */
+
+
         }
+        
 
         else if (newData.type == "edit") {
-            nodes.update(newData.data);
+            nodes.updateOnly(newData.data);
         }
         };
       

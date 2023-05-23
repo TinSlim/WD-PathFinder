@@ -55,7 +55,6 @@ public class GraphWrapperServer {
 	    newVertex.put("title", vertexLabel);
 	    newVertex.put("id", vw.idVertex);
 	    newVertex.put("edgeSize", 0);
-	    
 	    newVertex.put("size", 18);
 	    
 	    try {
@@ -93,10 +92,10 @@ public class GraphWrapperServer {
 	    if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
 	    
 	    JSONObject newVertex = new JSONObject();
-	    newVertex.put("label", vertexLabelSmall);
-	    newVertex.put("color",vw.getHexColor());
-	    newVertex.put("title", vertexLabel);
-	    newVertex.put("size", 18);
+	    //newVertex.put("label", vertexLabelSmall);
+	    //newVertex.put("color",vw.getHexColor());
+	    //newVertex.put("title", vertexLabel);
+	    //newVertex.put("size", 18);
 
 	    // Json
 	    JSONObject json = new JSONObject();
