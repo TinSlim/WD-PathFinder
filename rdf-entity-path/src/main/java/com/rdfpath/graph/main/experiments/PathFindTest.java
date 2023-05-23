@@ -34,7 +34,7 @@ public class PathFindTest {
 				System.getProperty("group") == null ||
 				System.getProperty("maxEdgeSize") == null
 				) {
-			System.out.println("-Dsubset -Dgraph -Dgroup");
+			System.out.println("-Dsubset -Dgraph -Dgroup -DmaxEdgeSize");
 			return;
 		}		
 
