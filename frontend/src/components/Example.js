@@ -46,11 +46,23 @@ export default function Example(props) {
         edges.add({to:1, from:7, label: "P41"})
         edges.add({to:1, from:8, label: "P41"})
 
+        edges.add({from:1, to:4, label: "P771"})
+        edges.add({from:1, to:5, label: "P771"})
+        edges.add({from:1, to:6, label: "P771"})
+        edges.add({from:1, to:7, label: "P771"})
+        edges.add({from:1, to:8, label: "P771"})
+
         edges.add({from:2, to:4, label: "P321"})
         edges.add({from:2, to:5, label: "P321"})
         edges.add({from:2, to:6, label: "P321"})
         edges.add({from:2, to:7, label: "P321"})
         edges.add({from:2, to:8, label: "P321"})
+
+        edges.add({to:2, from:4, label: "P88"})
+        edges.add({to:2, from:5, label: "P88"})
+        edges.add({to:2, from:6, label: "P88"})
+        edges.add({to:2, from:7, label: "P88"})
+        edges.add({to:2, from:8, label: "P88"})
 
         nodes.updateOnly({id: 4, a: "41.1", b : "-321.2", size : 2});
         nodes.updateOnly({id: 5, a: "41.1", b : "-321.2", size : 2});
@@ -80,10 +92,12 @@ export default function Example(props) {
     function clusterByCid() {
         network.setData(data);
         var clusterOptionsByData = {
-          joinCondition: function (childOptions) {
-            console.log("==");
-            console.log(childOptions);
-            return !(childOptions.id in [0,1,2,3]); //!= 1 && childOptions.id != 2 && childOptions.id != 0 && childOptions.id != 3;
+          joinCondition: function (nodeOptions) {
+
+            return [4,5,6,7,8].includes(nodeOptions.id); //!= 1 && childOptions.id != 2 && childOptions.id != 0 && childOptions.id != 3;
+          },
+          processProperties: function (clusterOptions, childNodes, childEdges) {
+            return clusterOptions;
           },
           clusterNodeProperties: {
             id: "cidCluster",
@@ -144,7 +158,7 @@ export default function Example(props) {
     return (
         <div>
             <button onClick={init}> LAUNCH </button>
-            <input type="button" onClick={clusterByCid} value="Cluster by hubsize" />
+            <input type="button" onClick={clusterByCid} value="Cluster by cid" />
             <input type="button" onClick={clusterByColor} value="Cluster by Color" />
             
             <input type="button" onClick={addNodes} value="Add nodes" />
