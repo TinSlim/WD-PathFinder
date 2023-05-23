@@ -118,12 +118,12 @@ public class PathFindTest {
 		
 		int i = 0;
 		int seconds = 60;
-		System.out.println("Estructura;ID;Grupos;Aristas;Tiempo;Memoria");
+		System.out.println("Estructura;Limite;ID;Grupos;Aristas;Tiempo;Memoria");
 		MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
 		
 		while (i < ids.length) {
 			System.gc();
-			System.out.print(graph.getStructName()+";"+i+";"+groupNames[indexGroup]+";");
+			System.out.print(graph.getStructName()+";"+maxEdgeSize+";"+i+";"+groupNames[indexGroup]+";");
 			
 			long memoryBefore = mbean.getHeapMemoryUsage().getUsed();
 			int[] a = ids[i];

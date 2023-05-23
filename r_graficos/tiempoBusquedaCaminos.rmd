@@ -96,7 +96,7 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=memArista, color=Estructura)) + #f
 
   geom_boxplot() +
 
-  labs(title= "Uso de memoria búsqueda 60 segundos",
+  labs(title= "Proporción memoria/cantidad de aristas, en búsqueda 60 segundos",
        color = "Estructura del Grafo",
        y = "Memoria/Cantidad de Aristas [bytes]",
        x = "Cantidad de Entidades") +
@@ -104,7 +104,7 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=memArista, color=Estructura)) + #f
   theme(plot.title = element_text(hjust = 0.5)) +
   #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
   #scale_y_continuous(trans='log2')#, breaks = c(2,4,8,16,32,64,128,256,512,1024,2048,4096))
-  scale_y_continuous(trans='log10')
+  scale_y_continuous(trans='log10', breaks=c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10 ^9))
 
 ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.pdf", width=8, height=5, dpi=300)
