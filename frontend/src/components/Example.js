@@ -30,11 +30,11 @@ export default function Example(props) {
         nodes.add({id:2, label:"2"});
         nodes.add({id:3, label:"3"});
         
-        nodes.add({id:4, label:"4"});
-        nodes.add({id:5, label:"5"});
-        nodes.add({id:6, label:"6"});
-        nodes.add({id:7, label:"7"});
-        nodes.add({id:8, label:"8"});
+        nodes.add({id:4, label:"4", cid:1});
+        nodes.add({id:5, label:"5", cid:1});
+        nodes.add({id:6, label:"6", cid:1});
+        nodes.add({id:7, label:"7", cid:1});
+        nodes.add({id:8, label:"8", cid:1});
 
         edges.add({to:0, from:1})
         edges.add({to:2, from:3})
@@ -52,28 +52,23 @@ export default function Example(props) {
         edges.add({from:1, to:7, label: "P771"})
         edges.add({from:1, to:8, label: "P771"})
 
-        edges.add({from:2, to:4, label: "P321"})
-        edges.add({from:2, to:5, label: "P321"})
-        edges.add({from:2, to:6, label: "P321"})
-        edges.add({from:2, to:7, label: "P321"})
-        edges.add({from:2, to:8, label: "P321"})
-
         edges.add({to:2, from:4, label: "P88"})
         edges.add({to:2, from:5, label: "P88"})
         edges.add({to:2, from:6, label: "P88"})
         edges.add({to:2, from:7, label: "P88"})
         edges.add({to:2, from:8, label: "P88"})
 
-        nodes.updateOnly({id: 4, a: "41.1", b : "-321.2", size : 2});
-        nodes.updateOnly({id: 5, a: "41.1", b : "-321.2", size : 2});
-        nodes.updateOnly({id: 6, a: "41.1", b : "-321.2", size : 2});
-        nodes.updateOnly({id: 7, a: "41.1", b : "-321.2", size : 2});
-        nodes.updateOnly({id: 8, a: "41.1", b : "-321.2", size : 2});
+        edges.add({from:2, to:4, label: "P321"})
+        edges.add({from:2, to:5, label: "P321"})
+        edges.add({from:2, to:6, label: "P321"})
+        edges.add({from:2, to:7, label: "P321"})
+        edges.add({from:2, to:8, label: "P321"})
 
-        
-
-        console.log(edges);
-        console.log(nodes);
+        nodes.updateOnly({id: 4});
+        nodes.updateOnly({id: 5});
+        nodes.updateOnly({id: 6});
+        nodes.updateOnly({id: 7});
+        nodes.updateOnly({id: 8});
 
         data = { nodes: nodes, edges:edges };
         network =
@@ -90,7 +85,7 @@ export default function Example(props) {
     }
     
     function clusterByCid() {
-        network.setData(data);
+        //network.setData(data);
         var clusterOptionsByData = {
           joinCondition: function (nodeOptions) {
 
@@ -107,6 +102,26 @@ export default function Example(props) {
         };
         network.cluster(clusterOptionsByData);
       }
+
+
+      function clusterByConn() {
+        var clusterOptionsByData = {
+          joinCondition: function (childOptions) {
+            console.log(childOptions);
+            return [4,5,6,7,8].includes(childOptions.id); //!= 1 && childOptions.id != 2 && childOptions.id != 0 && childOptions.id != 3;
+          },
+          processProperties: function (clusterOptions, childNodes, childEdges) {
+            return clusterOptions;
+          },
+          clusterNodeProperties: {
+            id: "cidCluster",
+            //borderWidth: 3,
+            shape: "database",
+          },
+        };
+        network.cluster(clusterOptionsByData);
+        
+      }
     
     
       function clusterByColor() {
@@ -120,7 +135,7 @@ export default function Example(props) {
           
           clusterOptionsByData = {
             joinCondition: function (childOptions) {
-              return childOptions.b + "_" + childOptions.a == par; // the color is fully defined in the node.
+              return childOptions.cid == 1; // the color is fully defined in the node.
             },
             processProperties: function (clusterOptions, childNodes, childEdges) {
               var totalMass = 0;
@@ -160,6 +175,7 @@ export default function Example(props) {
             <button onClick={init}> LAUNCH </button>
             <input type="button" onClick={clusterByCid} value="Cluster by cid" />
             <input type="button" onClick={clusterByColor} value="Cluster by Color" />
+            <input type="button" onClick={clusterByConn} value="Cluster by Conn" />
             
             <input type="button" onClick={addNodes} value="Add nodes" />
             <div className='has-background-white-ter' ref={container}/>

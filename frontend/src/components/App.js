@@ -108,9 +108,7 @@ export default function App() {
                 network.openCluster(index);
             }
         }
-        
-        console.log("pares");
-        console.log(pares);
+
         let clusterId = 0;
         for (let parKey in pares) {
 
@@ -129,7 +127,6 @@ export default function App() {
                       id: `${clusterId}cluster:`,
                       //borderWidth: 3,
                       //shape: "database",
-                      //label: childNodes.map(x => x.label).join(","),
                     },
                   };
                 network.cluster(clusterOptionsByData);
@@ -308,23 +305,19 @@ export default function App() {
                         </MenuItem>
                     </Select>
                     
-                    <Typography variant="h6" component="div" >
-                    {t('Time')}: {time}
-                    </Typography>
+                        <Typography variant="h6" component="div" >
+                            {t('Time')}: {time}
+                        </Typography>
                     <Button color="inherit" onClick={stop}>{t('Stop')}</Button>
-                    </Toolbar>
-            </AppBar>
+                </Toolbar>
 
-            
-            {/*<Graph words={words} values={values} ></Graph>*/}
-            {/*<VisNetwork></VisNetwork>*/}
+                
+            </AppBar>
            
             <div className='has-background-white-ter' ref={container}/>
 
             <Example></Example>
             <Button onClick={groupClusters}> PRINT INFO </Button>
-
-            {/*<WebSocketTemplate></WebSocketTemplate>*/}
             
             <SwipeableDrawer
                 PaperProps={{

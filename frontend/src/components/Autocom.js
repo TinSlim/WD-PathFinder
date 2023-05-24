@@ -4,9 +4,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import ModalDemo from './ModalDemo';
 
 import Box from '@mui/material/Box';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
@@ -65,9 +65,12 @@ export default function Autocom(props) {
     }
   }
   
+  // TODO AGREGAR TRADUCCION
   return (
     <div className='mt-3 mb-3'>
+      <ModalDemo></ModalDemo>
       <Autocomplete
+        forcePopupIcon={false}                // Elimina flechita autocompletado
         noOptionsText={getDefaultText()}
         onClose={() => setIsLoading(false)}   // al cerrar autocompletado
         filterOptions={(x) => x}              // quita filtro de opciones (no se necesita ya que obtengo de API)
@@ -136,6 +139,8 @@ export default function Autocom(props) {
           }
         }
       />
+
+      
     </div>
     );
   }
