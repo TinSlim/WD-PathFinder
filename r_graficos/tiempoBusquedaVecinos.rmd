@@ -23,10 +23,10 @@ tiemposBusquedaVecino <- read.csv("datos/timeNano.csv", sep = ";")
 ```{r}
 options(scipen = 999)
 tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphGt"] <- "Objetos de Java"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphComp"] <- "Adjacency"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphCompDense"] <- "Adjacency Dense"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFull"] <- "Triple"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFullDense"] <- "Triple Dense"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphComp"] <- "Adyacencia no densa"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphCompDense"] <- "Adyacencia Densa"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFull"] <- "Triples no Densos"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFullDense"] <- "Triples Densos"
 
 tiemposBusquedaVecino = tiemposBusquedaVecino[tiemposBusquedaVecino$Estructura !='graphNative',]
 ```
@@ -41,7 +41,7 @@ ggplot(tiemposBusquedaVecino, aes(x=SetDatos, y=Tiempos, color=Estructura)) + # 
   labs(title= "Tiempos de búsqueda de vecinos",
        color = "Estructura del Grafo",
        y = "Tiempo [ns] (log10)",
-       x = "Set de datos") +
+       x = "Conjunto") +
 
   theme(plot.title = element_text(hjust = 0.5)) +
   #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))

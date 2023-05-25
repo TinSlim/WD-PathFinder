@@ -27,16 +27,29 @@ options(scipen = 999)
 tiemposBusquedaCamino$memArista = tiemposBusquedaCamino$Memoria / tiemposBusquedaCamino$Aristas
 
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphGt"] <- "Objetos de Java"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Adjacency" #"Comprimido con índices"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Adjacency Dense"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFull"] <- "Triple"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFullDense"] <- "Triple Dense"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Adyacencia no densa" #"Comprimido con índices"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Adyacencia Densa"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFull"] <- "Triples no Densos"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFullDense"] <- "Triples Densos"
 
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "penta"] <- "5"
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "cuadra"] <- "4"
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "triple"] <- "3"
 tiemposBusquedaCamino$Grupos[tiemposBusquedaCamino$Grupos == "double"] <- "2"
+
+tiemposBusquedaCamino$grupos_id = paste(tiemposBusquedaCamino$Grupos,"_", as.character(tiemposBusquedaCamino$ID))
 ```
+
+### A
+
+```{r}
+ids_aristas_cero <- tiemposBusquedaCamino$grupos_id[tiemposBusquedaCamino$Aristas == 0]
+tiemposBusquedaCamino_conAristas <- tiemposBusquedaCamino[!
+    (tiemposBusquedaCamino$grupos_id %in% ids_aristas_cero), ]
+```
+
+
+
 
 ### Gráfico tiemposBusquedaVecino
 
@@ -47,12 +60,13 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Aristas, color=Estructura)) + #fil
 
   labs(title= "Aristas encontradas 60 segundos",
        color = "Estructura del Grafo",
-       y = "Aristas encontradas (log2)",
+       y = "Aristas encontradas (log10)",
        x = "Cantidad de Entidades") +
   #
   theme(plot.title = element_text(hjust = 0.5)) +
   #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
-  scale_y_continuous(trans='log2', breaks = c(2^4, 2^7,2^10,2^13,2^16,2^19,2^22))
+  scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8))
+#breaks = c(2^4, 2^7,2^10,2^13,2^16,2^19,2^22))
 # c(1000, 1000000, 1000000000)
 
 ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.png", width=8, height=5, dpi=300)
@@ -92,7 +106,7 @@ ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.pdf", wid
 
 ```{r}
 
-ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=memArista, color=Estructura)) + #fill=Estructura
+ggplot(tiemposBusquedaCamino_conAristas, aes(x=Grupos, y=memArista, color=Estructura)) + #fill=Estructura
 
   geom_boxplot() +
 

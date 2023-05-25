@@ -1,0 +1,40 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+### Importe de Bibliotecas
+
+```{r}
+library(ggplot2)
+```
+
+## Tiempo de Búsqueda de caminos
+
+### Importe Datos
+
+```{r}
+tiemposBusquedaCamino <- read.csv("datos/TPF_OptMem.csv", sep = ";")
+tiemposBusquedaCamino_10000 <- read.csv("datos/TPF_OptMem_10000.csv", sep = ";")
+tiemposBusquedaCamino_100000 <- read.csv("datos/TPF_OptMem_100000.csv", sep = ";")
+```
+
+### Edita datos
+
+```{r}
+tiemposBusquedaCamino$Limite = -1
+all_data = rbind(tiemposBusquedaCamino,tiemposBusquedaCamino_100000,tiemposBusquedaCamino_10000)
+all_data$Limite = as.character(all_data$Limite) 
+```
+
+### Gráfico
+
+```{r}
+ggplot(all_data, aes(x=Grupos, y=Aristas,color = Limite)) + 
+  geom_boxplot() + 
+  #facet_grid(vars(Limite))  + 
+  scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8))
+
+```
+
