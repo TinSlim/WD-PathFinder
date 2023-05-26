@@ -102,11 +102,11 @@ export default function Autocom(props) {
           <TextField {...params}
             InputLabelProps={{ shrink: true }}
             // hiddenLabel
-            label={t("Entity")} TODO Texto IDIOMA
+            label={t("Entity")} //TODO Texto IDIOMA
             variant="filled"
 
             //helperText="Escriba una entidad"  // TODO IDIOMA
-            placeholder='Write an entity'
+            placeholder='Escriba una entidad'
             InputProps={{
               ...params.InputProps,
               endAdornment: (
