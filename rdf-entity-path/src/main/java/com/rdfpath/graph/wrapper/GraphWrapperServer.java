@@ -350,6 +350,10 @@ public class GraphWrapperServer {
     	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
     	edge.put("title", edgeLabel);
     	
+    	JSONObject smooth = new JSONObject();
+    	smooth.put("type", "dynamic");
+    	edge.put("smooth", smooth);
+    	
     	JSONObject font = new JSONObject();
     	font.put("align", "middle");
     	font.put("strokeColor", "#f5f5f5"); // TODO color
