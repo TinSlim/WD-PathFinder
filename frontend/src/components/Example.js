@@ -17,24 +17,31 @@ export default function Example(props) {
 
     const init = () => {
         const options = {
-            autoResize: true,
-            height: (window.innerHeight - document.getElementById("app-bar").offsetHeight - document.getElementById("footer").offsetHeight) + "px",
-            width:  (window.innerWidth) + "px",
-            nodes: {
-                shape: "box",
+          physics : {
+              barnesHut: {
+                "gravitationalConstant": -3900,   // numero chistoso = 10000
+                "centralGravity": 0
               },
+            minVelocity: 1
+          },
+          autoResize: true,
+          height: (window.innerHeight - document.getElementById("app-bar").offsetHeight - document.getElementById("footer").offsetHeight) + "px",
+          width:  (window.innerWidth) + "px",
+          nodes: {
+            shape: "box",
+          },  
         };
 
-        nodes.add({id:0, shape: 'image', image: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Junior-Jaguar-Belize-Zoo.jpg'});
+        nodes.add({id:0, label:"0"});
         nodes.add({id:1, label:"1"});
         nodes.add({id:2, label:"2"});
         nodes.add({id:3, label:"3"});
         
-        nodes.add({id:4, label:"4", cid:1});
-        nodes.add({id:5, label:"5", cid:1});
-        nodes.add({id:6, label:"6", cid:1});
-        nodes.add({id:7, label:"7", cid:1});
-        nodes.add({id:8, label:"8", cid:1});
+        nodes.add({id:4, label:"4"});
+        nodes.add({id:5, label:"5"});
+        nodes.add({id:6, label:"6"});
+        nodes.add({id:7, label:"7"});
+        nodes.add({id:8, label:"8"});
 
         edges.add({to:0, from:1})
         edges.add({to:2, from:3})
@@ -64,13 +71,13 @@ export default function Example(props) {
         edges.add({from:2, to:7, label: "P321"})
         edges.add({from:2, to:8, label: "P321"})
 
-        nodes.updateOnly({id: 4});
-        nodes.updateOnly({id: 5});
-        nodes.updateOnly({id: 6});
-        nodes.updateOnly({id: 7});
-        nodes.updateOnly({id: 8});
+        //nodes.updateOnly({id: 4});
+        //nodes.updateOnly({id: 5});
+        //nodes.updateOnly({id: 6});
+        //nodes.updateOnly({id: 7});
+        //nodes.updateOnly({id: 8});
 
-        data = { nodes: nodes, edges:edges };
+        data = { nodes: nodes, edges:edges};
         network =
             container.current &&
             new Network(container.current, data , options);
@@ -85,22 +92,41 @@ export default function Example(props) {
     }
     
     function clusterByCid() {
-        //network.setData(data);
+      nodes.updateOnly({id: 4, cluster: 1});
+      nodes.updateOnly({id: 6, cluster: 1});
+      //network.setData(data);
         var clusterOptionsByData = {
-          joinCondition: function (nodeOptions) {
-
-            return [4,5,6,7,8].includes(nodeOptions.id); //!= 1 && childOptions.id != 2 && childOptions.id != 0 && childOptions.id != 3;
+          joinCondition: function (childOptions) {
+            console.log("Node");
+            console.log(childOptions);
+            return childOptions.cluster == 1;//[4,5,6,7,8].includes(nodeOptions.id);
           },
+
           processProperties: function (clusterOptions, childNodes, childEdges) {
+            var totalMass = 0;
+            for (var i = 0; i < childNodes.length; i++) {
+              totalMass += childNodes[i].mass;
+            }
+            clusterOptions.mass = totalMass;
             return clusterOptions;
           },
+
           clusterNodeProperties: {
             id: "cidCluster",
             borderWidth: 3,
             shape: "database",
           },
         };
+
         network.cluster(clusterOptionsByData);
+
+        //console.log("ClusterNodes:");
+        //console.log(network.getNodesInCluster("cidCluster"));
+        //console.log("BaseEdges:");
+        //console.log(network.getBaseEdges("cidCluster"));
+        //console.log("ClusterEdges:");
+        //console.log(network.getClusteredEdges("cidCluster"));
+
       }
 
 
@@ -111,12 +137,15 @@ export default function Example(props) {
             return [4,5,6,7,8].includes(childOptions.id); //!= 1 && childOptions.id != 2 && childOptions.id != 0 && childOptions.id != 3;
           },
           processProperties: function (clusterOptions, childNodes, childEdges) {
+            let text = childNodes.map(x => x.label).join(",")
+            clusterOptions.title = text;
+            clusterOptions.label = text.substring(0, 23);
             return clusterOptions;
           },
           clusterNodeProperties: {
-            id: "cidCluster",
+            id: `${1}cluster`,
             //borderWidth: 3,
-            shape: "database",
+            //shape: "database",
           },
         };
         network.cluster(clusterOptionsByData);
@@ -127,6 +156,7 @@ export default function Example(props) {
       function clusterByColor() {
         network.setData(data);
         var pares2 = Object.keys(pares);
+        console.log(pares);
         var clusterOptionsByData;
         
         for (var i = 0; i < pares2.length; i++) {
@@ -173,7 +203,7 @@ export default function Example(props) {
     return (
         <div>
             <button onClick={init}> LAUNCH </button>
-            <input type="button" onClick={clusterByCid} value="Cluster by cid" />
+            <input type="button" onClick={clusterByCid} value="Cluster by ciid" />
             <input type="button" onClick={clusterByColor} value="Cluster by Color" />
             <input type="button" onClick={clusterByConn} value="Cluster by Conn" />
             

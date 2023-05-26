@@ -8,21 +8,35 @@ import Content from "./Content"
 import Example from "./Example"
 import Footer from "./Footer"
 
+import Slide from '@mui/material/Slide';
+
 import Typography from '@mui/material/Typography';
 
+
+import Divider from '@mui/material/Divider';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import SquareIcon from '@mui/icons-material/Square';
 import Select from '@mui/material/Select';
 import MenuItem from "@mui/material/MenuItem";
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
+
+import TimerIcon from '@mui/icons-material/Timer';
+import CompressIcon from '@mui/icons-material/Compress';
+
 import IconButton from '@mui/material/IconButton';
+import InfoIcon from '@mui/icons-material/Info';
+import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+
+import Fab from '@mui/material/Fab';
 
 import Search from './Search';
 
 import  './i18n';
 import { useTranslation } from 'react-i18next';
+import { Stack, Zoom } from '@mui/material';
 
 const { socketUrl } = require('config');
 
@@ -34,12 +48,13 @@ export default function App() {
     const [words, setWords] = useState([]);
     const [values, setValues] = useState([]);
     const [time, setTime] = useState("00:00");
+    const [showingInfo, setShowingInfo] = useState(false);
     const [running, setRunning] = useState(false);
     const [stopwatchInterval, setStopWatchInterval] = useState(null);
     const [runningTime, setRunningTime] = useState(0);
     const container = useRef(null);
     const [socket,setSocket] = useState(null);
-    const [lang, setLang] = useState('en');
+    const [lang, setLang] = useState('es');
 
     const [network, setNetwork] = useState(null);
 
@@ -53,6 +68,10 @@ export default function App() {
     const [nodes, setNodes] = useState(new DataSet([]));
     const [edges, setEdges] = useState(new DataSet([]));
 
+    const changeInfo = () => {
+        if (showingInfo) {setShowingInfo(false)}
+        else {setShowingInfo(true)};
+    }
     const openDrawer = () => {
         setDrawerState(true);
     }
@@ -88,6 +107,11 @@ export default function App() {
     const stop = () => {
         setRunning(false);
         clearInterval(stopwatchInterval);
+        network.setOptions({
+            physics: {enabled:false}
+        });
+        setNetwork(network);
+
         if (socket != null) {
             console.log("socket close");
             socket.close();
@@ -159,13 +183,23 @@ export default function App() {
             nodes: {
                 shape: "box",
               },
-            //repulsion: {
-            //    centralGravity: 0.2,
-            //    springLength: 200,
-            //    springConstant: 0.05,
-            //    nodeDistance: 500,
-            //    damping: 0.09
-            //  },
+            physics : {
+                forceAtlas2Based: {
+                    theta: 0.45,
+                    gravitationalConstant: -310,
+                    centralGravity: 0,
+                    springLength: 500,
+                    springConstant: 0.675,
+                    damping: 0.1,
+                    avoidOverlap: 1
+                  },
+                //barnesHut: {
+                //  gravitationalConstant: -50,   // TODO numero chistoso = 10000
+                //  centralGravity: 0,
+                //  avoidOverlap: 0.5
+                //},
+              //minVelocity: 1
+            },
         };
 
         const data = { nodes: nodes, edges:edges };
@@ -278,72 +312,195 @@ export default function App() {
     return (
         <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
             
-            <AppBar id="app-bar" position="static">
-                <Toolbar >
-                    <Button color="inherit"
-                        onClick={openDrawer}>
-                        {t('Menu')}
-                    </Button>
+            <div className='has-background-white-ter' ref={container}/>
 
-                    <Typography variant="h3" component="div" sx={{ flexGrow: 1}}>
-                        W<img src={require('./../images/wool2.svg')}
-                            width="50px"/>olNet
-                    </Typography>
+            <Stack
+                sx={{position:"fixed",top: "0px",left: "0px", width: "100%"}}
+                id="app-bar"
+                direction="row"
+                justifyContent="space-between" 
+                className='ml-4 mr-4 pr-5 pl-5'>
+                    
+                    <Stack direction="row">
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 2 }}
+                            onClick={openDrawer}
+                        >
+                            <MenuIcon />
+                        </IconButton>
 
+                        
+                    </Stack>
+                    
+
+                    
+                    
+                    
+                    
+                    <Stack direction="row" spacing={1} alignItems="center">
+                        <Stack>
+                            <Button variant="contained" onClick={groupClusters} > 
+                            <CompressIcon/> COMPRIMIR </Button> 
+                        </Stack>
+
+                        <Stack direction="row">
+                            <Button variant="contained" onClick={stop}>
+                            <TimerIcon />
+                            
+                                {time}
+                                &nbsp;
+                            
+                                {t('Stop')}
+                            </Button>
+                        </Stack>
+                    </Stack>
+                        
+                    
                     <Select
-                    variant="standard"
-                    className="selectBox"
-                    onChange={changeLanguage}
-                    name="lang"
-                    value={lang}
-                    >
-                         <MenuItem className="optionsMenu" value="en">
-                            {t('English')}
-                        </MenuItem>
+                        variant="standard"
+                        className="selectBox"
+                        onChange={changeLanguage}
+                        name="lang"
+                        value={lang}
+                        >
+                        
                         <MenuItem className="optionsMenu" value="es">
                             {t('Spanish')}
                         </MenuItem>
+                        <MenuItem className="optionsMenu" value="en">
+                            {t('English')}
+                        </MenuItem>
                     </Select>
-                    
-                        <Typography variant="h6" component="div" >
-                            {t('Time')}: {time}
-                        </Typography>
-                    <Button color="inherit" onClick={stop}>{t('Stop')}</Button>
-                </Toolbar>
-
-                
-            </AppBar>
+            </Stack>
            
-            <div className='has-background-white-ter' ref={container}/>
+            
+            {/*<Fab color="primary"
+                aria-label="add"
+                variant="extended"
+                sx={{position: 'fixed'}}>
+                 <InfoIcon /> Detener
+            </Fab>*/}
 
-            <Example></Example>
-            <Button onClick={groupClusters}> PRINT INFO </Button>
+            {/*<Example></Example>*/}
+            
             
             <SwipeableDrawer
                 PaperProps={{
                     sx: {
-                      backgroundColor: "#e3e6e8"
+                      backgroundColor: "#e3e6e8",
+                      width: "324px"        // TODO ancho del drawer 324
                     }
                   }}
                 open={drawerState}
                 onClose={closeDrawer}>
-                <div style={{display:"flex", alignItems:"center", justifyContent:"flex-end"}}>
+                <Stack spacing={12} className="has-background-primary" direction="row" justifyContent="flex-end">
+                    <Typography variant="h4" fullWidth={true} className='has-text-white' p={1}>
+                        W<img src={require('./../images/wool2.svg')} width="25px"/>olNet
+                    </Typography>
                     <IconButton onClick={closeDrawer}>
                         <ChevronLeftIcon />
                     </IconButton>
-                </div>
-                <div>
-                    <Search 
-                        initGraph = {initGraph}
-                        startCrono = {start}
-                        words={words}
-                        setWords={setWords}
-                        values={values}
-                        setValues={setValues}
-                        closeDrawer={closeDrawer}>
-                    </Search>
-                </div>
-                 
+                </Stack>
+
+                    <Typography variant="body" p={1}>
+                        Woolnet, es el graficador de caminos entre entidades de Wikidata.
+                    </Typography>
+                <Divider />
+                
+
+
+                {!showingInfo &&
+                <Zoom  in={!showingInfo} >
+                    <Stack>
+
+                        <Search 
+                            initGraph = {initGraph}
+                            startCrono = {start}
+                            words={words}
+                            setWords={setWords}
+                            values={values}
+                            setValues={setValues}
+                            closeDrawer={closeDrawer}>
+                        </Search>
+
+                    
+
+                        <Stack className="ml-3 mr-3" spacing={1} direction="row" alignItems="center">
+                            <Button fullWidth={true} onClick={changeInfo} >
+                                <InfoIcon/> &nbsp;Ayuda
+                            </Button>
+                        </Stack>
+                    </Stack>
+                </Zoom>
+                }
+
+
+                {showingInfo &&
+                <Zoom hidden={!showingInfo} in={showingInfo} >
+                    <Stack>
+                        <Stack>
+                            <Button fullWidth={true} className='mt-3' onClick={changeInfo}>
+                                <InfoIcon/> Volver
+                            </Button>
+                        </Stack>
+                    
+                        <Stack className='ml-3 mr-3'>
+                            <Stack style={{display: 'flex',height: '500px', overflowY: 'auto'}}>
+                            <Typography variant='h6'>
+                                Uso
+                            </Typography>
+                            
+                            <Typography variant="body">
+                                Para encontrar caminos entre entidades debe escribir una en la entrada. Se desplegarán entidades existentes en Wikidata que corresponden con lo escrito.
+                                Debe seleccionar una. Repita esto con las entidades que desea.
+
+                                Para iniciar la búsqueda clickee BUSCAR.
+                                A continuación se desplegarán las entidades y los caminos.
+                                Puede detener la búsqueda clickeando en DETENER.
+                                Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
+
+
+                                Para encontrar caminos entre entidades debe escribir una en la entrada. Se desplegarán entidades existentes en Wikidata que corresponden con lo escrito.
+                                Debe seleccionar una. Repita esto con las entidades que desea.
+
+                                Para iniciar la búsqueda clickee BUSCAR.
+                                A continuación se desplegarán las entidades y los caminos.
+                                Puede detener la búsqueda clickeando en DETENER.
+                                Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
+
+
+                                Para encontrar caminos entre entidades debe escribir una en la entrada. Se desplegarán entidades existentes en Wikidata que corresponden con lo escrito.
+                                Debe seleccionar una. Repita esto con las entidades que desea.
+
+                                Para iniciar la búsqueda clickee BUSCAR.
+                                A continuación se desplegarán las entidades y los caminos.
+                                Puede detener la búsqueda clickeando en DETENER.
+                                Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
+
+
+                                Para encontrar caminos entre entidades debe escribir una en la entrada. Se desplegarán entidades existentes en Wikidata que corresponden con lo escrito.
+                                Debe seleccionar una. Repita esto con las entidades que desea.
+
+                                Para iniciar la búsqueda clickee BUSCAR.
+                                A continuación se desplegarán las entidades y los caminos.
+                                Puede detener la búsqueda clickeando en DETENER.
+                                Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
+
+                            </Typography>
+                            </Stack>
+                        </Stack>
+                        
+                    </Stack>
+
+                </Zoom>
+                }
+
+               
+
             </SwipeableDrawer>
 
             <Footer></Footer>

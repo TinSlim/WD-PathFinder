@@ -4,8 +4,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import ModalDemo from './ModalDemo';
-
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -67,8 +65,7 @@ export default function Autocom(props) {
   
   // TODO AGREGAR TRADUCCION
   return (
-    <div className='mt-3 mb-3'>
-      <ModalDemo></ModalDemo>
+    <div className='mb-3'>
       <Autocomplete
         forcePopupIcon={false}                // Elimina flechita autocompletado
         noOptionsText={getDefaultText()}
@@ -102,9 +99,14 @@ export default function Autocom(props) {
         options={options}
         sx={{ width: 300 }}
         renderInput={(params) => 
-          <TextField {...params} 
-            label={t("Entity")} //TODO Texto IDIOMA
+          <TextField {...params}
+            InputLabelProps={{ shrink: true }}
+            // hiddenLabel
+            label={t("Entity")} TODO Texto IDIOMA
             variant="filled"
+
+            //helperText="Escriba una entidad"  // TODO IDIOMA
+            placeholder='Write an entity'
             InputProps={{
               ...params.InputProps,
               endAdornment: (

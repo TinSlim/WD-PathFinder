@@ -1,19 +1,22 @@
 import React from 'react';
+import Stack from '@mui/material/Stack';
 
 export default function Footer() {
     return (
+        
         <footer id="footer" class="footer mt-auto has-background-primary has-text-white">
-            <div class="columns">
-                <div class="content has-text-centered column">
+            <Stack direction="row" justifyContent="space-around">
+                <Stack>
                     <p>
                     <strong class="has-text-white">© 2023 WoolNet</strong> by <a href="https://ctorresg.cl">Cristóbal Torres</a>.
                     </p>
-                </div>
-                <div class="content has-text-centered column">
+                </Stack>
+                <Stack>
                 <img src={require('./../images/Wikidata_Stamp_Rec_Dark.svg')}
                                 width="150px"/>
-                </div>
-            </div>
+                </Stack>
+            </Stack>
+            
         </footer>
     );
 }
