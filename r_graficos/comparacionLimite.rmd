@@ -16,16 +16,38 @@ library(ggplot2)
 
 ```{r}
 tiemposBusquedaCamino <- read.csv("datos/TPF_OptMem.csv", sep = ";")
+tiemposBusquedaCamino_1000 <- read.csv("datos/TPF_OptMem_1000.csv", sep = ";")
 tiemposBusquedaCamino_10000 <- read.csv("datos/TPF_OptMem_10000.csv", sep = ";")
 tiemposBusquedaCamino_100000 <- read.csv("datos/TPF_OptMem_100000.csv", sep = ";")
+tiemposBusquedaCamino_100000 <- read.csv("datos/TPF_OptMem_1000000.csv", sep = ";")
 ```
 
 ### Edita datos
 
 ```{r}
+options(scipen = 999)
+
+tiemposBusquedaCamino = tiemposBusquedaCamino[tiemposBusquedaCamino$Estructura =='graphComp',]
 tiemposBusquedaCamino$Limite = -1
-all_data = rbind(tiemposBusquedaCamino,tiemposBusquedaCamino_100000,tiemposBusquedaCamino_10000)
-all_data$Limite = as.character(all_data$Limite) 
+
+
+all_data = rbind(tiemposBusquedaCamino,tiemposBusquedaCamino_1000,tiemposBusquedaCamino_10000,tiemposBusquedaCamino_100000)
+all_data$Limite = as.character(all_data$Limite)
+
+all_data$grupos_id = paste(all_data$Grupos,"_", as.character(all_data$ID))
+ids_aristas_cero <- all_data$grupos_id[all_data$Aristas == 0]
+all_data_SAC <- all_data[!
+    (all_data$grupos_id %in% ids_aristas_cero), ]
+all_data_SAC$memArista = all_data_SAC$Memoria / all_data_SAC$Aristas
+
+all_data$Limite[all_data$Limite == "-1"] <- "Sin límite"
+
+all_data$Grupos[all_data$Grupos == "penta"] <- "5"
+all_data$Grupos[all_data$Grupos == "cuadra"] <- "4"
+all_data$Grupos[all_data$Grupos == "triple"] <- "3"
+all_data$Grupos[all_data$Grupos == "double"] <- "2"
+
+
 ```
 
 ### Gráfico
@@ -34,7 +56,19 @@ all_data$Limite = as.character(all_data$Limite)
 ggplot(all_data, aes(x=Grupos, y=Aristas,color = Limite)) + 
   geom_boxplot() + 
   #facet_grid(vars(Limite))  + 
-  scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8))
-
+  scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10^9,10^10,10^11))
 ```
 
+```{r}
+ggplot(all_data, aes(x=Grupos, y=Memoria,color = Limite)) + 
+  geom_boxplot() + 
+  #facet_grid(vars(Limite))  + 
+  scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10^9,10^10,10^11,10^12))
+```
+
+```{r}
+ggplot(all_data_SAC, aes(x=Grupos, y=memArista,color = Limite)) + 
+  geom_boxplot() + 
+  #facet_grid(vars(Limite))  + 
+  scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10^9,10^10,10^11,10^12))
+```
