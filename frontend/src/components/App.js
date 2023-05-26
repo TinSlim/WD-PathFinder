@@ -178,7 +178,7 @@ export default function App() {
         }
         const options = {
             autoResize: true,
-            height: (window.innerHeight - document.getElementById("app-bar").offsetHeight - document.getElementById("footer").offsetHeight) + "px",
+            height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px",
             width:  (window.innerWidth) + "px",
             nodes: {
                 shape: "box",
