@@ -177,7 +177,7 @@ export default function App() {
         console.log(require('./../images/no-image-photography-icon.png'));
         const options = {
             autoResize: true,
-            height: (window.innerHeight - document.getElementById("app-bar").offsetHeight - document.getElementById("footer").offsetHeight) + "px",
+            height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px",
             width:  (window.innerWidth) + "px",
             nodes: {
                 shape: "image",
