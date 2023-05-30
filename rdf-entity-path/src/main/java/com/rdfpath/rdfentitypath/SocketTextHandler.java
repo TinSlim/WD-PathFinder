@@ -93,14 +93,20 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		graphWrapper.setSession(session);
 		graphWrapper.setLang(splitAns[splitAns.length - 1]);
 		
+		int sizeSearch = 3;
+		if (nodesNumbers.length == 1) {
+			sizeSearch = 0;
+		}
+		
 		try {
-			graphWrapper.search(nodesNumbers, 3, 10000);
+			graphWrapper.search(nodesNumbers, sizeSearch, 10000);
 		}
 		catch (IOException ioE) {
 			// Session is closed
 		}
 
 		//graphWrapper = null;
+		session.close();
 	}
 	
 	

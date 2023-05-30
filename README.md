@@ -1,76 +1,80 @@
 # RDF-Path-server
 
-## Información
+## Requisitos
 
-- Versiones:
-	- Node: v16.17.1
-	- Java: openjdk 11
-- Lanzar en el servidor demora **80 minutos**.
-- Parámetros extra, se agregan con **-D{lo de abajo}**:
-	- Archivo grafo externo a `.jar`: `graph-path="{nombre archivo}"`
-	- Token de Telegram para recibir mensajes de carga de grafo: `tg-token="{token}"`
-- IMPORTANTE: Se debe incluir las flags: `-Dorg.eclipse.rdf4j.rio.verify_uri_syntax=false -Dorg.eclipse.rdf4j.rio.ntriples.fail_on_invalid_lines=false`.
+- Node: v16.17.1
+- Java: openjdk 11
 
-- Objeto GraphComp, archivo compressed_struct.nt.gz , usa **98347590**
+## Preparación
 
-## Instalación
-
-- Se requiere Node *v16.17.1* y Java *openjdk 11*.
 - En `/frontend` usar `npm i`, para instalar dependencias.
 - Cargar `/rdf-entity-path` a **Eclipse IDE**. 
 
-## Desarrollo
+## Trabajo de Datos
 
-### Frontend
+- Tener un archivo en formato `.nt`.
 
-- Lanzar `npm run dev` desde `/frontend`.
-- Correr `public\index.html`.
+## Lanzamiento
 
-### Backend
+### Lanzamiento, Producción
 
-- En archivo `/frontend/.env` usar **localhost** que está comentado.
-- Lanzar `npm run build` desde `/frontend`.
-- Lazar servidor desde Eclipse con configuración `RunServer`.
+- Escribir en `/frontend/.env` variables de entorno.
 
-## Lanzar Servidor desde `.jar`
-
-Primero se debe compilar front, luego lanzar el sevidor:
-
-### Compilar Front
-
-- En archivo `.env` asignar las direcciones `http` y `ws`. En caso de usar cerificado `SSL`, direcciones deben ser `https` y `wss`.
-
-- Compilar archivos, estos se guardarán en la carpeta resources del proyecto en Java.
 ```
-cd .\frontend\
+BASE_URL = "https://urldeejemplo.ejemplo"		# Url de la app
+WEB_SOCKET_URL = "wss://urldeejemplo.ejemplo"	# Url del WebSocket
+```
+
+- Ejecutar `build.ps1`.
+- El archivo que ejecuta la aplicación se exportará en `/export`.
+- Ejecutar el archivo con los parámetros:
+	- `-Xmx59g` : Memoria disponible.
+	- `-Dgraph-data=` : Archivo con datos para poblar el grafo.
+
+Ejemplo a continuación:
+
+```
+java -jar -Xmx59g -Dgraph-data="latest-truthy_small" rdf-entity-path-0.0.1-SNAPSHOT.jar
+```
+
+> Considere que el formato debe ser Adyacente, de modo que si sus datos no han sido transformados debe llevarlo a cabo antes de usarlos.
+
+### Lanzamiento, Desarrollo - Frontend
+
+- Escribir en `/frontend/.env` variables de entorno.
+
+```
+BASE_URL = "http://localhost:8080"
+WEB_SOCKET_URL = "ws://localhost:8080"
+```
+
+- Ejecutar los siguientes comandos:
+
+```
+cd frontend
+npm run dev
+```
+
+- El archivo `frontend/public/index.html` mostrará los cambios en vivo.
+
+### Lanzamiento, Desarrollo - Backend
+
+- Escribir en `/frontend/.env` variables de entorno.
+
+```
+BASE_URL = "http://localhost:8080"
+WEB_SOCKET_URL = "ws://localhost:8080"
+```
+
+- Ejecutar los siguientes comandos:
+
+```
+cd frontend
 npm run build
 ```
 
-### Construir archivo Jar
+- Usar `RunServer.launch` en Eclipse IDE.
 
-- Ejecutar lo siguiente para armar el archivo `.jar`. Este se almacenará en `\rdf-entity-path\target`.
-```
-cd ..\rdf-entity-path\
-.\mvnw package
-```
-
-### Lanzar
-
-Se tienen dos opciones.
-
-- El compilado incluye un archivo de grafos, si se quiere usar ese, ejecutar:
-```
-java -jar .\rdf-entity-path-0.0.1-SNAPSHOT.jar
-```
-
-- Usar un archivo `.gz` externo al archivo jar. Se debe tener este al lado del archivo.
-
-```
-java -jar -Dgraph-path="{nombre archivo}" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
-
-#EJEMPLO:
-#java -jar -Dgraph-path="delete.nt.gz" .\rdf-entity-path-0.0.1-SNAPSHOT.jar
-```
 
 
 ## Ejecución Tests

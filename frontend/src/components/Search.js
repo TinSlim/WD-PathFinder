@@ -52,8 +52,9 @@ export default function Search(props) {
         props.closeDrawer();
         let ids = props.values.map((entity) => (entity.id).replace("Q", ""));//})
         //startGraph(ids);
-        props.initGraph(ids);
         props.startCrono();
+        props.initGraph(ids);
+        
         console.log(ids);
     }
 

@@ -104,6 +104,7 @@ export default function App() {
         setStopWatchInterval(stopwatchIntervalC);
     }
     
+    
     const stop = () => {
         setRunning(false);
         clearInterval(stopwatchInterval);
@@ -111,15 +112,12 @@ export default function App() {
             physics: {enabled:false}
         });
         setNetwork(network);
-
         if (socket != null) {
-            console.log("socket close");
             socket.close();
-            console.log("socket clos3de");
             setSocket(socket);
         }
     }
-    
+
     const changeLanguage = (e) => {
         setLang(e.target.value);
         i18n.changeLanguage(e.target.value);
@@ -176,12 +174,14 @@ export default function App() {
         if (socket != null) {
             socket.close();
         }
+        console.log(require('./../images/no-image-photography-icon.png'));
         const options = {
             autoResize: true,
             height: (window.innerHeight - document.getElementById("app-bar").offsetHeight - document.getElementById("footer").offsetHeight) + "px",
             width:  (window.innerWidth) + "px",
             nodes: {
-                shape: "box",
+                shape: "image",
+                image: require('./../images/no-image-photography-icon.png'),
               },
             physics : {
                 forceAtlas2Based: {
@@ -221,84 +221,84 @@ export default function App() {
       
         newSocket.onmessage = function(event) {
             
-        let newData = JSON.parse(event.data);
+            let newData = JSON.parse(event.data);
+            
+            if (newData.type == "vertex") {
+                nodes.add(newData.data);
+                setNodes(nodes);
+            }
         
-        if (newData.type == "vertex") {
-            nodes.add(newData.data);
-            setNodes(nodes);
-        }
-    
-        else if (newData.type == "edge") {
-            edges.add(newData.data);
-            setEdges(edges);
+            else if (newData.type == "edge") {
+                edges.add(newData.data);
+                setEdges(edges);
 
-            let item1 = nodes.get(newData.data.from, { fields: ['id'] } );
-            let actEdge = newData.data.labelWiki + "_" + newData.data.to;
-            if (! (item1.id in nodoPar) ) {
-                if (actEdge in pares) {
-                    pares[actEdge].push(item1.id);
+                let item1 = nodes.get(newData.data.from, { fields: ['id'] } );
+                let actEdge = newData.data.labelWiki + "_" + newData.data.to;
+                if (! (item1.id in nodoPar) ) {
+                    if (actEdge in pares) {
+                        pares[actEdge].push(item1.id);
+                    }
+                    else {
+                        pares[actEdge] = [item1.id];
+                    }
+                    nodoPar[item1.id] = [actEdge];
                 }
                 else {
-                    pares[actEdge] = [item1.id];
-                }
-                nodoPar[item1.id] = [actEdge];
-            }
-            else {
-                pares[nodoPar[item1.id]] = pares[nodoPar[item1.id]].filter((ele) => {return ele != item1.id})
-                
-                nodoPar[item1.id].push(actEdge);
-                nodoPar[item1.id].sort();
+                    pares[nodoPar[item1.id]] = pares[nodoPar[item1.id]].filter((ele) => {return ele != item1.id})
+                    
+                    nodoPar[item1.id].push(actEdge);
+                    nodoPar[item1.id].sort();
 
-                if (nodoPar[item1.id] in pares) {
-                    pares[nodoPar[item1.id]].push(item1.id);
+                    if (nodoPar[item1.id] in pares) {
+                        pares[nodoPar[item1.id]].push(item1.id);
+                    }
+                    else {
+                        pares[nodoPar[item1.id]] = [item1.id];
+                    }
+                }
+
+
+                let item2 = nodes.get(newData.data.to, { fields: ['id'] } );
+                actEdge = "-" + newData.data.labelWiki + "_" + newData.data.from;
+                if (! (item2.id in nodoPar) ) {
+                    if (actEdge in pares) {
+                        pares[actEdge].push(item2.id);
+                    }
+                    else {
+                        pares[actEdge] = [item2.id];
+                    }
+                    nodoPar[item2.id] = [actEdge];
                 }
                 else {
-                    pares[nodoPar[item1.id]] = [item1.id];
+                    pares[nodoPar[item2.id]] = pares[nodoPar[item2.id]].filter((ele) => {return ele != item2.id})
+                    
+                    nodoPar[item2.id].push(actEdge);
+                    nodoPar[item2.id].sort();
+
+                    if (nodoPar[item2.id] in pares) {
+                        pares[nodoPar[item2.id]].push(item2.id);
+                    }
+                    else {
+                        pares[nodoPar[item2.id]] = [item2.id];
+                    }
                 }
+            
+                setPares({... pares});
+                setNodoPar({... nodoPar});
             }
+            
 
-
-            let item2 = nodes.get(newData.data.to, { fields: ['id'] } );
-            actEdge = "-" + newData.data.labelWiki + "_" + newData.data.from;
-            if (! (item2.id in nodoPar) ) {
-                if (actEdge in pares) {
-                    pares[actEdge].push(item2.id);
-                }
-                else {
-                    pares[actEdge] = [item2.id];
-                }
-                nodoPar[item2.id] = [actEdge];
+            else if (newData.type == "edit") {
+                nodes.updateOnly(newData.data);
             }
-            else {
-                pares[nodoPar[item2.id]] = pares[nodoPar[item2.id]].filter((ele) => {return ele != item2.id})
-                
-                nodoPar[item2.id].push(actEdge);
-                nodoPar[item2.id].sort();
-
-                if (nodoPar[item2.id] in pares) {
-                    pares[nodoPar[item2.id]].push(item2.id);
-                }
-                else {
-                    pares[nodoPar[item2.id]] = [item2.id];
-                }
-            }
-           
-            setPares({... pares});
-            setNodoPar({... nodoPar});
-        }
-        
-
-        else if (newData.type == "edit") {
-            nodes.updateOnly(newData.data);
-        }
         };
       
         newSocket.onclose = function(event) {
-        if (event.wasClean) {
-            console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-        } else {
-            console.log('[close] Connection died');
-        }
+            if (event.wasClean) {
+                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                console.log('[close] Connection died');
+            }
         };
       
         newSocket.onerror = function(error) {
@@ -325,7 +325,7 @@ export default function App() {
                         <IconButton
                             size="large"
                             edge="start"
-                            color="inherit"
+                            color="primary"
                             aria-label="menu"
                             sx={{ mr: 2 }}
                             onClick={openDrawer}
@@ -343,14 +343,15 @@ export default function App() {
                     
                     <Stack direction="row" spacing={1} alignItems="center">
                         <Stack>
-                            <Button variant="contained" onClick={groupClusters} > 
+                            <Button variant="contained" onClick={groupClusters} >
+                            &nbsp; 
                             <CompressIcon/> COMPRIMIR </Button> 
                         </Stack>
 
                         <Stack direction="row">
-                            <Button variant="contained" onClick={stop}>
-                            <TimerIcon />
-                            
+                            <Button variant="contained" disabled={!running} onClick={stop}>
+                                <TimerIcon />
+                                &nbsp;
                                 {time}
                                 &nbsp;
                             
@@ -376,16 +377,7 @@ export default function App() {
                         </MenuItem>
                     </Select>
             </Stack>
-           
-            
-            {/*<Fab color="primary"
-                aria-label="add"
-                variant="extended"
-                sx={{position: 'fixed'}}>
-                 <InfoIcon /> Detener
-            </Fab>*/}
-
-            {/*<Example></Example>*/}
+  
             
             
             <SwipeableDrawer
@@ -451,46 +443,28 @@ export default function App() {
                         <Stack className='ml-3 mr-3'>
                             <Stack style={{display: 'flex',height: '500px', overflowY: 'auto'}}>
                             <Typography variant='h6'>
-                                Uso
+                                Uso:
                             </Typography>
                             
-                            <Typography variant="body">
-                                Para encontrar caminos entre entidades debe escribir una en la entrada. Se desplegarán entidades existentes en Wikidata que corresponden con lo escrito.
-                                Debe seleccionar una. Repita esto con las entidades que desea.
-
-                                Para iniciar la búsqueda clickee BUSCAR.
-                                A continuación se desplegarán las entidades y los caminos.
-                                Puede detener la búsqueda clickeando en DETENER.
-                                Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
-
-
-                                Para encontrar caminos entre entidades debe escribir una en la entrada. Se desplegarán entidades existentes en Wikidata que corresponden con lo escrito.
-                                Debe seleccionar una. Repita esto con las entidades que desea.
-
-                                Para iniciar la búsqueda clickee BUSCAR.
-                                A continuación se desplegarán las entidades y los caminos.
-                                Puede detener la búsqueda clickeando en DETENER.
-                                Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
-
-
-                                Para encontrar caminos entre entidades debe escribir una en la entrada. Se desplegarán entidades existentes en Wikidata que corresponden con lo escrito.
-                                Debe seleccionar una. Repita esto con las entidades que desea.
-
-                                Para iniciar la búsqueda clickee BUSCAR.
-                                A continuación se desplegarán las entidades y los caminos.
-                                Puede detener la búsqueda clickeando en DETENER.
-                                Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
-
-
-                                Para encontrar caminos entre entidades debe escribir una en la entrada. Se desplegarán entidades existentes en Wikidata que corresponden con lo escrito.
-                                Debe seleccionar una. Repita esto con las entidades que desea.
-
-                                Para iniciar la búsqueda clickee BUSCAR.
-                                A continuación se desplegarán las entidades y los caminos.
-                                Puede detener la búsqueda clickeando en DETENER.
-                                Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
-
+                            <Typography variant="body2" component="div">
+                                1. Escriba en el buscador la entidad la entidad que desea buscar.
                             </Typography>
+                            <Typography variant="body2" component="div">
+                                2. Cuando se desplieguen entidades existentes, seleccione una.
+                            </Typography>
+                            <Typography variant="body2" component="div">
+                                3. Repita el paso 1. y 2. con las entidades que desea.
+                            </Typography>
+                            <Typography variant="body2" component="div">
+                                4. Para iniciar la búsqueda clickee BUSCAR.
+                            </Typography>
+                            <Typography variant="body2" component="div">
+                                • Puede detener la búsqueda clickeando en DETENER.
+                            </Typography> 
+                            <Typography variant="body2" component="div">
+                                • Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
+                            </Typography>
+
                             </Stack>
                         </Stack>
                         
