@@ -57,6 +57,7 @@ public class GraphWrapperServer {
 	    newVertex.put("edgeSize", 0);
 	    newVertex.put("size", 18);
 	    newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
+	    newVertex.put("nodeGrade", vw.nodeGrade);
 	    
 	    try {
 			String imageUrl = Utils.getImage("Q" + vw.idVertex);
@@ -166,7 +167,7 @@ public class GraphWrapperServer {
 
 				// NO ha sido visitado:
 				if (nodes.get(adjVertex) == null) {
-					VertexWrapperServer newVW = new VertexWrapperServer (actualVW, adjVertex);
+					VertexWrapperServer newVW = new VertexWrapperServer (actualVW, adjVertex,graph.getGrade(adjVertex)); //  Math.log10( -- )
 					nodes.put(adjVertex, newVW);
 					toSearch.add(newVW);
 				}

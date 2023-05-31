@@ -140,6 +140,10 @@ public class GraphFullNative extends AbstractGraph {
 	}
 
 	
+	public int getGrade (int idVertex) {
+		int[] edgesOfV = nodes2[idVertex];
+		return edgesOfV.length;
+	}
 	
 
 }

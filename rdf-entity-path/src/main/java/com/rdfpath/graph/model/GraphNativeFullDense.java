@@ -158,6 +158,12 @@ public class GraphNativeFullDense extends AbstractGraph {
 		}
 		return result;
 	}
+	
+	public int getGrade (int idVertex) {
+		int index = searchVertexIndex(idVertex);
+		int[] edgesOfV = nodes2[index];
+		return edgesOfV.length - 1;
+	}
 
 	@Override
 	public int getOriginEdge(Object e) {

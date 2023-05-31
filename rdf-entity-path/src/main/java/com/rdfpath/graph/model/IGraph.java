@@ -104,5 +104,6 @@ public interface IGraph {
 	
 	HashSet<Integer> getAdjacentVertexSessionLimited(int id, WebSocketSession session, int maxEdgeSize, boolean isInitial) throws IOException;
 	
+	public int getGrade (int idVertex);
 
 }

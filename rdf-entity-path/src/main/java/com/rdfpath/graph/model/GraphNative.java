@@ -149,6 +149,12 @@ public class GraphNative extends AbstractGraph {
 	}
 
 
+	@Override
+	public int getGrade(int idVertex) {
+		return nodes.get(idVertex).size();
+	}
+
+
 	
 
 }

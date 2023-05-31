@@ -185,5 +185,16 @@ public class GraphCompDense extends AbstractGraph {
 		return edge[1];
 	}
 
-	
+	public int getGrade (int idVertex) {
+		int index = searchVertexIndex(idVertex);
+		int gradeTotal = 0;
+		
+		int i = 1;
+
+		while (i < nodes[index].length) {
+			gradeTotal += nodes[index][i].length - 1;
+			i+=1;
+		}
+		return gradeTotal;
+	}
 }

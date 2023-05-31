@@ -169,7 +169,7 @@ public class GraphWrapperServerOldVersion {
 
 				// NO ha sido visitado:
 				if (nodes.get(adjVertex) == null) {
-					VertexWrapperServer newVW = new VertexWrapperServer (actualVW, adjVertex);
+					VertexWrapperServer newVW = new VertexWrapperServer (actualVW, adjVertex,-1); // OJO EL -1 ES PARA RELLENAR
 					nodes.put(adjVertex, newVW);
 					toSearch.add(newVW);
 				}

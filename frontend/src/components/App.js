@@ -368,6 +368,41 @@ export default function App() {
         }
     }
 
+    const handleSlider2Change = (e) => {
+        let minSize = e.target.value;
+        
+
+        var itemsNodes = nodes.get({
+            fields: ['id', 'nodeGrade'],
+          });
+
+        console.log("____");
+        console.log(Math.log10(minSize));
+        console.log(itemsNodes);
+        console.log("____");
+        for (let itemNode of itemsNodes) {
+            if (Math.log10(itemNode.nodeGrade) <= minSize) {
+                nodes.updateOnly({ id: itemNode.id, hidden: false });
+            }
+            else {
+                nodes.updateOnly({ id: itemNode.id, hidden: true });
+            }
+        }
+
+        /*
+        var itemsEdges = edges.get({
+            fields: ['id', 'roadSize'],
+          });
+        for (let itemEdge of itemsEdges) {
+            if (itemEdge.roadSize <= minSize) {
+                edges.updateOnly({ id: itemEdge.id, hidden: false });
+            }
+            else {
+                edges.updateOnly({ id: itemEdge.id, hidden: true });
+            }
+        }*/
+    }
+
     return (
         <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
             
@@ -550,6 +585,13 @@ export default function App() {
                 max={3}
                 onChange={handleSliderChange}
                 marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
+                />
+                <Slider
+                defaultValue={1}
+                min={1}
+                max={5}
+                onChange={handleSlider2Change}
+                marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},{value:4, label:"4"},{value:5, label:"5"}]}
                 />
             </Stack>
 

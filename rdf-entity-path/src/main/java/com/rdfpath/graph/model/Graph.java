@@ -123,4 +123,9 @@ public class Graph extends AbstractGraph {
 		Edge edgeF = (Edge) e;
 		return edgeF.id;
 	}
+	
+	public int getGrade (int idVertex) {
+		Vertex node = nodes.get(idVertex);
+		return node.getAdjacentEdges().size();
+	}
 }

@@ -162,6 +162,14 @@ public class GraphComp extends AbstractGraph {
 	}
 
 	
-
+	public int getGrade (int idVertex) {
+		int gradeTotal = 0;
+		int i = 0;
+		while (i < nodes[idVertex].length) {
+			gradeTotal += nodes[idVertex][i].length - 1;
+			i+=1;
+		}
+		return gradeTotal;
+	}
 	
 }
