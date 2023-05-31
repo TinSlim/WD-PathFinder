@@ -12,7 +12,7 @@ import Slide from '@mui/material/Slide';
 
 import Typography from '@mui/material/Typography';
 
-
+import Slider from '@mui/material/Slider';
 import Divider from '@mui/material/Divider';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -158,6 +158,38 @@ export default function App() {
         }
     }
 
+    const hideByNum = () => {
+        var itemsNodes = nodes.get({
+            fields: ['id', 'roadSize'],
+          });
+        console.log(itemsNodes);
+        for (let itemNode of itemsNodes) {
+            console.log(itemNode);
+            if (itemNode.roadSize <= 1) {
+                nodes.updateOnly({ id: itemNode.id, hidden: false });
+            }
+            else {
+                nodes.updateOnly({ id: itemNode.id, hidden: true });
+            }
+        }
+
+        var itemsEdges = edges.get({
+            fields: ['id', 'roadSize'],
+          });
+        console.log(itemsEdges);
+        for (let itemEdge of itemsEdges) {
+            if (itemEdge.roadSize <= 1) {
+                edges.updateOnly({ id: itemEdge.id, hidden: false });
+            }
+            else {
+                edges.updateOnly({ id: itemEdge.id, hidden: true });
+            }
+        }
+          
+        console.log("done");
+        
+
+    }
     const initGraph = (ids) => {
         let pares = {};
         setPares(pares);
@@ -307,7 +339,34 @@ export default function App() {
         setSocket(newSocket);
     }
 
-    
+    const handleSliderChange = (e) => {
+        let minSize = e.target.value;
+        
+
+        var itemsNodes = nodes.get({
+            fields: ['id', 'roadSize'],
+          });
+        for (let itemNode of itemsNodes) {
+            if (itemNode.roadSize <= minSize) {
+                nodes.updateOnly({ id: itemNode.id, hidden: false });
+            }
+            else {
+                nodes.updateOnly({ id: itemNode.id, hidden: true });
+            }
+        }
+
+        var itemsEdges = edges.get({
+            fields: ['id', 'roadSize'],
+          });
+        for (let itemEdge of itemsEdges) {
+            if (itemEdge.roadSize <= minSize) {
+                edges.updateOnly({ id: itemEdge.id, hidden: false });
+            }
+            else {
+                edges.updateOnly({ id: itemEdge.id, hidden: true });
+            }
+        }
+    }
 
     return (
         <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
@@ -358,6 +417,12 @@ export default function App() {
                                 {t('Stop')}
                             </Button>
                         </Stack>
+
+                        <Stack>
+                            <Button variant="contained" onClick={hideByNum} >
+                            &nbsp; 
+                            <CompressIcon/> Emparejar </Button> 
+                        </Stack>
                     </Stack>
                         
                     
@@ -377,9 +442,9 @@ export default function App() {
                         </MenuItem>
                     </Select>
             </Stack>
-  
-            
-            
+
+
+
             <SwipeableDrawer
                 PaperProps={{
                     sx: {
@@ -476,6 +541,17 @@ export default function App() {
                
 
             </SwipeableDrawer>
+            
+            <Stack
+                sx={{position:"fixed", left:"50%", bottom: "90px", width: "10%"}}>
+                <Slider
+                defaultValue={1}
+                min={1}
+                max={3}
+                onChange={handleSliderChange}
+                marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
+                />
+            </Stack>
 
             <Footer></Footer>
         </div>

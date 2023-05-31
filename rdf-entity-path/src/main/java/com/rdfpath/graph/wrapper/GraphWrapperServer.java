@@ -56,6 +56,7 @@ public class GraphWrapperServer {
 	    newVertex.put("id", vw.idVertex);
 	    newVertex.put("edgeSize", 0);
 	    newVertex.put("size", 18);
+	    newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
 	    
 	    try {
 			String imageUrl = Utils.getImage("Q" + vw.idVertex);
@@ -184,8 +185,9 @@ public class GraphWrapperServer {
 					if (actualVW.colorNode == adjVW.colorNode) {
 
 						// Revisar si se agregó, ESTÁ EN PATH
-						if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance <= size) {
+						if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
 							LinkedList<Integer> unionNodes = new LinkedList<Integer>();
+							actualVW.otherColorDistance = adjVW.otherColorDistance + 1;
 							unionNodes.push(adjVW.idVertex);
 							unionNodes.push(actualVW.idVertex);
 							makeEdges(unionNodes);
@@ -308,7 +310,17 @@ public class GraphWrapperServer {
 		for (Object edge : edges) {
 			checkConn();
 			totalEdges+=1;
-		
+			System.out.println(".............");
+			System.out.println(v1);
+			System.out.println(vw1.sameColorDistance);
+			System.out.println(vw1.otherColorDistance);
+			System.out.println(v2);
+			System.out.println(vw2.sameColorDistance);
+			System.out.println(vw2.otherColorDistance);
+			System.out.println(".............");
+			
+			
+			int edgeRoadSize = Math.max(vw1.sameColorDistance + vw1.otherColorDistance, vw2.sameColorDistance + vw2.otherColorDistance);
 			// TODO extensión del grafo
 			if (actualDistance + 24 < totalEdges * 11) {
 				actualDistance = totalEdges * 10;
@@ -320,13 +332,13 @@ public class GraphWrapperServer {
 					index++;
 				}
 			}
-			session.sendMessage(new TextMessage(edgeToJson(edge)));
+			session.sendMessage(new TextMessage(edgeToJson(edge,edgeRoadSize)));
 		}
 		
 	}
 	
 	@SuppressWarnings("unchecked")
-	public CharSequence edgeToJson(Object e) {
+	public CharSequence edgeToJson(Object e, int roadSize) {
     	JSONObject json = new JSONObject();
     	
     	// Edge data
@@ -349,7 +361,8 @@ public class GraphWrapperServer {
     	edge.put("labelWiki", graph.getPredicateEdge(e));
     	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
     	edge.put("title", edgeLabel);
-    	
+    	edge.put("roadSize", roadSize);
+
     	JSONObject smooth = new JSONObject();
     	smooth.put("type", "dynamic");
     	edge.put("smooth", smooth);
