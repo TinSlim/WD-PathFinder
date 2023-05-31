@@ -258,17 +258,17 @@ public abstract class AbstractGraph implements IGraph {
         }
 	}
 	
-	public HashSet<Integer> getAdjacentVertexSessionLimited (int id, WebSocketSession session, int maxEdgeSize) throws IOException {
+	public HashSet<Integer> getAdjacentVertexSessionLimited (int id, WebSocketSession session, int maxEdgeSize, boolean isInitial) throws IOException {
 		HashSet<Integer> adjVertex = getAdjacentVertexSession(id, session);
-		if (maxEdgeSize == -1 || adjVertex.size() < maxEdgeSize) {
+		if ( maxEdgeSize == -1 || adjVertex.size() < maxEdgeSize || isInitial ) {
 			return adjVertex;
 		}
 		return new HashSet<Integer>();
 	}
 	
-	public HashSet<Integer> getAdjacentVertexTimeoutLimited(int id, int seconds, long startTime, int maxEdgeSize) throws InterruptedException {
+	public HashSet<Integer> getAdjacentVertexTimeoutLimited(int id, int seconds, long startTime, int maxEdgeSize, boolean isInitial) throws InterruptedException {
 		HashSet<Integer> adjVertex = getAdjacentVertexTimeout(id, seconds, startTime);
-		if (maxEdgeSize == -1 || adjVertex.size() < maxEdgeSize) {
+		if ( maxEdgeSize == -1 || adjVertex.size() < maxEdgeSize || isInitial ) {
 			return adjVertex;
 		}
 		return new HashSet<Integer>();

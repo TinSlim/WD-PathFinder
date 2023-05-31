@@ -82,7 +82,7 @@ public class GraphWrapperTimeTestOptMem {
 				}
 				
 				// Revisa VÉRTICES adyacentes
-				for (Integer adjVertex : graph.getAdjacentVertexTimeoutLimited(actualVW.idVertex, seconds, startTime, maxEdgeSize)) {
+				for (Integer adjVertex : graph.getAdjacentVertexTimeoutLimited(actualVW.idVertex, seconds, startTime, maxEdgeSize, actualVW.added == null)) {
 					checkTime("Checking adj vertexes");									// Revisa tiempo
 					
 					// Así no cicla en el mismo nodo

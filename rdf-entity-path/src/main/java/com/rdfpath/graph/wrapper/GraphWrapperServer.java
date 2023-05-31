@@ -156,7 +156,7 @@ public class GraphWrapperServer {
 			}
 
 			// Revisa VÉRTICES adyacentes
-			for (Integer adjVertex : graph.getAdjacentVertexSessionLimited(actualVW.idVertex, session, maxEdgeSize)) {
+			for (Integer adjVertex : graph.getAdjacentVertexSessionLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.added == null)) {
 				checkConn();
 
 				// Así no cicla en el mismo nodo
@@ -310,15 +310,6 @@ public class GraphWrapperServer {
 		for (Object edge : edges) {
 			checkConn();
 			totalEdges+=1;
-			System.out.println(".............");
-			System.out.println(v1);
-			System.out.println(vw1.sameColorDistance);
-			System.out.println(vw1.otherColorDistance);
-			System.out.println(v2);
-			System.out.println(vw2.sameColorDistance);
-			System.out.println(vw2.otherColorDistance);
-			System.out.println(".............");
-			
 			
 			int edgeRoadSize = Math.max(vw1.sameColorDistance + vw1.otherColorDistance, vw2.sameColorDistance + vw2.otherColorDistance);
 			// TODO extensión del grafo
