@@ -21,6 +21,7 @@ public class VertexWrapperServer {
 	public HashSet<Integer> edgesWith;
 	public int nodeGrade;
 	public int maxNodeGrade;
+	public int backTNodeGrade;
 	
 	/**
 	 * @param idSearch
@@ -32,8 +33,10 @@ public class VertexWrapperServer {
 		this.from = new HashSet<VertexWrapperServer>();
 		this.otherColorDistance = -1;
 		edgesWith = null;
+		
 		nodeGrade = 0;
 		maxNodeGrade = 0;
+		backTNodeGrade = 1;
 	}
 
 	/**
@@ -55,11 +58,11 @@ public class VertexWrapperServer {
 		
 		edgesWith = null;
 		this.nodeGrade = nodeGrade;
-		this.maxNodeGrade = Math.max(nodeGrade,actualVW.maxNodeGrade);
 		int[] newColor = {actualVW.color[0] - 26,actualVW.color[1] - 24,actualVW.color[2] - 25};
 		this.color = newColor;
 		
 		this.maxNodeGrade = Math.max(nodeGrade,actualVW.maxNodeGrade);
+		backTNodeGrade = -1;
 	}
 	
 	public void addVertexAdded (int idVertex) {

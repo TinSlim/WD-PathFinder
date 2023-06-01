@@ -46,5 +46,16 @@ public class VertexBackTrackingServer {
 			vwFrom.otherColorDistance = colorDistance + 1;
 		}
 		grade = vwFrom.sameColorDistance;
+		
+		
+		if (vwFrom.maxNodeGrade != 1) {
+			if (vwFrom.backTNodeGrade < 0) {
+				vwFrom.backTNodeGrade = actualBT.actVW.backTNodeGrade;
+			}
+			else {
+				vwFrom.backTNodeGrade = Math.min(actualBT.actVW.backTNodeGrade, vwFrom.backTNodeGrade);
+			}
+			
+		}
 	}
 }

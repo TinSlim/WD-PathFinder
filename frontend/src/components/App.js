@@ -186,7 +186,6 @@ export default function App() {
             }
         }
           
-        console.log("done");
         
 
     }
@@ -355,6 +354,7 @@ export default function App() {
             }
         }
 
+        /*
         var itemsEdges = edges.get({
             fields: ['id', 'roadSize'],
           });
@@ -365,7 +365,7 @@ export default function App() {
             else {
                 edges.updateOnly({ id: itemEdge.id, hidden: true });
             }
-        }
+        }*/
     }
 
     const handleSlider2Change = (e) => {
@@ -377,7 +377,6 @@ export default function App() {
           });
 
         console.log("____");
-        console.log(Math.log10(minSize));
         console.log(itemsNodes);
         console.log("____");
         for (let itemNode of itemsNodes) {
@@ -578,7 +577,7 @@ export default function App() {
             </SwipeableDrawer>
             
             <Stack
-                sx={{position:"fixed", left:"50%", bottom: "90px", width: "10%"}}>
+                sx={{position:"fixed", left:"35%", bottom: "90px", width: "30%"}}>
                 <Slider
                 defaultValue={1}
                 min={1}
@@ -589,9 +588,12 @@ export default function App() {
                 <Slider
                 defaultValue={1}
                 min={1}
-                max={5}
+                max={9}
                 onChange={handleSlider2Change}
-                marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},{value:4, label:"4"},{value:5, label:"5"}]}
+                marks={[
+                        {value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},
+                        {value:4, label:"4"},{value:5, label:"5"},{value:6, label:"6"},
+                        {value:7, label:"7"},{value:8, label:"8"},{value:9, label:"9"}]}
                 />
             </Stack>
 

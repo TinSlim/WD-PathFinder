@@ -38,6 +38,25 @@ public class GraphWrapperServer {
 	private String lang;
 	
 	@SuppressWarnings("unchecked")
+	public CharSequence vertexWrapperUpdateToJson (VertexWrapperServer vw) {
+		JSONObject newVertex = new JSONObject();
+		newVertex.put("id", vw.idVertex);
+		newVertex.put("nodeGrade", vw.backTNodeGrade);
+		
+		if (vw.idVertex == 11401) {
+	    	System.out.println("______");
+	    	System.out.println(vw.idVertex);
+		    System.out.println(vw.backTNodeGrade);
+		    System.out.println("...__");
+	    }
+		
+		JSONObject json = new JSONObject();
+		json.put("type","edit");
+	    json.put("data",newVertex);
+	    return json.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperToJson (VertexWrapperServer vw, float angle) {
 		// Node
 		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex, lang);
@@ -57,7 +76,7 @@ public class GraphWrapperServer {
 	    newVertex.put("edgeSize", 0);
 	    newVertex.put("size", 18);
 	    newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
-	    newVertex.put("nodeGrade", vw.nodeGrade);
+	    newVertex.put("nodeGrade", vw.backTNodeGrade);
 	    
 	    try {
 			String imageUrl = Utils.getImage("Q" + vw.idVertex);
@@ -191,6 +210,14 @@ public class GraphWrapperServer {
 							actualVW.otherColorDistance = adjVW.otherColorDistance + 1;
 							unionNodes.push(adjVW.idVertex);
 							unionNodes.push(actualVW.idVertex);
+							
+							
+							int bTGrade = Math.max(adjVW.backTNodeGrade, actualVW.maxNodeGrade);
+							
+							
+							if (actualVW.backTNodeGrade < 0) actualVW.backTNodeGrade =  bTGrade;
+							
+							
 							makeEdges(unionNodes);
 							backTracking(actualVW, size, nodesNumbersSet);
 						}
@@ -219,6 +246,29 @@ public class GraphWrapperServer {
 							
 							adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
 							actualVW.otherColorDistance = adjVW.sameColorDistance + 1;
+							
+							int bTGrade = Math.max(adjVW.maxNodeGrade, actualVW.maxNodeGrade);
+							
+							if (actualVW.idVertex == 11401 || adjVW.idVertex == 11401) {
+								System.out.println("__________2");
+								System.out.println(actualVW.idVertex);
+							    System.out.println(actualVW.backTNodeGrade);
+							    System.out.println(adjVW.idVertex);
+							    System.out.println(adjVW.backTNodeGrade);
+							    System.out.println(".....");
+						    }
+							
+							adjVW.backTNodeGrade = bTGrade;
+							actualVW.backTNodeGrade = bTGrade;
+							
+							if (actualVW.idVertex == 11401 || adjVW.idVertex == 11401) {
+								System.out.println(actualVW.idVertex);
+							    System.out.println(actualVW.backTNodeGrade);
+							    System.out.println(adjVW.idVertex);
+							    System.out.println(adjVW.backTNodeGrade);
+							    System.out.println("___________");
+						    }
+							
 							backTracking(adjVW, size, nodesNumbersSet);
 							LinkedList<Integer> unionNodes = new LinkedList<Integer>();
 							unionNodes.push(adjVW.idVertex);
@@ -300,12 +350,17 @@ public class GraphWrapperServer {
 		if (!addedNodes.contains(v1)) {
 			addedNodes.add(v1);
 			session.sendMessage(new TextMessage(vertexWrapperToJson(vw1,-1)));
-			
+		}
+		else {
+			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw1)));
 		}
 		
 		if (!addedNodes.contains(v2)) {
 			addedNodes.add(v2);
 			session.sendMessage(new TextMessage(vertexWrapperToJson(vw2,-1)));
+		}
+		else {
+			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw2)));
 		}
 		
 		for (Object edge : edges) {
