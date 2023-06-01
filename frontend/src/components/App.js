@@ -340,66 +340,20 @@ export default function App() {
 
     const handleSliderChange = (e) => {
         let minSize = e.target.value;
-        
-
-        var itemsNodes = nodes.get({
-            fields: ['id', 'roadSize'],
-          });
-        for (let itemNode of itemsNodes) {
-            if (itemNode.roadSize <= minSize) {
-                nodes.updateOnly({ id: itemNode.id, hidden: false });
-            }
-            else {
-                nodes.updateOnly({ id: itemNode.id, hidden: true });
-            }
-        }
-
-        /*
-        var itemsEdges = edges.get({
-            fields: ['id', 'roadSize'],
-          });
-        for (let itemEdge of itemsEdges) {
-            if (itemEdge.roadSize <= minSize) {
-                edges.updateOnly({ id: itemEdge.id, hidden: false });
-            }
-            else {
-                edges.updateOnly({ id: itemEdge.id, hidden: true });
-            }
-        }*/
+        let updates = nodes.map(
+            (x) => {
+                let hidden = x.roadSize <= minSize ? false : true;
+                return {id:x.id,hidden:hidden} });
+        nodes.updateOnly(updates); 
     }
 
     const handleSlider2Change = (e) => {
         let minSize = e.target.value;
-        
-
-        var itemsNodes = nodes.get({
-            fields: ['id', 'nodeGrade'],
-          });
-
-        console.log("____");
-        console.log(itemsNodes);
-        console.log("____");
-        for (let itemNode of itemsNodes) {
-            if (Math.log10(itemNode.nodeGrade) <= minSize) {
-                nodes.updateOnly({ id: itemNode.id, hidden: false });
-            }
-            else {
-                nodes.updateOnly({ id: itemNode.id, hidden: true });
-            }
-        }
-
-        /*
-        var itemsEdges = edges.get({
-            fields: ['id', 'roadSize'],
-          });
-        for (let itemEdge of itemsEdges) {
-            if (itemEdge.roadSize <= minSize) {
-                edges.updateOnly({ id: itemEdge.id, hidden: false });
-            }
-            else {
-                edges.updateOnly({ id: itemEdge.id, hidden: true });
-            }
-        }*/
+        let updates = nodes.map(
+            (x) => {
+                let hidden = Math.log10(x.nodeGrade) <= minSize ? false : true;
+                return {id:x.id,hidden:hidden} });
+        nodes.updateOnly(updates); 
     }
 
     return (
