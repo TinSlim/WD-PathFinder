@@ -23,7 +23,6 @@ import com.rdfpath.graph.utils.Utils;
  */
 public class GraphWrapperServer {
 	private String[] palette = {"#ADF7B6","#A0CED9","#FCF5C7","#FFEE93", "#FFC09F"};
-	
 	private int[][] paletteRGB = {
 		{173,247,182}, {160,206,217}, {252,245,199}, {255,238,147}, {255,192,159}
 		};
@@ -43,16 +42,10 @@ public class GraphWrapperServer {
 		newVertex.put("id", vw.idVertex);
 		newVertex.put("nodeGrade", vw.backTNodeGrade);
 		
-		if (vw.idVertex == 11401) {
-	    	System.out.println("______");
-	    	System.out.println(vw.idVertex);
-		    System.out.println(vw.backTNodeGrade);
-		    System.out.println("...__");
-	    }
-		
 		JSONObject json = new JSONObject();
 		json.put("type","edit");
 	    json.put("data",newVertex);
+	    
 	    return json.toString();
 	}
 	
@@ -77,7 +70,7 @@ public class GraphWrapperServer {
 	    newVertex.put("size", 18);
 	    newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
 	    newVertex.put("nodeGrade", vw.backTNodeGrade);
-	    
+
 	    try {
 			String imageUrl = Utils.getImage("Q" + vw.idVertex);
 			if (imageUrl != "") {
@@ -155,12 +148,11 @@ public class GraphWrapperServer {
 		int index = 0;
 		for (int idSearch : nodesNumbers) {
 			VertexWrapperServer actVW = new VertexWrapperServer(idSearch);
-			actVW.color = paletteRGB[index];
+			actVW.color = paletteRGB[index % paletteRGB.length];
 			nodes.put(idSearch, actVW);
 			nodesNumbersSet.add(idSearch);
 			toSearch.push(actVW);
-			
-			//addedNodes.add(idSearch);			OPTMEM
+			addedNodes.add(idSearch);
 			session.sendMessage(new TextMessage(
 					vertexWrapperToJson (actVW, (360/nodesNumbers.length)*index)));
 			index++;
@@ -212,11 +204,13 @@ public class GraphWrapperServer {
 							unionNodes.push(actualVW.idVertex);
 							
 							
+							
+							
 							int bTGrade = Math.max(adjVW.backTNodeGrade, actualVW.maxNodeGrade);
-							
-							
 							if (actualVW.backTNodeGrade < 0) actualVW.backTNodeGrade =  bTGrade;
 							
+						    // TODO
+							// WB encuentra USA y usa su grado
 							
 							makeEdges(unionNodes);
 							backTracking(actualVW, size, nodesNumbersSet);
@@ -249,25 +243,8 @@ public class GraphWrapperServer {
 							
 							int bTGrade = Math.max(adjVW.maxNodeGrade, actualVW.maxNodeGrade);
 							
-							if (actualVW.idVertex == 11401 || adjVW.idVertex == 11401) {
-								System.out.println("__________2");
-								System.out.println(actualVW.idVertex);
-							    System.out.println(actualVW.backTNodeGrade);
-							    System.out.println(adjVW.idVertex);
-							    System.out.println(adjVW.backTNodeGrade);
-							    System.out.println(".....");
-						    }
-							
-							adjVW.backTNodeGrade = bTGrade;
-							actualVW.backTNodeGrade = bTGrade;
-							
-							if (actualVW.idVertex == 11401 || adjVW.idVertex == 11401) {
-								System.out.println(actualVW.idVertex);
-							    System.out.println(actualVW.backTNodeGrade);
-							    System.out.println(adjVW.idVertex);
-							    System.out.println(adjVW.backTNodeGrade);
-							    System.out.println("___________");
-						    }
+							adjVW.backTNodeGrade = (adjVW.backTNodeGrade < 0) ? bTGrade : Math.min(bTGrade,adjVW.backTNodeGrade);
+							actualVW.backTNodeGrade = (actualVW.backTNodeGrade < 0) ? bTGrade : Math.min(bTGrade,actualVW.backTNodeGrade);
 							
 							backTracking(adjVW, size, nodesNumbersSet);
 							LinkedList<Integer> unionNodes = new LinkedList<Integer>();
@@ -411,7 +388,7 @@ public class GraphWrapperServer {
     	edge.put("roadSize", roadSize);
 
     	JSONObject smooth = new JSONObject();
-    	smooth.put("type", "dynamic");
+    	smooth.put("type", "dynamic"); //dynamic curvedCCW discrete cubicBezier
     	edge.put("smooth", smooth);
     	
     	JSONObject font = new JSONObject();

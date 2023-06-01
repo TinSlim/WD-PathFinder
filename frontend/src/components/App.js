@@ -44,29 +44,30 @@ const { socketUrl } = require('config');
 
   
 export default function App() {
-    const [drawerState, setDrawerState] = useState(false);
     const [words, setWords] = useState([]);
     const [values, setValues] = useState([]);
     const [time, setTime] = useState("00:00");
+
     const [showingInfo, setShowingInfo] = useState(false);
+    const [drawerState, setDrawerState] = useState(false);
     const [running, setRunning] = useState(false);
+    
     const [stopwatchInterval, setStopWatchInterval] = useState(null);
     const [runningTime, setRunningTime] = useState(0);
     const container = useRef(null);
     const [socket,setSocket] = useState(null);
+    
     const [lang, setLang] = useState('es');
-
-    const [network, setNetwork] = useState(null);
-
     const { t, i18n } = useTranslation();
    
-
+    const [network, setNetwork] = useState(null);
     const [pares, setPares] = useState({});
     const [nodoPar, setNodoPar] = useState({});
-
-
     const [nodes, setNodes] = useState(new DataSet([]));
     const [edges, setEdges] = useState(new DataSet([]));
+
+    const [roadSize, setRoadSize] = useState(3);
+    const [gradeSize, setGradeSize] = useState(9);
 
     const changeInfo = () => {
         if (showingInfo) {setShowingInfo(false)}
@@ -158,37 +159,6 @@ export default function App() {
         }
     }
 
-    const hideByNum = () => {
-        var itemsNodes = nodes.get({
-            fields: ['id', 'roadSize'],
-          });
-        console.log(itemsNodes);
-        for (let itemNode of itemsNodes) {
-            console.log(itemNode);
-            if (itemNode.roadSize <= 1) {
-                nodes.updateOnly({ id: itemNode.id, hidden: false });
-            }
-            else {
-                nodes.updateOnly({ id: itemNode.id, hidden: true });
-            }
-        }
-
-        var itemsEdges = edges.get({
-            fields: ['id', 'roadSize'],
-          });
-        console.log(itemsEdges);
-        for (let itemEdge of itemsEdges) {
-            if (itemEdge.roadSize <= 1) {
-                edges.updateOnly({ id: itemEdge.id, hidden: false });
-            }
-            else {
-                edges.updateOnly({ id: itemEdge.id, hidden: true });
-            }
-        }
-          
-        
-
-    }
     const initGraph = (ids) => {
         let pares = {};
         setPares(pares);
@@ -245,9 +215,7 @@ export default function App() {
         const newSocket = new WebSocket(`${socketUrl}/query`);
         newSocket.onopen = function(e) {
             console.log("[open] Connection established");
-            //resetGraph();
             newSocket.send(ids.concat(i18n.language));
-      
         };
       
         newSocket.onmessage = function(event) {
@@ -256,7 +224,12 @@ export default function App() {
             
             if (newData.type == "vertex") {
                 nodes.add(newData.data);
-                setNodes(nodes);
+                if (Math.log10(newData.data.nodeGrade) <= gradeSize && newData.data.roadSize <= roadSize) {
+                    nodes.updateOnly({id:newData.data.id, hidden: false});
+                } else {
+                    nodes.updateOnly({id:newData.data.id, hidden: true});
+                }  
+                //setNodes(nodes);
             }
         
             else if (newData.type == "edge") {
@@ -338,23 +311,30 @@ export default function App() {
         setSocket(newSocket);
     }
 
-    const handleSliderChange = (e) => {
-        let minSize = e.target.value;
-        let updates = nodes.map(
-            (x) => {
-                let hidden = x.roadSize <= minSize ? false : true;
-                return {id:x.id,hidden:hidden} });
-        nodes.updateOnly(updates); 
+    const handleSliderGrade = (e) => {
+        setGradeSize(e.target.value)
     }
 
-    const handleSlider2Change = (e) => {
-        let minSize = e.target.value;
+    const handleSliderRoad = (e) => {
+        setRoadSize(e.target.value)
+    }
+
+    const handleSliderChange = () => {
         let updates = nodes.map(
             (x) => {
-                let hidden = Math.log10(x.nodeGrade) <= minSize ? false : true;
-                return {id:x.id,hidden:hidden} });
-        nodes.updateOnly(updates); 
+                let hidden = Math.log10(x.nodeGrade) <= gradeSize && x.roadSize <= roadSize ? false : true;
+                return {id:x.id,hidden:hidden} 
+        });
+        nodes.updateOnly(updates);
     }
+    
+    useEffect( () => {
+        handleSliderChange();
+    }, [roadSize]);
+
+    useEffect( () => {
+        handleSliderChange();
+    }, [gradeSize]);
 
     return (
         <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
@@ -404,12 +384,6 @@ export default function App() {
                             
                                 {t('Stop')}
                             </Button>
-                        </Stack>
-
-                        <Stack>
-                            <Button variant="contained" onClick={hideByNum} >
-                            &nbsp; 
-                            <CompressIcon/> Emparejar </Button> 
                         </Stack>
                     </Stack>
                         
@@ -533,17 +507,17 @@ export default function App() {
             <Stack
                 sx={{position:"fixed", left:"35%", bottom: "90px", width: "30%"}}>
                 <Slider
-                defaultValue={1}
+                defaultValue={3}
                 min={1}
                 max={3}
-                onChange={handleSliderChange}
+                onChange={(e) => {handleSliderRoad(e);handleSliderChange()}}
                 marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
                 />
                 <Slider
-                defaultValue={1}
+                defaultValue={9}
                 min={1}
                 max={9}
-                onChange={handleSlider2Change}
+                onChange={(e) => {handleSliderGrade(e);handleSliderChange()}}
                 marks={[
                         {value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},
                         {value:4, label:"4"},{value:5, label:"5"},{value:6, label:"6"},
