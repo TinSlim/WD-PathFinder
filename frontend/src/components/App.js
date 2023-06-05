@@ -159,6 +159,14 @@ export default function App() {
         }
     }
 
+    const checkVals = (nodeRoadSize, nodeGradeSize) => {
+        if (Math.log10(nodeGradeSize) <= gradeSize && nodeRoadSize <= roadSize) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     const initGraph = (ids) => {
         let pares = {};
         setPares(pares);
@@ -222,19 +230,15 @@ export default function App() {
             let newData = JSON.parse(event.data);
             
             if (newData.type == "vertex") {
+                newData.data.hidden = checkVals(newData.data.roadSize, newData.data.nodeGrade);
                 nodes.add(newData.data);
-                if (Math.log10(newData.data.nodeGrade) <= gradeSize && newData.data.roadSize <= roadSize) {
-                    nodes.updateOnly({id:newData.data.id, hidden: false});
-                } else {
-                    nodes.updateOnly({id:newData.data.id, hidden: true});
-                }  
-                //setNodes(nodes);
+                setNodes(nodes);
             }
         
             else if (newData.type == "edge") {
                 edges.add(newData.data);
                 setEdges(edges);
-
+                /*
                 let item1 = nodes.get(newData.data.from, { fields: ['id'] } );
                 let actEdge = newData.data.labelWiki + "_" + newData.data.to;
                 if (! (item1.id in nodoPar) ) {
@@ -288,6 +292,7 @@ export default function App() {
             
                 setPares({... pares});
                 setNodoPar({... nodoPar});
+                */
             }
             
 
@@ -340,16 +345,18 @@ export default function App() {
             
             <div className='has-background-white-ter' ref={container}/>
 
+            {/*<Example></Example>*/}
+
             <Stack
                 sx={{position:"fixed",top: "0px",left: "0px", width: "100%"}}
                 id="app-bar"
                 direction="row"
                 justifyContent="space-between" 
-                className='ml-4 mr-4 pr-5 pl-5'>
+                className='mt-1 pr-5 pl-5'>
                     
                     <Stack direction="row">
                         <IconButton
-                            size="large"
+                            size="small"
                             edge="start"
                             color="primary"
                             aria-label="menu"
@@ -361,19 +368,18 @@ export default function App() {
 
                         
                     </Stack>
-                    
 
-                    
-                    
-                    
-                    
-                    <Stack direction="row" spacing={1} alignItems="center">
+                    <Stack 
+                    direction="row" 
+                    spacing={1} 
+                    alignItems="center">
+                        {/*
                         <Stack>
                             <Button variant="contained" onClick={groupClusters} >
                             &nbsp; 
                             <CompressIcon/> COMPRIMIR </Button> 
                         </Stack>
-
+                        */}
                         <Stack direction="row">
                             <Button variant="contained" disabled={!running} onClick={stop}>
                                 <TimerIcon />
@@ -433,7 +439,8 @@ export default function App() {
 
                 {!showingInfo &&
                 <Zoom  in={!showingInfo} >
-                    <Stack>
+                    <Stack
+                        >
 
                         <Search 
                             initGraph = {initGraph}
@@ -468,29 +475,46 @@ export default function App() {
                     
                         <Stack className='ml-3 mr-3'>
                             <Stack style={{display: 'flex',height: '500px', overflowY: 'auto'}}>
-                            <Typography variant='h6'>
-                                Uso:
-                            </Typography>
+                                <Stack>
+                                    <Typography variant='h6'>
+                                        Uso:
+                                    </Typography>
+                                    
+                                    <Typography variant="body2" component="div">
+                                        1. Escriba en el buscador la entidad la entidad que desea buscar.
+                                    </Typography>
+                                    <Typography variant="body2" component="div">
+                                        2. Cuando se desplieguen entidades existentes, seleccione una.
+                                    </Typography>
+                                    <Typography variant="body2" component="div">
+                                        3. Repita el paso 1. y 2. con las entidades que desea.
+                                    </Typography>
+                                    <Typography variant="body2" component="div">
+                                        4. Clickeando el botón BUSCAR iniciará las búsqueda de caminos.
+                                    </Typography>
+                                    <Typography variant="body2" component="div">
+                                        • Puede detener la búsqueda clickeando en DETENER.
+                                    </Typography>
+                                    <Typography variant="body2" component="div">
+                                        • Puede disminuir regular los resultados usando los SLIDERS inferiores.
+                                    </Typography>
+                                </Stack>
+
+                                <Stack>
+                                    <Typography variant='h6'>
+                                        WoolNet:
+                                    </Typography>
+                                    <Typography variant="body2" component="div">
+                                        WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikdata.
+                                    </Typography>
+                                </Stack>
+
                             
-                            <Typography variant="body2" component="div">
-                                1. Escriba en el buscador la entidad la entidad que desea buscar.
-                            </Typography>
-                            <Typography variant="body2" component="div">
-                                2. Cuando se desplieguen entidades existentes, seleccione una.
-                            </Typography>
-                            <Typography variant="body2" component="div">
-                                3. Repita el paso 1. y 2. con las entidades que desea.
-                            </Typography>
-                            <Typography variant="body2" component="div">
-                                4. Para iniciar la búsqueda clickee BUSCAR.
-                            </Typography>
-                            <Typography variant="body2" component="div">
-                                • Puede detener la búsqueda clickeando en DETENER.
-                            </Typography> 
+                            {/*
                             <Typography variant="body2" component="div">
                                 • Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
                             </Typography>
-
+                            */}
                             </Stack>
                         </Stack>
                         
@@ -504,26 +528,38 @@ export default function App() {
             </SwipeableDrawer>
             
             <Stack
-                sx={{position:"fixed", left:"40%", bottom: "90px", width: "20%"}}>
-                <Slider
-                size='small'
-                defaultValue={3}
-                min={1}
-                max={3}
-                onChange={(e) => {handleSliderRoad(e);handleSliderChange()}}
-                marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
-                />
-                <Slider
-                size='small'
-                defaultValue={9}
-                min={1}
-                max={9}
-                onChange={(e) => {handleSliderGrade(e);handleSliderChange()}}
-                marks={[
-                        {value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},
-                        {value:4, label:"4"},{value:5, label:"5"},{value:6, label:"6"},
-                        {value:7, label:"7"},{value:8, label:"8"},{value:9, label:"9"}]}
-                />
+                direction="row"
+                spacing={5}
+                sx={{position:"fixed", left:"15%", bottom: "90px", width: "70%"}}>
+                <Stack
+                sx={{width: "30%"}}>
+                    <Typography>
+                        Largo caminos
+                    </Typography>
+                    <Slider
+                    defaultValue={3}
+                    min={1}
+                    max={3}
+                    onChange={(e) => {handleSliderRoad(e);handleSliderChange()}}
+                    marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
+                    />
+                </Stack>
+                <Stack
+                sx={{width: "70%"}}>
+                    <Typography>
+                        Capa
+                    </Typography>
+                    <Slider
+                    defaultValue={9}
+                    min={1}
+                    max={9}
+                    onChange={(e) => {handleSliderGrade(e);handleSliderChange()}}
+                    marks={[
+                            {value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},
+                            {value:4, label:"4"},{value:5, label:"5"},{value:6, label:"6"},
+                            {value:7, label:"7"},{value:8, label:"8"},{value:9, label:"9"}]}
+                    />
+                </Stack>
             </Stack>
 
             <Footer></Footer>
