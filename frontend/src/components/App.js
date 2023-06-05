@@ -175,7 +175,6 @@ export default function App() {
         if (socket != null) {
             socket.close();
         }
-        console.log(require('./../images/no-image-photography-icon.png'));
         const options = {
             autoResize: true,
             height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px",
@@ -505,8 +504,9 @@ export default function App() {
             </SwipeableDrawer>
             
             <Stack
-                sx={{position:"fixed", left:"35%", bottom: "90px", width: "30%"}}>
+                sx={{position:"fixed", left:"40%", bottom: "90px", width: "20%"}}>
                 <Slider
+                size='small'
                 defaultValue={3}
                 min={1}
                 max={3}
@@ -514,6 +514,7 @@ export default function App() {
                 marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
                 />
                 <Slider
+                size='small'
                 defaultValue={9}
                 min={1}
                 max={9}
