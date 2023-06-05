@@ -70,7 +70,7 @@ public class GraphWrapperServer {
 	    newVertex.put("size", 18);
 	    newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
 	    newVertex.put("nodeGrade", vw.backTNodeGrade);
-
+	    
 	    try {
 			String imageUrl = Utils.getImage("Q" + vw.idVertex);
 			if (imageUrl != "") {

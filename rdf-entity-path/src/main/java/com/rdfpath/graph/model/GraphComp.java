@@ -62,6 +62,8 @@ public class GraphComp extends AbstractGraph {
 	public HashSet<Integer> getAdjacentVertex(int id) {
 		HashSet<Integer> answer = new HashSet<Integer>();
 		int index = searchVertexIndex(id);
+		if (index == -1) return answer;
+		
 		int i = 0;
 		int j = -1;
 		while (i < nodes[index].length) {
@@ -80,6 +82,7 @@ public class GraphComp extends AbstractGraph {
 	public HashSet<Integer> getAdjacentVertexTimeout(int id, int seconds, long startTime) throws InterruptedException {
 		HashSet<Integer> answer = new HashSet<Integer>();
 		int index = searchVertexIndex(id);
+		
 		int i = 0;
 		int j = -1;
 		while (i < nodes[index].length) {
@@ -98,6 +101,8 @@ public class GraphComp extends AbstractGraph {
 	public HashSet<Integer> getAdjacentVertexSession(int id, WebSocketSession session) throws IOException {
 		HashSet<Integer> answer = new HashSet<Integer>();
 		int index = searchVertexIndex(id);
+		if (index == -1) return answer;
+		
 		int i = 0;
 		int j = -1;
 		while (i < nodes[index].length) {
@@ -116,7 +121,6 @@ public class GraphComp extends AbstractGraph {
 	public ArrayList<int[]> getEdges(int idVertex, int idVertex2) {
 		ArrayList<int[]> edges = new ArrayList<int[]>();
 		int index = searchVertexIndex(idVertex);
-		
 		int i = 0;
 		int j;
 		while (i < nodes[index].length) {

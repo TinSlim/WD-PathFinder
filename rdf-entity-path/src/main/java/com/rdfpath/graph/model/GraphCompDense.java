@@ -121,11 +121,13 @@ public class GraphCompDense extends AbstractGraph {
 	public HashSet<Integer> getAdjacentVertexSession(int id, WebSocketSession session) throws IOException {
 		HashSet<Integer> answer = new HashSet<Integer>();
 		int index = searchVertexIndex(id);
+		if (index == -1) return answer;
+		
 		int i = 1;
 		int j = -1;
 
 		while (i < nodes[index].length) {
-			j = 1;
+			j = 1; 
 			while (j < nodes[index][i].length) {
 				checkConn(session);
 				answer.add(nodes[index][i][j]);
