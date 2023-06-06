@@ -89,8 +89,8 @@ ggplot(tiemposBusquedaCamino_limExc, aes(x=Grupos, y=Aristas,color = Limite)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10^9,10^10,10^11))
 
-#ggsave(plot = last_plot(), filename = "export/4_LimitesAristas.png", width=8, height=5, dpi=300)
-#ggsave(plot = last_plot(), filename = "export/4_LimitesAristas.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesAristasExc.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesAristasExc.pdf", width=8, height=5, dpi=300)
 ```
 
 ```{r}
@@ -119,8 +119,8 @@ ggplot(tiemposBusquedaCamino_limExc, aes(x=Grupos, y=Memoria,color = Limite)) +
   #facet_grid(vars(Limite))  + 
   scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10^9,10^10,10^11,10^12))
 
-#ggsave(plot = last_plot(), filename = "export/4_LimitesMemoria.png", width=8, height=5, dpi=300)
-#ggsave(plot = last_plot(), filename = "export/4_LimitesMemoria.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaExc.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaExc.pdf", width=8, height=5, dpi=300)
 ```
 
 ```{r}
@@ -150,6 +150,6 @@ ggplot(tiemposBusquedaCamino_limExc_SAC, aes(x=Grupos, y=memArista,color = Limit
   #facet_grid(vars(Limite))  + 
   scale_y_continuous(trans='log10', breaks = c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10^9,10^10,10^11,10^12))
 
-#ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaAristas.png", width=8, height=5, dpi=300)
-#ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaAristas.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaAristasExc.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaAristasExc.pdf", width=8, height=5, dpi=300)
 ```
