@@ -205,6 +205,10 @@ export default function App() {
     const end = () => {
         clearInterval(stopwatchInterval.current);
         //end();//
+        network.setOptions({
+            physics: {enabled:false}
+        });
+        //setNetwork(network);
         setRunning(false);
         setRestartSocket(!restartSocket);
     }
@@ -630,7 +634,7 @@ export default function App() {
             <Stack
                 direction="row"
                 spacing={5}
-                sx={{position:"fixed", left:"15%", bottom: "90px", width: "70%"}}>
+                sx={{position:"absolute", left:"15%", bottom: "90px", width: "70%"}}>
                 <Stack
                 sx={{width: "30%"}}>
                     <Typography>
