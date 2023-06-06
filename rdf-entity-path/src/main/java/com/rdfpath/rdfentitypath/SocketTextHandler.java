@@ -99,7 +99,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		}
 		
 		try {
-			graphWrapper.search(nodesNumbers, sizeSearch, 10000);
+			graphWrapper.search(nodesNumbers, sizeSearch, 100000);
 			session.close();
 		}
 		catch (IOException ioE) {
