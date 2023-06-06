@@ -100,13 +100,14 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		
 		try {
 			graphWrapper.search(nodesNumbers, sizeSearch, 10000);
+			session.close();
 		}
 		catch (IOException ioE) {
 			// Session is closed
 		}
 
 		//graphWrapper = null;
-		session.close();
+		
 	}
 	
 	

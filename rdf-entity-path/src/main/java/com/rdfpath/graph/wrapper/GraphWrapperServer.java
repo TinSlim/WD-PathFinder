@@ -41,6 +41,7 @@ public class GraphWrapperServer {
 		JSONObject newVertex = new JSONObject();
 		newVertex.put("id", vw.idVertex);
 		newVertex.put("nodeGrade", vw.backTNodeGrade);
+		newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
 		
 		JSONObject json = new JSONObject();
 		json.put("type","edit");
@@ -70,6 +71,12 @@ public class GraphWrapperServer {
 	    newVertex.put("size", 18);
 	    newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
 	    newVertex.put("nodeGrade", vw.backTNodeGrade);
+	    
+	    JSONObject font = new JSONObject();
+    	font.put("align", "middle");
+    	//font.put("strokeColor", "#f5f5f5"); // TODO color
+    	font.put("size", 18);
+    	newVertex.put("font", font);
 	    
 	    try {
 			String imageUrl = Utils.getImage("Q" + vw.idVertex);

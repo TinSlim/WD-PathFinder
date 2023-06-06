@@ -52,10 +52,8 @@ export default function App() {
     const [drawerState, setDrawerState] = useState(false);
     const [running, setRunning] = useState(false);
     
-    const [stopwatchInterval, setStopWatchInterval] = useState(null);
-    const [runningTime, setRunningTime] = useState(0);
+    
     const container = useRef(null);
-    const [socket,setSocket] = useState(null);
     
     const [lang, setLang] = useState('es');
     const { t, i18n } = useTranslation();
@@ -63,16 +61,72 @@ export default function App() {
     const [network, setNetwork] = useState(null);
     const [pares, setPares] = useState({});
     const [nodoPar, setNodoPar] = useState({});
-    const [nodes, setNodes] = useState(new DataSet([]));
-    const [edges, setEdges] = useState(new DataSet([]));
+    
+    const nodes = useRef(new DataSet([]));
+    const edges = useRef(new DataSet([]));
 
+    const stopwatchInterval = useRef(null);
+
+    const [restartSocket, setRestartSocket] = useState(true);
     const [roadSize, setRoadSize] = useState(3);
     const [gradeSize, setGradeSize] = useState(9);
+
+    const ws = useRef(null);
+    
+
+    // Cuando inicia crea un socket
+    useEffect(() => {
+        ws.current = new WebSocket(`${socketUrl}/query`);
+        ws.current.onopen = () => console.log("ws opened");
+        ws.current.onclose = () => console.log("onclose::");
+
+        const wsCurrent = ws.current;
+
+        return () => {
+            console.log("cierra ws");
+            
+            //setRestartSocket(!restartSocket);//wsCurrent.close();
+        };
+    }, [restartSocket]);
+
+
+    useEffect(() => {
+        if (!ws.current) return;
+
+        ws.current.onmessage = e => {
+            if (!running) return;
+
+            const message = JSON.parse(e.data);
+            if (message.type == 'vertex') {
+                console.log(message);
+                if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
+                    message.data.hidden = false;
+                } else {
+                    message.data.hidden = true;
+                }
+                nodes.current.add(message.data);
+            }
+            else if (message.type == 'edge') {
+                edges.current.add(message.data);
+            }
+            else if (message.type == "edit") {
+                if ('nodeGrade' in message.data) {
+                    if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
+                        message.data.hidden = false;
+                    } else {
+                        message.data.hidden = true;
+                    }
+                }
+                nodes.current.updateOnly(message.data);
+            }
+        };
+    }, [running, roadSize,gradeSize]);
 
     const changeInfo = () => {
         if (showingInfo) {setShowingInfo(false)}
         else {setShowingInfo(true)};
     }
+
     const openDrawer = () => {
         setDrawerState(true);
     }
@@ -91,32 +145,83 @@ export default function App() {
         return `${display_minutes}:${display_seconds}`
     }
 
+    const startSearch = (ids) => {
+        if (running) {      //
+            end2();         // TODO no reinicia al apretar buscar en medio de una búsqueda
+        }                   //
+
+        let pares = {};
+        setPares(pares);
+
+        let nodoPar = {};
+        setNodoPar(nodoPar);
+
+        nodes.current = new DataSet([]);
+        edges.current = new DataSet([]);
+
+        const options = {
+            autoResize: true,
+            height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px",
+            width:  (window.innerWidth) + "px",
+            nodes: {
+                shape: "image",
+                image: require('./../images/no-image-photography-icon.png'),
+              },
+            physics : {
+                forceAtlas2Based: {
+                    theta: 0.45,
+                    gravitationalConstant: -310,
+                    centralGravity: 0,
+                    springLength: 500,
+                    springConstant: 0.675,
+                    damping: 0.1,
+                    avoidOverlap: 1
+                  },
+                //barnesHut: {
+                //  gravitationalConstant: -50,   // TODO numero chistoso = 10000
+                //  centralGravity: 0,
+                //  avoidOverlap: 0.5
+                //},
+              //minVelocity: 1
+            },
+        };
+
+        const data = { nodes: nodes.current, edges:edges.current };
+        let network = new Network(container.current, data , options);
+        setNetwork(network);
+        
+        const networkCont =
+            container.current &&
+            network;
+
+        ws.current.send(ids.concat(i18n.language));
+
+    }
+
+    const end2 = () => {
+        ws.current.close();
+        end();
+    }
+    const end = () => {
+        clearInterval(stopwatchInterval.current);
+        //end();//
+        setRunning(false);
+        setRestartSocket(!restartSocket);
+    }
+
     const start = () => {
         setRunning(true);
-        clearInterval(stopwatchInterval);
+        clearInterval(stopwatchInterval.current);
         setTime("00:00");
         let startTime = Date.now() - 0;
         // animacion esfera
         const stopwatchIntervalC = setInterval ( () => {
             const runningTimeC = Date.now() - startTime;
-            setRunningTime(runningTimeC);
             setTime(calculateTime(runningTimeC));
         }, 1000)
-        setStopWatchInterval(stopwatchIntervalC);
-    }
-    
-    
-    const stop = () => {
-        setRunning(false);
-        clearInterval(stopwatchInterval);
-        network.setOptions({
-            physics: {enabled:false}
-        });
-        setNetwork(network);
-        if (socket != null) {
-            socket.close();
-            setSocket(socket);
-        }
+        stopwatchInterval.current = stopwatchIntervalC;
+
+        
     }
 
     const changeLanguage = (e) => {
@@ -158,15 +263,8 @@ export default function App() {
             }
         }
     }
-
-    const checkVals = (nodeRoadSize, nodeGradeSize) => {
-        if (Math.log10(nodeGradeSize) <= gradeSize && nodeRoadSize <= roadSize) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
+    
+/*
     const initGraph = (ids) => {
         let pares = {};
         setPares(pares);
@@ -238,7 +336,8 @@ export default function App() {
             else if (newData.type == "edge") {
                 edges.add(newData.data);
                 setEdges(edges);
-                /*
+                */
+/*
                 let item1 = nodes.get(newData.data.from, { fields: ['id'] } );
                 let actEdge = newData.data.labelWiki + "_" + newData.data.to;
                 if (! (item1.id in nodoPar) ) {
@@ -292,7 +391,8 @@ export default function App() {
             
                 setPares({... pares});
                 setNodoPar({... nodoPar});
-                */
+                */ 
+/*
             }
             
 
@@ -313,7 +413,7 @@ export default function App() {
             console.log(`[error]`);
         };
         setSocket(newSocket);
-    }
+    }*/
 
     const handleSliderGrade = (e) => {
         setGradeSize(e.target.value)
@@ -324,12 +424,12 @@ export default function App() {
     }
 
     const handleSliderChange = () => {
-        let updates = nodes.map(
+        let updates = nodes.current.map(
             (x) => {
                 let hidden = Math.log10(x.nodeGrade) <= gradeSize && x.roadSize <= roadSize ? false : true;
                 return {id:x.id,hidden:hidden} 
         });
-        nodes.updateOnly(updates);
+        nodes.current.updateOnly(updates);
     }
     
     useEffect( () => {
@@ -381,7 +481,7 @@ export default function App() {
                         </Stack>
                         */}
                         <Stack direction="row">
-                            <Button variant="contained" disabled={!running} onClick={stop}>
+                            <Button variant="contained" disabled={!running} onClick={end2}>
                                 <TimerIcon />
                                 &nbsp;
                                 {time}
@@ -443,7 +543,7 @@ export default function App() {
                         >
 
                         <Search 
-                            initGraph = {initGraph}
+                            initGraph = {startSearch}
                             startCrono = {start}
                             words={words}
                             setWords={setWords}
@@ -540,7 +640,7 @@ export default function App() {
                     defaultValue={3}
                     min={1}
                     max={3}
-                    onChange={(e) => {handleSliderRoad(e);handleSliderChange()}}
+                    onChange={(e) => setRoadSize(e.target.value)}
                     marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
                     />
                 </Stack>
@@ -553,7 +653,7 @@ export default function App() {
                     defaultValue={9}
                     min={1}
                     max={9}
-                    onChange={(e) => {handleSliderGrade(e);handleSliderChange()}}
+                    onChange={(e) => setGradeSize(e.target.value)}
                     marks={[
                             {value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},
                             {value:4, label:"4"},{value:5, label:"5"},{value:6, label:"6"},
