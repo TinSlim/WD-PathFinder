@@ -34,14 +34,12 @@ export default function Search(props) {
 
     const addWord = (newWord) => {
         props.setWords(prevArray => [...prevArray, newWord]);
-        console.log(props.words);
     }
 
     const deleteWord = (index) => {
         let copyActualWords = props.words;
         copyActualWords.pop(index);
         props.setWords(copyActualWords);
-        console.log(props.words);
     }
 
     const clearWords = () => {
@@ -54,8 +52,6 @@ export default function Search(props) {
         //startGraph(ids);
         props.startCrono();
         props.initGraph(ids);
-        
-        console.log(ids);
     }
 
     return (

@@ -55,9 +55,6 @@ export default function App() {
     const container = useRef(null);
     
     const [lang, setLang] = useState(langParam);
-    //console.log(langParam ? langParam : 'es');
-    //console.log(langParam ? langParam : 'es');
-    //console.log(langParam ? langParam : 'es');
     
     const { t, i18n } = useTranslation();
    
@@ -74,35 +71,127 @@ export default function App() {
     const [roadSize, setRoadSize] = useState(3);
     const [gradeSize, setGradeSize] = useState(9);
 
-
+    const [idsSearch, setIdsSearch] = useState([]);
+    const ws = useRef(null);
     
-
+    // Ajusta idioma
     useEffect(() => {
         i18n.changeLanguage(langParam);
         setLang(langParam);
     },[])
     
-    const ws = useRef(null);
-    
-
-    // Cuando inicia crea un socket
+    // Set network
     useEffect(() => {
-        //console.log(`Type: ${queryParameters.get("type")}`);
-        //console.log(`Name: ${queryParameters.get("name")}`);
-        ws.current = new WebSocket(`${socketUrl}/query`);
-        ws.current.onopen = () => console.log("ws opened");
-        ws.current.onclose = () => console.log("onclose::");
+        const options = {
+            autoResize: true,
+            height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px",
+            width:  (window.innerWidth) + "px",
+            nodes: {
+                shape: "image",
+                image: require('./../images/no-image-photography-icon.png'),
+              },
+            edges: {
+                widthConstraint: 200,   // Cantidad de letras X 10
+            },
+            physics : {
+                forceAtlas2Based: {
+                    theta: 0.45,
+                    gravitationalConstant: -310,
+                    centralGravity: 0,
+                    springLength: 500,
+                    springConstant: 0.675,
+                    damping: 0.1,
+                    avoidOverlap: 1
+                  },
+                //barnesHut: {
+                //  gravitationalConstant: -50,   // TODO numero chistoso = 10000
+                //  centralGravity: 0,
+                //  avoidOverlap: 0.5
+                //},
+              //minVelocity: 1
+            },
+        };
 
-        const wsCurrent = ws.current;
+        const data = { nodes: nodes.current, edges:edges.current };
+        let network = new Network(container.current, data , options);
+        setNetwork(network);
+
+        const networkCont =
+            container.current &&
+            network;
+    },[])
+
+    // Cuando running, crea un socket
+    useEffect(() => {
+        if (! running) {
+            return;
+        }
+        if (ws.current) {
+            ws.current.close();
+        }
+
+        // Limpia y reinicia el Grafo
+        nodes.current.clear();
+        edges.current.clear();
+        network.moveTo(
+            {
+                position: {x:0, y:0},
+                scale: 0.5,
+                offset: {x:0, y:0},
+                animation: false
+            }
+        );
+        network.setOptions({
+            physics: {enabled:true}
+        });
+        let actWS = new WebSocket(`${socketUrl}/query`);
+        actWS.onopen = () => actWS.send(idsSearch.concat(i18n.language));
+        actWS.onclose = () => checkClose(actWS);
+        actWS.onmessage = e => {
+            if (!running) return;
+
+            const message = JSON.parse(e.data);
+            if (message.type == 'vertex') {
+                if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
+                    message.data.hidden = false;
+                } else {
+                    message.data.hidden = true;
+                }
+                nodes.current.add(message.data);
+            }
+            else if (message.type == 'edge') {
+                edges.current.add(message.data);
+            }
+            else if (message.type == "edit") {
+                if ('nodeGrade' in message.data) {
+                    if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
+                        message.data.hidden = false;
+                    } else {
+                        message.data.hidden = true;
+                    }
+                }
+                nodes.current.updateOnly(message.data);
+            }
+        };
+        ws.current = actWS;
+
+        //ws.current.send(idsSearch.concat(i18n.language));
+        //const wsCurrent = ws.current;
 
         return () => {
-            console.log("cierra ws");
+            //actWS.close();
             
             //setRestartSocket(!restartSocket);//wsCurrent.close();
         };
-    }, [restartSocket]);
+    }, [idsSearch]);
 
-
+    function checkClose (actWS) {
+        if (actWS == ws.current) {
+            end();
+        }
+    }
+    
+    // Cambios en Slider gatillan cambio de Onmessage
     useEffect(() => {
         if (!ws.current) return;
 
@@ -132,7 +221,7 @@ export default function App() {
                 nodes.current.updateOnly(message.data);
             }
         };
-    }, [running, roadSize,gradeSize]);
+    }, [roadSize,gradeSize]);
 
     const changeInfo = () => {
         if (showingInfo) {setShowingInfo(false)}
@@ -158,22 +247,17 @@ export default function App() {
     }
 
     const startSearch = (ids) => {
-        if (running) {      //
-            console.log("----");
-            console.log(ws.current);
-            end2();         // TODO no reinicia al apretar buscar en medio de una búsqueda
-            console.log(ws.current);
-            console.log("----");
-        }
-
+        setIdsSearch(ids);
+        setRunning(true);
+        /*
         let pares = {};
         setPares(pares);
 
         let nodoPar = {};
         setNodoPar(nodoPar);
 
-        nodes.current = new DataSet([]);
-        edges.current = new DataSet([]);
+        nodes.current.clear();// = new DataSet([]);
+        edges.current.clear();// = new DataSet([]);
 
         const options = {
             autoResize: true,
@@ -225,7 +309,7 @@ export default function App() {
             container.current &&
             network;
 
-        ws.current.send(ids.concat(i18n.language));
+        ws.current.send(ids.concat(i18n.language));*/
 
     }
 
