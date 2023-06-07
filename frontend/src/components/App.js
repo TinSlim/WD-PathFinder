@@ -30,8 +30,6 @@ import InfoIcon from '@mui/icons-material/Info';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
-import Fab from '@mui/material/Fab';
-
 import Search from './Search';
 
 import  './i18n';
@@ -40,10 +38,12 @@ import { Stack, Zoom } from '@mui/material';
 
 const { socketUrl } = require('config');
 
-
-
   
 export default function App() {
+    const queryParameters = new URLSearchParams(window.location.search);
+    const langParam = queryParameters.get("lang") ? queryParameters.get("lang") : 'es';
+    const name = queryParameters.get("name");
+
     const [words, setWords] = useState([]);
     const [values, setValues] = useState([]);
     const [time, setTime] = useState("00:00");
@@ -51,11 +51,14 @@ export default function App() {
     const [showingInfo, setShowingInfo] = useState(false);
     const [drawerState, setDrawerState] = useState(false);
     const [running, setRunning] = useState(false);
-    
-    
+
     const container = useRef(null);
     
-    const [lang, setLang] = useState('es');
+    const [lang, setLang] = useState(langParam);
+    //console.log(langParam ? langParam : 'es');
+    //console.log(langParam ? langParam : 'es');
+    //console.log(langParam ? langParam : 'es');
+    
     const { t, i18n } = useTranslation();
    
     const [network, setNetwork] = useState(null);
@@ -71,11 +74,21 @@ export default function App() {
     const [roadSize, setRoadSize] = useState(3);
     const [gradeSize, setGradeSize] = useState(9);
 
+
+    
+
+    useEffect(() => {
+        i18n.changeLanguage(langParam);
+        setLang(langParam);
+    },[])
+    
     const ws = useRef(null);
     
 
     // Cuando inicia crea un socket
     useEffect(() => {
+        //console.log(`Type: ${queryParameters.get("type")}`);
+        //console.log(`Name: ${queryParameters.get("name")}`);
         ws.current = new WebSocket(`${socketUrl}/query`);
         ws.current.onopen = () => console.log("ws opened");
         ws.current.onclose = () => console.log("onclose::");
@@ -98,7 +111,6 @@ export default function App() {
 
             const message = JSON.parse(e.data);
             if (message.type == 'vertex') {
-                console.log(message);
                 if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
                     message.data.hidden = false;
                 } else {
@@ -147,8 +159,12 @@ export default function App() {
 
     const startSearch = (ids) => {
         if (running) {      //
+            console.log("----");
+            console.log(ws.current);
             end2();         // TODO no reinicia al apretar buscar en medio de una búsqueda
-        }                   //
+            console.log(ws.current);
+            console.log("----");
+        }
 
         let pares = {};
         setPares(pares);
@@ -167,6 +183,9 @@ export default function App() {
                 shape: "image",
                 image: require('./../images/no-image-photography-icon.png'),
               },
+            edges: {
+                widthConstraint: 200,   // Cantidad de letras X 10
+            },
             physics : {
                 forceAtlas2Based: {
                     theta: 0.45,
@@ -189,6 +208,18 @@ export default function App() {
         const data = { nodes: nodes.current, edges:edges.current };
         let network = new Network(container.current, data , options);
         setNetwork(network);
+
+        network.moveTo(
+            {
+                position: {x:0, y:0},
+                scale: 0.5,
+                offset: {x:0, y:0},
+                animation: false //{ // -------------------> can be a boolean too!
+                //duration: 1,
+                //easingFunction: 'linear'
+                //}
+            }
+        );
         
         const networkCont =
             container.current &&
@@ -229,8 +260,13 @@ export default function App() {
     }
 
     const changeLanguage = (e) => {
-        setLang(e.target.value);
-        i18n.changeLanguage(e.target.value);
+        //window.location.reload(false);
+        //console.log("reload");
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', e.target.value);
+        window.location.href = url.href;
+        //setLang(e.target.value);
+        //i18n.changeLanguage(e.target.value);
     }
 
     const groupClusters = () => {
@@ -490,7 +526,6 @@ export default function App() {
                                 &nbsp;
                                 {time}
                                 &nbsp;
-                            
                                 {t('Stop')}
                             </Button>
                         </Stack>

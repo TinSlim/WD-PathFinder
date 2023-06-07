@@ -22,11 +22,32 @@ export default function Autocom(props) {
   const { t, i18n } = useTranslation();
 
   const timeoutIdRef = React.useRef();
-  
+  const queryParameters = new URLSearchParams(window.location.search);
+  const entityQuery = queryParameters.getAll("ent");
+
+  React.useEffect (() => {
+    if (entityQuery) {
+      dataFromGet(entityQuery);
+    }
+  },[])
+
   const handleNewData = (data) => {
     setOptions([]);
     setOptions(data.search.map((x, index) => ({index: index,id: x.id, label: x.label,  url: x.concepturi, description: x.description})));
     setIsLoading(false);
+  }
+
+  const dataFromGet = (params) => {
+    for (let param of params) {
+      let url = `${baseURL}/autocomplete?entity=${param}&language=${i18n.language}`
+      fetch(url)
+        .then(response => response.json())
+        .then(data =>
+            data.search.length > 0  ?
+            props.addEntity({index: 0,id: data.search[0].id, label: data.search[0].label,  url: data.search[0].concepturi, description: data.search[0].description}) : null             
+            //data.search.map((x, index) => ({index: index,id: x.id, label: x.label,  url: x.concepturi, description: x.description}))  
+          );
+    } //data.search.map((x, index) => ({index: index,id: x.id, label: x.label,  url: x.concepturi, description: x.description}
   }
 
   const handleAuto = (word) => {

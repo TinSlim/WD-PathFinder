@@ -65,7 +65,7 @@ public class GraphWrapperServer {
 	    JSONObject newVertex = new JSONObject();
 	    newVertex.put("label", vertexLabelSmall);
 	    newVertex.put("color",vw.getHexColor());
-	    newVertex.put("title", vertexLabel);
+	    newVertex.put("title", "Q"+vw.idVertex+"\n"+vertexLabel);
 	    newVertex.put("id", vw.idVertex);
 	    newVertex.put("edgeSize", 0);
 	    newVertex.put("size", 18);
@@ -375,7 +375,7 @@ public class GraphWrapperServer {
     	// Edge data
     	String edgeLabel = Utils.getEntityName("P"+	graph.getPredicateEdge(e) +"&type=property", lang);
     	String edgeLabelSmall = edgeLabel;
-    	if (edgeLabel.length() > 7) {edgeLabelSmall = edgeLabel.substring(0,Math.min(edgeLabel.length(), 7)) + "...";}
+    	//if (edgeLabel.length() > 7) {edgeLabelSmall = edgeLabel.substring(0,Math.min(edgeLabel.length(), 7)) + "...";}
 
     	// Arrow Config
     	JSONObject arrowInfo = new JSONObject();
@@ -396,6 +396,7 @@ public class GraphWrapperServer {
 
     	JSONObject smooth = new JSONObject();
     	smooth.put("type", "dynamic"); //dynamic curvedCCW discrete cubicBezier
+    	smooth.put("roundness", 0.7);
     	edge.put("smooth", smooth);
     	
     	JSONObject font = new JSONObject();
