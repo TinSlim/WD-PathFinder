@@ -41,6 +41,7 @@ public class GraphWrapperServer {
 		JSONObject newVertex = new JSONObject();
 		newVertex.put("id", vw.idVertex);
 		newVertex.put("nodeGrade", vw.backTNodeGrade);
+	    
 		newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
 		
 		JSONObject json = new JSONObject();
@@ -69,6 +70,7 @@ public class GraphWrapperServer {
 	    newVertex.put("id", vw.idVertex);
 	    newVertex.put("edgeSize", 0);
 	    newVertex.put("size", 18);
+	    
 	    newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
 	    newVertex.put("nodeGrade", vw.backTNodeGrade);
 	    
@@ -245,9 +247,17 @@ public class GraphWrapperServer {
 								adjVW.color = newColor;
 							}
 							
-							adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
-							actualVW.otherColorDistance = adjVW.sameColorDistance + 1;
+							if (adjVW.otherColorDistance != -1) {
+								adjVW.otherColorDistance = Math.min(adjVW.otherColorDistance,actualVW.sameColorDistance + 1);
+							} else {
+								adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
+							}
 							
+							if (actualVW.otherColorDistance != -1) {
+								actualVW.otherColorDistance = Math.min(actualVW.otherColorDistance,actualVW.sameColorDistance + 1);
+							} else {
+								actualVW.otherColorDistance = actualVW.sameColorDistance + 1;
+							}
 							int bTGrade = Math.max(adjVW.maxNodeGrade, actualVW.maxNodeGrade);
 							
 							adjVW.backTNodeGrade = (adjVW.backTNodeGrade < 0) ? bTGrade : Math.min(bTGrade,adjVW.backTNodeGrade);
