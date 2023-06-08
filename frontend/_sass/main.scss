@@ -31,9 +31,12 @@ $custom-colors: (
 $primary-invert: $pink-invert;
 
 // USANDO
-$primary: #1976d2;
+$primary-blue: #1976d2;
+$primary: #B769C2;
+//#d0bdf6
+//#ba9df4
+//#a788ab
 $footer-padding: 1rem 1rem 1rem; // arriba, los lados, abajo
-// 4. Import the rest of Bulma
-
+html { overflow-y: auto !important; } // Elimina scroll lateral
 
 @import "../node_modules/bulma/bulma";

@@ -3,10 +3,13 @@ import { render } from "react-dom"
 import { Network } from "vis-network";
 import { DataSet} from "vis-data";
 
-import Navbar from "./Navbar"
-import Content from "./Content"
-import Example from "./Example"
-import Footer from "./Footer"
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { theme } from './Theme';
+
+import Navbar from "./Navbar";
+import Content from "./Content";
+import Example from "./Example";
+import Footer from "./Footer";
 
 import Slide from '@mui/material/Slide';
 
@@ -84,7 +87,7 @@ export default function App() {
     useEffect(() => {
         const options = {
             autoResize: true,
-            height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px",
+            height: (window.offsetHeight - document.getElementById("footer").offsetHeight) + "px",
             width:  (window.innerWidth) + "px",
             nodes: {
                 shape: "image",
@@ -565,6 +568,7 @@ export default function App() {
     }, [gradeSize]);
 
     return (
+        <ThemeProvider theme={theme}>
         <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
             
             <div className='has-background-white-ter' ref={container}/>
@@ -787,6 +791,7 @@ export default function App() {
 
             <Footer></Footer>
         </div>
+        </ThemeProvider>
     );
 }
 
