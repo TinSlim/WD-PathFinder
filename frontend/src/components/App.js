@@ -87,7 +87,7 @@ export default function App() {
     useEffect(() => {
         const options = {
             autoResize: true,
-            height: (window.offsetHeight - document.getElementById("footer").offsetHeight) + "px",
+            //height: (665 + document.getElementById("footer").offsetHeight) + "px",
             width:  (window.innerWidth) + "px",
             nodes: {
                 shape: "image",
@@ -252,6 +252,9 @@ export default function App() {
     const startSearch = (ids) => {
         setIdsSearch(ids);
         setRunning(true);
+        network.setOptions({
+            height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px"
+        });
         /*
         let pares = {};
         setPares(pares);
@@ -648,21 +651,18 @@ export default function App() {
                   }}
                 open={drawerState}
                 onClose={closeDrawer}>
-                <Stack spacing={12} className="has-background-primary" direction="row" justifyContent="flex-end">
-                    <Typography variant="h4" fullWidth={true} className='has-text-white' p={1}>
-                        W<img src={require('./../images/wool2.svg')} width="25px"/>olNet
-                    </Typography>
+               
+                <Stack className="has-background-primary" p={0.5} direction="row" alignItems="center" justifyContent="space-between">
+                    <img className="ml-1" src={require('./../images/wool2.svg')}/>
                     <IconButton onClick={closeDrawer}>
                         <ChevronLeftIcon />
                     </IconButton>
                 </Stack>
-
-                    <Typography variant="body" p={1}>
-                        Woolnet, es el graficador de caminos entre entidades de Wikidata.
-                    </Typography>
-                <Divider />
                 
-
+                <Typography variant="body" p={1}>
+                    Woolnet, es el graficador de caminos entre entidades de Wikidata.
+                </Typography>
+                <Divider />
 
                 {!showingInfo &&
                 <Zoom  in={!showingInfo} >
@@ -682,7 +682,7 @@ export default function App() {
                     
 
                         <Stack className="ml-3 mr-3" spacing={1} direction="row" alignItems="center">
-                            <Button fullWidth={true} onClick={changeInfo} >
+                            <Button fullWidth={true} onClick={changeInfo} color="secondary">
                                 <InfoIcon/> &nbsp;Ayuda
                             </Button>
                         </Stack>
@@ -695,7 +695,7 @@ export default function App() {
                 <Zoom hidden={!showingInfo} in={showingInfo} >
                     <Stack>
                         <Stack>
-                            <Button fullWidth={true} className='mt-3' onClick={changeInfo}>
+                            <Button fullWidth={true} className='mt-3' onClick={changeInfo} color="secondary">
                                 <InfoIcon/> Volver
                             </Button>
                         </Stack>
@@ -761,7 +761,7 @@ export default function App() {
                 <Stack
                 sx={{width: "30%"}}>
                     <Typography>
-                        Largo caminos
+                        Largo máximo caminos
                     </Typography>
                     <Slider
                     defaultValue={3}
@@ -774,7 +774,7 @@ export default function App() {
                 <Stack
                 sx={{width: "70%"}}>
                     <Typography>
-                        Capa
+                        Grado máximo caminos
                     </Typography>
                     <Slider
                     defaultValue={9}
