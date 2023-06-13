@@ -10,7 +10,7 @@ const resources = {
       "English": "English",
       "Spanish": "Spanish",
 
-      "Description": "Woolnet, es el graficador de caminos entre entidades de Wikidata",
+      "Description": "",
       "Time": "Time",
       "Menu": "Menu",
       "Stop": "STOP",
@@ -39,7 +39,7 @@ const resources = {
       "English": "Inglés",
       "Spanish": "Español",
 
-      "Description": "",
+      "Description": "Woolnet, es el graficador de caminos entre entidades de Wikidata",
       "Time": "Tiempo",
       "Menu": "Menú",
       "Stop": "DETENER",
