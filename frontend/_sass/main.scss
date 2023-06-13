@@ -36,7 +36,17 @@ $primary: #8fbbaf;
 //#d0bdf6
 //#ba9df4
 //#a788ab
-$footer-padding: 1rem 1rem 1rem; // arriba, los lados, abajo
-html { overflow-y: auto !important; } // Elimina scroll lateral
+$footer-padding: 1rem 1rem 1rem;        // arriba, los lados, abajo
+html { overflow-y: auto !important; }   // Elimina scroll lateral
+a:visited {
+color: #8bcdf8;
+background-color: transparent;
+text-decoration: none;
+}
+a:hover {
+color: #8bcdf8;
+background-color: transparent;
+text-decoration: underline;
+}
 
 @import "../node_modules/bulma/bulma";
