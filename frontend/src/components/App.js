@@ -8,7 +8,7 @@ import { theme } from './Theme';
 
 import Navbar from "./Navbar";
 import Content from "./Content";
-import Example from "./Example";
+import Help from "./Help";
 import Footer from "./Footer";
 
 import Slide from '@mui/material/Slide';
@@ -148,7 +148,7 @@ export default function App() {
             physics: {enabled:true}
         });
         let actWS = new WebSocket(`${socketUrl}/query`);
-        actWS.onopen = () => actWS.send(idsSearch.concat(i18n.language));
+        actWS.onopen = () => {actWS.send(idsSearch.concat(i18n.language));actWS.send(idsSearch.concat(i18n.language));actWS.send(idsSearch.concat(i18n.language));};
         actWS.onclose = () => checkClose(actWS);
         actWS.onmessage = e => {
             if (!running) return;
@@ -394,156 +394,6 @@ export default function App() {
         }
     }
     
-/*
-    const initGraph = (ids) => {
-        let pares = {};
-        setPares(pares);
-
-        let nodoPar = {};
-        setNodoPar(nodoPar);
-
-        let nodes = new DataSet([]);
-        setNodes(nodes);
-
-        let edges = new DataSet([]);
-        setEdges(edges);
-
-        if (socket != null) {
-            socket.close();
-        }
-        const options = {
-            autoResize: true,
-            height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px",
-            width:  (window.innerWidth) + "px",
-            nodes: {
-                shape: "image",
-                image: require('./../images/no-image-photography-icon.png'),
-              },
-            physics : {
-                forceAtlas2Based: {
-                    theta: 0.45,
-                    gravitationalConstant: -310,
-                    centralGravity: 0,
-                    springLength: 500,
-                    springConstant: 0.675,
-                    damping: 0.1,
-                    avoidOverlap: 1
-                  },
-                //barnesHut: {
-                //  gravitationalConstant: -50,   // TODO numero chistoso = 10000
-                //  centralGravity: 0,
-                //  avoidOverlap: 0.5
-                //},
-              //minVelocity: 1
-            },
-        };
-
-        const data = { nodes: nodes, edges:edges };
-        
-        let network = new Network(container.current, data , options);
-        setNetwork(network);
-        
-        const networkCont =
-            container.current &&
-            network;
-
-        const newSocket = new WebSocket(`${socketUrl}/query`);
-        newSocket.onopen = function(e) {
-            console.log("[open] Connection established");
-            newSocket.send(ids.concat(i18n.language));
-        };
-      
-        newSocket.onmessage = function(event) {
-            
-            let newData = JSON.parse(event.data);
-            
-            if (newData.type == "vertex") {
-                newData.data.hidden = checkVals(newData.data.roadSize, newData.data.nodeGrade);
-                nodes.add(newData.data);
-                setNodes(nodes);
-            }
-        
-            else if (newData.type == "edge") {
-                edges.add(newData.data);
-                setEdges(edges);
-                */
-/*
-                let item1 = nodes.get(newData.data.from, { fields: ['id'] } );
-                let actEdge = newData.data.labelWiki + "_" + newData.data.to;
-                if (! (item1.id in nodoPar) ) {
-                    if (actEdge in pares) {
-                        pares[actEdge].push(item1.id);
-                    }
-                    else {
-                        pares[actEdge] = [item1.id];
-                    }
-                    nodoPar[item1.id] = [actEdge];
-                }
-                else {
-                    pares[nodoPar[item1.id]] = pares[nodoPar[item1.id]].filter((ele) => {return ele != item1.id})
-                    
-                    nodoPar[item1.id].push(actEdge);
-                    nodoPar[item1.id].sort();
-
-                    if (nodoPar[item1.id] in pares) {
-                        pares[nodoPar[item1.id]].push(item1.id);
-                    }
-                    else {
-                        pares[nodoPar[item1.id]] = [item1.id];
-                    }
-                }
-
-
-                let item2 = nodes.get(newData.data.to, { fields: ['id'] } );
-                actEdge = "-" + newData.data.labelWiki + "_" + newData.data.from;
-                if (! (item2.id in nodoPar) ) {
-                    if (actEdge in pares) {
-                        pares[actEdge].push(item2.id);
-                    }
-                    else {
-                        pares[actEdge] = [item2.id];
-                    }
-                    nodoPar[item2.id] = [actEdge];
-                }
-                else {
-                    pares[nodoPar[item2.id]] = pares[nodoPar[item2.id]].filter((ele) => {return ele != item2.id})
-                    
-                    nodoPar[item2.id].push(actEdge);
-                    nodoPar[item2.id].sort();
-
-                    if (nodoPar[item2.id] in pares) {
-                        pares[nodoPar[item2.id]].push(item2.id);
-                    }
-                    else {
-                        pares[nodoPar[item2.id]] = [item2.id];
-                    }
-                }
-            
-                setPares({... pares});
-                setNodoPar({... nodoPar});
-                */ 
-/*
-            }
-            
-
-            else if (newData.type == "edit") {
-                nodes.updateOnly(newData.data);
-            }
-        };
-      
-        newSocket.onclose = function(event) {
-            if (event.wasClean) {
-                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-            } else {
-                console.log('[close] Connection died');
-            }
-        };
-      
-        newSocket.onerror = function(error) {
-            console.log(`[error]`);
-        };
-        setSocket(newSocket);
-    }*/
 
     const handleSliderGrade = (e) => {
         setGradeSize(e.target.value)
@@ -575,8 +425,6 @@ export default function App() {
         <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
             
             <div className='has-background-white-ter' ref={container}/>
-
-            {/*<Example></Example>*/}
 
             <Stack
                 sx={{position:"fixed",top: "0px",left: "0px", width: "100%"}}
@@ -660,7 +508,7 @@ export default function App() {
                 </Stack>
                 
                 <Typography variant="body" p={1}>
-                    Woolnet, es el graficador de caminos entre entidades de Wikidata.
+                    {t("Description")}.                   
                 </Typography>
                 <Divider />
 
@@ -683,7 +531,7 @@ export default function App() {
 
                         <Stack className="ml-3 mr-3" spacing={1} direction="row" alignItems="center">
                             <Button fullWidth={true} onClick={changeInfo} color="secondary">
-                                <InfoIcon/> &nbsp;Ayuda
+                                <InfoIcon/> &nbsp;{t('Help')}
                             </Button>
                         </Stack>
                     </Stack>
@@ -692,62 +540,7 @@ export default function App() {
 
 
                 {showingInfo &&
-                <Zoom hidden={!showingInfo} in={showingInfo} >
-                    <Stack>
-                        <Stack>
-                            <Button fullWidth={true} className='mt-3' onClick={changeInfo} color="secondary">
-                                <InfoIcon/> Volver
-                            </Button>
-                        </Stack>
-                    
-                        <Stack className='ml-3 mr-3'>
-                            <Stack style={{display: 'flex',height: '500px', overflowY: 'auto'}}>
-                                <Stack>
-                                    <Typography variant='h6'>
-                                        Uso:
-                                    </Typography>
-                                    
-                                    <Typography variant="body2" component="div">
-                                        1. Escriba en el buscador la entidad la entidad que desea buscar.
-                                    </Typography>
-                                    <Typography variant="body2" component="div">
-                                        2. Cuando se desplieguen entidades existentes, seleccione una.
-                                    </Typography>
-                                    <Typography variant="body2" component="div">
-                                        3. Repita el paso 1. y 2. con las entidades que desea.
-                                    </Typography>
-                                    <Typography variant="body2" component="div">
-                                        4. Clickeando el botón BUSCAR iniciará las búsqueda de caminos.
-                                    </Typography>
-                                    <Typography variant="body2" component="div">
-                                        • Puede detener la búsqueda clickeando en DETENER.
-                                    </Typography>
-                                    <Typography variant="body2" component="div">
-                                        • Puede disminuir regular los resultados usando los SLIDERS inferiores.
-                                    </Typography>
-                                </Stack>
-
-                                <Stack>
-                                    <Typography variant='h6'>
-                                        WoolNet:
-                                    </Typography>
-                                    <Typography variant="body2" component="div">
-                                        WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikdata.
-                                    </Typography>
-                                </Stack>
-
-                            
-                            {/*
-                            <Typography variant="body2" component="div">
-                                • Si los resultados son demasiados, puede comprimirlos usando el botón COMPRIMIR.
-                            </Typography>
-                            */}
-                            </Stack>
-                        </Stack>
-                        
-                    </Stack>
-
-                </Zoom>
+                <Help showingInfo={showingInfo} changeInfo={changeInfo}></Help>
                 }
 
                
@@ -761,7 +554,7 @@ export default function App() {
                 <Stack
                 sx={{width: "30%"}}>
                     <Typography>
-                        Largo máximo caminos
+                        {t('Slider1')}
                     </Typography>
                     <Slider
                     defaultValue={3}
@@ -774,17 +567,17 @@ export default function App() {
                 <Stack
                 sx={{width: "70%"}}>
                     <Typography>
-                        Grado máximo caminos
+                        {t('Slider2')}
                     </Typography>
                     <Slider
-                    defaultValue={9}
+                    defaultValue={8}
                     min={1}
-                    max={9}
+                    max={8}
                     onChange={(e) => setGradeSize(e.target.value)}
                     marks={[
                             {value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},
                             {value:4, label:"4"},{value:5, label:"5"},{value:6, label:"6"},
-                            {value:7, label:"7"},{value:8, label:"8"},{value:9, label:"9"}]}
+                            {value:7, label:"7"},{value:8, label:"8"}]}
                     />
                 </Stack>
             </Stack>
