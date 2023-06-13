@@ -86,7 +86,7 @@ export default function Autocom(props) {
   
   // TODO AGREGAR TRADUCCION
   return (
-    <div className='mb-3'>
+    <div>
       <Autocomplete
         forcePopupIcon={false}                // Elimina flechita autocompletado
         noOptionsText={getDefaultText()}
