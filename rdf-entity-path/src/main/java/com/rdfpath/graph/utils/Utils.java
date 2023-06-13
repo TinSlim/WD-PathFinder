@@ -40,31 +40,28 @@ public class Utils {
 		System.out.println("Successfully wrote to the file.");
 	}
 	
-	public static String getEntityName (String id, String language) {
-		/*
-		 * String url = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids="
-				+ id
-				+ "&languages=en&formatversion=2";
-		 */
-
+	public static String[] getEntityName (int idVertex, String language, Boolean isEntity) throws IOException {
+		// https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search={id}&uselang=es&language=es&formatversion=2
+		String id = isEntity ? "Q" + idVertex : "P" + idVertex + "&type=property";
 		String url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&search=" + id
 				+ "&uselang=" + language
 				+ "&language=" + language 
 				+ "&formatversion=2";
-		String respuesta = "";
-		try {
-			respuesta = peticionHttpGet(url);
-			JSONObject obj = new JSONObject(respuesta);
-			if (obj.getJSONArray("search").length() > 0) {
-				String label = (((JSONObject) obj.getJSONArray("search").get(0)).getJSONObject("display").getJSONObject("label").getString("value"));
-				return label;
+		String ans[] = {null, null};
+		String ansHttp = peticionHttpGet(url);
+		JSONObject obj = new JSONObject(ansHttp);
+		// Hay 1 resultado
+		JSONArray arr = obj.getJSONArray("search");
+		if (arr.length() > 0) {
+			JSONObject arrAns = (JSONObject) arr.get(0);
+			if (arrAns.has("label")) {
+				ans[0] = arrAns.getString("label");
 			}
-		} catch (Exception e) {
-			// Manejar excepción
-			e.printStackTrace();
+			if (arrAns.has("description")) {
+				ans[1] = arrAns.getString("description");
+			}
 		}
-		
-		return id;
+		return ans;
 	}
 	
 	// TODO ACA USA IDIOMA

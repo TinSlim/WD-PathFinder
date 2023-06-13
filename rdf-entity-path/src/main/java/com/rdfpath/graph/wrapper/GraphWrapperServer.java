@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import org.json.JSONException;
 import org.json.simple.JSONObject;
+import org.springframework.web.socket.PingMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -26,6 +27,7 @@ public class GraphWrapperServer {
 	private int[][] paletteRGB = {
 		{173,247,182}, {160,206,217}, {252,245,199}, {255,238,147}, {255,192,159}
 		};
+	public long startTime;
 	
 	private HashMap<Integer, VertexWrapperServer> nodes;
 	private IGraph graph;
@@ -54,19 +56,26 @@ public class GraphWrapperServer {
 	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperToJson (VertexWrapperServer vw, float angle) {
 		// Node
-		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex, lang);
-		String vertexLabelSmall = vertexLabel;
+		String vertexLabelSmall = null;
+		String vertexDescription = null;
+		
+		String[] vertexLabel;
+		try {
+			vertexLabel = Utils.getEntityName(vw.idVertex, lang, true);
+			vertexLabelSmall = vertexLabel[0];
+			vertexDescription = vertexLabel[1];
+		} catch (IOException e) {
+		}
+		
 	    
-	    int vLabelSize = vertexLabel.length();
-	    int spacePos = vertexLabel.indexOf(" ", (vertexLabel.length()/2) + 2);
-	    if (vLabelSize > 24) {	
-	    	vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 20)) + "...";
-	    }
+		String title = "Q" + vw.idVertex;
+		if (vertexLabelSmall != null) {title += " - " + vertexLabelSmall;};
+		if (vertexDescription != null) {title += "\n" + vertexDescription;};
 	    
 	    JSONObject newVertex = new JSONObject();
-	    newVertex.put("label", vertexLabelSmall);
+	    newVertex.put("label", vertexLabelSmall != null ? vertexLabelSmall : "" + vw.idVertex );
 	    newVertex.put("color",vw.getHexColor());
-	    newVertex.put("title", "Q"+vw.idVertex+"\n"+vertexLabel);
+	    newVertex.put("title", title);
 	    newVertex.put("id", vw.idVertex);
 	    newVertex.put("edgeSize", 0);
 	    newVertex.put("size", 18);
@@ -107,19 +116,18 @@ public class GraphWrapperServer {
 	    return json.toString();
 	}
 	
+
+	private CharSequence ping() {
+		JSONObject json = new JSONObject();
+	    json.put("type","ping");
+		return json.toString();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperEditPositionJson (VertexWrapperServer vw, float angle) {
-		// Node
-		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex, lang);
-	    String vertexLabelSmall = vertexLabel;
-	    if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
-	    
+		// Node	    
 	    JSONObject newVertex = new JSONObject();
-	    //newVertex.put("label", vertexLabelSmall);
-	    //newVertex.put("color",vw.getHexColor());
-	    //newVertex.put("title", vertexLabel);
-	    //newVertex.put("size", 18);
-
+	    
 	    // Json
 	    JSONObject json = new JSONObject();
 	    json.put("type","edit");
@@ -148,6 +156,7 @@ public class GraphWrapperServer {
 	}
 
 	public void search (int [] nodesNumbers, int size, int maxEdgeSize) throws IOException {
+		startTime = System.currentTimeMillis();
 		this.nodesNumbers = nodesNumbers;
 		
 		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
@@ -279,8 +288,12 @@ public class GraphWrapperServer {
 	}
 	
 	private void checkConn() throws IOException {
-		if (!session.isOpen() ) {
-			throw new IOException();
+		if ( (System.currentTimeMillis() - startTime) > 1 * 500 ) { // 1 cada medio segundo
+			session.sendMessage(new TextMessage(ping()));
+			if (!session.isOpen() ) {
+				throw new IOException();
+			}
+			startTime = System.currentTimeMillis();
 		}
 	}
 
@@ -363,7 +376,7 @@ public class GraphWrapperServer {
 			
 			int edgeRoadSize = Math.max(vw1.sameColorDistance + vw1.otherColorDistance, vw2.sameColorDistance + vw2.otherColorDistance);
 			// TODO extensión del grafo
-			if (actualDistance + 24 < totalEdges * 11) {
+			if (actualDistance + 24 < totalEdges * 11) { // TODO Corregir tamaño
 				actualDistance = totalEdges * 10;
 				int index = 0;
 				for (int idSearch : nodesNumbers) {
@@ -383,10 +396,14 @@ public class GraphWrapperServer {
     	JSONObject json = new JSONObject();
     	
     	// Edge data
-    	String edgeLabel = Utils.getEntityName("P"+	graph.getPredicateEdge(e) +"&type=property", lang);
-    	String edgeLabelSmall = edgeLabel;
-    	//if (edgeLabel.length() > 7) {edgeLabelSmall = edgeLabel.substring(0,Math.min(edgeLabel.length(), 7)) + "...";}
-
+    	String[] edgeLabel;
+    	String edgeLabelSmall = "";
+		try {
+			edgeLabel = Utils.getEntityName(graph.getPredicateEdge(e), lang, false);
+			edgeLabelSmall = edgeLabel[0];
+		} catch (IOException e1) {
+		}
+    	
     	// Arrow Config
     	JSONObject arrowInfo = new JSONObject();
     	arrowInfo.put("enabled", true);
@@ -400,8 +417,8 @@ public class GraphWrapperServer {
     	edge.put("from", graph.getOriginEdge(e));
     	edge.put("to", graph.getDestinationEdge(e));
     	edge.put("labelWiki", graph.getPredicateEdge(e));
-    	edge.put("label", edgeLabelSmall);//Utils.getEntityName("P" + id));
-    	edge.put("title", edgeLabel);
+    	edge.put("label", edgeLabelSmall);
+    	edge.put("title", edgeLabelSmall);
     	edge.put("roadSize", roadSize);
 
     	JSONObject smooth = new JSONObject();
@@ -419,7 +436,7 @@ public class GraphWrapperServer {
     	edge.put("arrows", arrow);
     	
     	// TODO Fuerza aristas 500
-    	edge.put("length", 300);
+    	//edge.put("length", 900);
     	
     	json.put("type", "edge");
     	json.put("data", edge);

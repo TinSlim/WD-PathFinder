@@ -40,7 +40,13 @@ public class GraphWrapperServerOldVersion {
 	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperToJson (VertexWrapperServer vw, float angle) {
 		// Node
-		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex, lang);
+		String vertexLabel = null;
+		try {
+			vertexLabel = Utils.getEntityName(vw.idVertex, lang, true)[0];
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String vertexLabelSmall = vertexLabel;
 	    
 	    int vLabelSize = vertexLabel.length();
@@ -88,7 +94,13 @@ public class GraphWrapperServerOldVersion {
 	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperEditPositionJson (VertexWrapperServer vw, float angle) {
 		// Node
-		String vertexLabel = Utils.getEntityName("Q" + vw.idVertex, lang);
+		String vertexLabel = null;
+		try {
+			vertexLabel = Utils.getEntityName(vw.idVertex, lang,true)[0];
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    String vertexLabelSmall = vertexLabel;
 	    if (vertexLabel.length() > 7) {vertexLabelSmall = vertexLabel.substring(0,Math.min(vertexLabel.length(), 7)) + "...";}
 	    
@@ -322,7 +334,13 @@ public class GraphWrapperServerOldVersion {
     	JSONObject json = new JSONObject();
     	
     	// Edge data
-    	String edgeLabel = Utils.getEntityName("P"+	graph.getPredicateEdge(e) +"&type=property", lang);
+    	String edgeLabel = null;
+		try {
+			edgeLabel = Utils.getEntityName(graph.getPredicateEdge(e), lang, false)[0];
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     	String edgeLabelSmall = edgeLabel;
     	if (edgeLabel.length() > 7) {edgeLabelSmall = edgeLabel.substring(0,Math.min(edgeLabel.length(), 7)) + "...";}
 
