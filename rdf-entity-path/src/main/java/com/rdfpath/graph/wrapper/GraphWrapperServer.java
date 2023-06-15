@@ -176,7 +176,6 @@ public class GraphWrapperServer {
 			index++;
 		}
 		
-
 		while (toSearch.size() > 0) {
 			checkConn();
 
@@ -370,6 +369,9 @@ public class GraphWrapperServer {
 			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw2)));
 		}
 		
+		
+		double spaceRound = 2.0 / (edges.size() + 1.0);
+		double accRound = -1.0;
 		for (Object edge : edges) {
 			checkConn();
 			totalEdges+=1;
@@ -386,13 +388,15 @@ public class GraphWrapperServer {
 					index++;
 				}
 			}
-			session.sendMessage(new TextMessage(edgeToJson(edge,edgeRoadSize)));
+			accRound = accRound + spaceRound;
+			session.sendMessage(new TextMessage(
+					edgeToJson(edge,edgeRoadSize,v1, accRound)));
 		}
 		
 	}
 	
 	@SuppressWarnings("unchecked")
-	public CharSequence edgeToJson(Object e, int roadSize) {
+	public CharSequence edgeToJson(Object e, int roadSize, int v1, double roundness) {
     	JSONObject json = new JSONObject();
     	
     	// Edge data
@@ -410,20 +414,55 @@ public class GraphWrapperServer {
     	arrowInfo.put("type", "arrow");
     	
     	JSONObject arrow = new JSONObject();
-    	arrow.put("to", arrowInfo);
+    	
+    	JSONObject smooth = new JSONObject();
+    	smooth.put("type", "curvedCW"); //dynamic curvedCCW discrete cubicBezier
     	
     	// Edge
     	JSONObject edge = new JSONObject();
-    	edge.put("from", graph.getOriginEdge(e));
-    	edge.put("to", graph.getDestinationEdge(e));
+    	int origin = graph.getOriginEdge(e);
+    	int destination = graph.getDestinationEdge(e);
+    	if (roundness > 0 ) {
+    		if (v1 == origin) {
+    			arrow.put("to", arrowInfo);
+    		}
+    		else {
+    			destination = origin;
+    			origin = v1;
+    			arrow.put("from", arrowInfo);
+    		}
+    		smooth.put("roundness", roundness);
+    	}
+    	else if (roundness < 0 ){
+    		if (v1 == origin) {
+    			origin = destination;
+    			destination = v1;
+    			arrow.put("from", arrowInfo);
+    		}
+    		else {
+    			arrow.put("to", arrowInfo);
+    		}
+    		smooth.put("roundness",-1 * roundness);
+    	}
+    	else {
+    		smooth.put("type", "continuous"); //dynamic curvedCCW discrete cubicBezier continuous
+    		arrow.put("to", arrowInfo);
+    	}
+    	
+   
+		//arrow.put("to", arrowInfo);
+		
+    	edge.put("from", origin);
+    	edge.put("to", destination);
+    	
     	edge.put("labelWiki", graph.getPredicateEdge(e));
     	edge.put("label", edgeLabelSmall);
     	edge.put("title", edgeLabelSmall);
     	edge.put("roadSize", roadSize);
 
-    	JSONObject smooth = new JSONObject();
-    	smooth.put("type", "dynamic"); //dynamic curvedCCW discrete cubicBezier
-    	smooth.put("roundness", 0.7);
+    	
+    	//smooth.put("roundness", 0.7);
+    	//System.out.println(v1 == graph.getOriginEdge(e) ? roundness : -1 * roundness);
     	edge.put("smooth", smooth);
     	
     	JSONObject font = new JSONObject();
