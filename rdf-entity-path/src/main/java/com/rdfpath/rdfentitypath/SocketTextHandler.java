@@ -3,6 +3,8 @@ package com.rdfpath.rdfentitypath;
 import java.io.IOException;
 import java.util.Arrays;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -17,6 +19,7 @@ import com.rdfpath.graph.wrapper.GraphWrapperServer;
 @Component
 public class SocketTextHandler extends TextWebSocketHandler {
 	public IGraph graph;
+	Logger logger = LoggerFactory.getLogger(SocketTextHandler.class);
 	
 	public SocketTextHandler () throws IOException, ParseException {
 		super();
@@ -61,10 +64,11 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		}
 		
 
-		System.out.println("==    Cargando Grafo   ==\n"+
-				(filename + end) + "\n" +
-				(filename + endComp) + "\n" +
-				(filename + endNative)); 
+		logger.info("[Carga Datos] Cargando Grafo: " + filename + endComp);
+		//System.out.println("==    Cargando Grafo   ==\n"+
+		//		(filename + end) + "\n" +
+		//		(filename + endComp) + "\n" +
+		//		(filename + endNative)); 
 		
 		//graph = new Graph(path + files[index] + end, true);
 		//graph = new GraphNative(path + files[index] + end, true, edgesSize[index]);
@@ -76,15 +80,15 @@ public class SocketTextHandler extends TextWebSocketHandler {
 				true,
 				maxNodeId[index]);
 		
-		System.out.println("==    Grafo Cargado    ==\n");
+		logger.info("[Carga Datos] Grafo Cargado");
 	}
 	
 	@Override
 	public void handleTextMessage(WebSocketSession session, TextMessage message)
 			throws IOException {
-		System.out.println("UNA CONEXIÓN");
+		
 		String response = message.getPayload();
-		System.out.println(response);
+		logger.info("[ID:"+session.getId()+"] Consulta: " + response);
 		
 		String[] splitAns = response.split(",");
 		int[] nodesNumbers = Arrays.stream(Arrays.copyOfRange(splitAns,0,splitAns.length - 1)).mapToInt(Integer::parseInt).toArray();  
@@ -100,7 +104,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		
 		try {
 			graphWrapper.search(nodesNumbers, sizeSearch, 100000);
-			session.close();
+			session.close();;
 		}
 		catch (IOException ioE) {
 			// Session is closed
@@ -113,7 +117,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus){
-		System.out.println(closeStatus);
+		logger.info("[ID:"+session.getId()+"] Cierre conexión: " + closeStatus.getReason());
 	}
 
 }
