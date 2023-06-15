@@ -95,9 +95,12 @@ export default function App() {
               },
             edges: {
                 widthConstraint: 200,   // Cantidad de letras X 10
+                //smooth : {
+                //    type :"curvedCCW",
+                //}
             },
             physics : {
-                forceAtlas2Based: {
+                /*forceAtlas2Based: {
                     theta: 0.45,
                     gravitationalConstant: -310,
                     centralGravity: 0,
@@ -105,7 +108,15 @@ export default function App() {
                     springConstant: 0.675,
                     damping: 0.1,
                     avoidOverlap: 1
-                  },
+                  },*/
+                barnesHut: {
+                    springConstant: 0,
+                    avoidOverlap: 0.2,
+                    springConstant: 0.05,
+                    gravitationalConstant: -20850,
+
+                }
+                
                 //barnesHut: {
                 //  gravitationalConstant: -50,   // TODO numero chistoso = 10000
                 //  centralGravity: 0,
@@ -395,13 +406,6 @@ export default function App() {
     }
     
 
-    const handleSliderGrade = (e) => {
-        setGradeSize(e.target.value)
-    }
-
-    const handleSliderRoad = (e) => {
-        setRoadSize(e.target.value)
-    }
 
     const handleSliderChange = () => {
         let updates = nodes.current.map(
@@ -413,6 +417,7 @@ export default function App() {
     }
     
     useEffect( () => {
+        console.log(edges.current);
         handleSliderChange();
     }, [roadSize]);
 
