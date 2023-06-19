@@ -92,9 +92,16 @@ export default function App() {
             nodes: {
                 shape: "image",
                 image: require('./../images/no-image-photography-icon.png'),
-              },
+                widthConstraint: {
+                    //minimum : 200,
+                    maximum : 200,
+                },
+            },
             edges: {
-                widthConstraint: 200,   // Cantidad de letras X 10
+                widthConstraint: {// 200,   // Cantidad de letras X 10
+                    //minimum : 200,
+                    maximum : 200,
+                },
                 //smooth : {
                 //    type :"curvedCCW",
                 //}
@@ -111,10 +118,11 @@ export default function App() {
                   },*/
                 barnesHut: {
                     springConstant: 0,
-                    avoidOverlap: 0.2,
+                    avoidOverlap: 0.6,
                     springConstant: 0.05,
                     gravitationalConstant: -20850,
-
+                    centralGravity: 0.8,
+                    timestep: 0.01
                 }
                 
                 //barnesHut: {

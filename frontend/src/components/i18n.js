@@ -19,12 +19,13 @@ const resources = {
       "Return": "Return",
       "Clear": "CLEAR",
       "Entity": "Entity",
+      "EntityWrite": "Write an entity",
       "LoadingSearch": "Searching",
       "WaitingSearch": "Waiting an entry",
       "NoResultSearch": "No results",
 
-      "Slider1": "Max road size",
-      "Slider2": "Max road grade",
+      "Slider1": "Max path size",
+      "Slider2": "Max path grade",
 
       "Ayuda1": "Write in the search input the entity you want to search",
       "Ayuda2": "When the entities displays, select one",
@@ -48,6 +49,7 @@ const resources = {
       "Return": "Volver",
       "Clear": "LIMPIAR",
       "Entity": "Entidad",
+      "EntityWrite": "Escriba una entidad",
       "LoadingSearch": "Buscando",
       "WaitingSearch": "Esperando una entrada",
       "NoResultSearch": "Sin resultados",

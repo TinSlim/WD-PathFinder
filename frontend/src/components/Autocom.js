@@ -83,8 +83,7 @@ export default function Autocom(props) {
       return t('NoResultSearch');
     }
   }
-  
-  // TODO AGREGAR TRADUCCION
+
   return (
     <div>
       <Autocomplete
@@ -123,11 +122,10 @@ export default function Autocom(props) {
           <TextField {...params}
             InputLabelProps={{ shrink: true }}
             // hiddenLabel
-            label={t("Entity")} //TODO Texto IDIOMA
+            label={t("Entity")}
             variant="filled"
-
-            //helperText="Escriba una entidad"  // TODO IDIOMA
-            placeholder='Escriba una entidad'
+            //helperText="Escriba una entidad"
+            placeholder={t("EntityWrite")}
             InputProps={{
               ...params.InputProps,
               endAdornment: (

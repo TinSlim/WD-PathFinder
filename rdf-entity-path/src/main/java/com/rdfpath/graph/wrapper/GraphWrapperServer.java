@@ -73,7 +73,7 @@ public class GraphWrapperServer {
 		if (vertexDescription != null) {title += "\n" + vertexDescription;};
 	    
 	    JSONObject newVertex = new JSONObject();
-	    newVertex.put("label", vertexLabelSmall != null ? vertexLabelSmall : "" + vw.idVertex );
+	    newVertex.put("label", vertexLabelSmall != null ? vertexLabelSmall : "Q" + vw.idVertex );
 	    newVertex.put("color",vw.getHexColor());
 	    newVertex.put("title", title);
 	    newVertex.put("id", vw.idVertex);
@@ -108,8 +108,8 @@ public class GraphWrapperServer {
 	    
 	    double angleR = Math.toRadians(angle);
 	    if (angle != -1) {
-	    	newVertex.put("x", Math.cos(angleR) * 500);
-		    newVertex.put("y", Math.sin(angleR) * 500);
+	    	newVertex.put("x", Math.cos(angleR) * 600);
+		    newVertex.put("y", Math.sin(angleR) * 600);
 		    newVertex.put("fixed",true);
 	    }
 	    
@@ -162,7 +162,7 @@ public class GraphWrapperServer {
 		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
 		
-		actualDistance = 500;
+		actualDistance = 600;
 		int index = 0;
 		for (int idSearch : nodesNumbers) {
 			VertexWrapperServer actVW = new VertexWrapperServer(idSearch);
@@ -341,37 +341,11 @@ public class GraphWrapperServer {
 		return;
 		}
 		
-		if (vw1.edgesWith != null) {
-			vw1.addEdgeWith(v2);
-		}
-		else {
-			vw2.addEdgeWith(v1);
-		}
-		
-		//vw1.addEdgeWith(v2);
-		//vw2.addEdgeWith(v1);
+		// Envío de aristas
 		
 		ArrayList edges = graph.getEdges(v1, v2);
-		// AddedNodes se puede borrar usando size de edgesNodes
-		if (!addedNodes.contains(v1)) {
-			addedNodes.add(v1);
-			session.sendMessage(new TextMessage(vertexWrapperToJson(vw1,-1)));
-		}
-		else {
-			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw1)));
-		}
-		
-		if (!addedNodes.contains(v2)) {
-			addedNodes.add(v2);
-			session.sendMessage(new TextMessage(vertexWrapperToJson(vw2,-1)));
-		}
-		else {
-			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw2)));
-		}
-		
-		
-		double spaceRound = 2.0 / (edges.size() + 1.0);
-		double accRound = -1.0;
+		double spaceRound = 1.0 / (edges.size() + 1.0); // 2.0 /
+		double accRound = -0.5; // -1.0
 		for (Object edge : edges) {
 			checkConn();
 			totalEdges+=1;
@@ -392,6 +366,32 @@ public class GraphWrapperServer {
 			session.sendMessage(new TextMessage(
 					edgeToJson(edge,edgeRoadSize,v1, accRound)));
 		}
+		
+		if (vw1.edgesWith != null) {
+			vw1.addEdgeWith(v2);
+		}
+		else {
+			vw2.addEdgeWith(v1);
+		}
+		// Envío de Nodos
+		if (!addedNodes.contains(v1)) {
+			addedNodes.add(v1);
+			session.sendMessage(new TextMessage(vertexWrapperToJson(vw1,-1)));
+		}
+		else {
+			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw1)));
+		}
+		
+		if (!addedNodes.contains(v2)) {
+			addedNodes.add(v2);
+			session.sendMessage(new TextMessage(vertexWrapperToJson(vw2,-1)));
+		}
+		else {
+			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw2)));
+		}
+		
+		
+		
 		
 	}
 	
