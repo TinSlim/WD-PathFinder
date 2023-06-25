@@ -11,6 +11,7 @@ import Content from "./Content";
 import Help from "./Help";
 import Footer from "./Footer";
 
+import Tooltip from '@mui/material/Tooltip';
 import Slide from '@mui/material/Slide';
 
 import Typography from '@mui/material/Typography';
@@ -107,30 +108,16 @@ export default function App() {
                 //}
             },
             physics : {
-                /*forceAtlas2Based: {
-                    theta: 0.45,
-                    gravitationalConstant: -310,
-                    centralGravity: 0,
-                    springLength: 500,
-                    springConstant: 0.675,
-                    damping: 0.1,
-                    avoidOverlap: 1
-                  },*/
+                maxVelocity: 8,
+                minVelocity: 0.29,
+                timestep: 0.4,
                 barnesHut: {
                     springConstant: 0,
                     avoidOverlap: 0.6,
                     springConstant: 0.05,
                     gravitationalConstant: -20850,
-                    centralGravity: 0.8,
-                    timestep: 0.01
+                    centralGravity: 0.8, 
                 }
-                
-                //barnesHut: {
-                //  gravitationalConstant: -50,   // TODO numero chistoso = 10000
-                //  centralGravity: 0,
-                //  avoidOverlap: 0.5
-                //},
-              //minVelocity: 1
             },
         };
 
@@ -142,6 +129,12 @@ export default function App() {
             container.current &&
             network;
     },[])
+
+    function htmlTitle(html) {
+        const container = document.createElement("div");
+        container.innerHTML = html;
+        return container;
+    }
 
     // Cuando running, crea un socket
     useEffect(() => {
@@ -179,6 +172,7 @@ export default function App() {
                 } else {
                     message.data.hidden = true;
                 }
+                message.data.title = message.data.title; //htmlTitle();
                 nodes.current.add(message.data);
             }
             else if (message.type == 'edge') {
@@ -227,6 +221,7 @@ export default function App() {
                 } else {
                     message.data.hidden = true;
                 }
+                message.data.title = message.data.title; //htmlTitle();
                 nodes.current.add(message.data);
             }
             else if (message.type == 'edge') {
@@ -274,68 +269,6 @@ export default function App() {
         network.setOptions({
             height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px"
         });
-        /*
-        let pares = {};
-        setPares(pares);
-
-        let nodoPar = {};
-        setNodoPar(nodoPar);
-
-        nodes.current.clear();// = new DataSet([]);
-        edges.current.clear();// = new DataSet([]);
-
-        const options = {
-            autoResize: true,
-            height: (window.innerHeight - document.getElementById("footer").offsetHeight) + "px",
-            width:  (window.innerWidth) + "px",
-            nodes: {
-                shape: "image",
-                image: require('./../images/no-image-photography-icon.png'),
-              },
-            edges: {
-                widthConstraint: 200,   // Cantidad de letras X 10
-            },
-            physics : {
-                forceAtlas2Based: {
-                    theta: 0.45,
-                    gravitationalConstant: -310,
-                    centralGravity: 0,
-                    springLength: 500,
-                    springConstant: 0.675,
-                    damping: 0.1,
-                    avoidOverlap: 1
-                  },
-                //barnesHut: {
-                //  gravitationalConstant: -50,   // TODO numero chistoso = 10000
-                //  centralGravity: 0,
-                //  avoidOverlap: 0.5
-                //},
-              //minVelocity: 1
-            },
-        };
-
-        const data = { nodes: nodes.current, edges:edges.current };
-        let network = new Network(container.current, data , options);
-        setNetwork(network);
-
-        network.moveTo(
-            {
-                position: {x:0, y:0},
-                scale: 0.5,
-                offset: {x:0, y:0},
-                animation: false //{ // -------------------> can be a boolean too!
-                //duration: 1,
-                //easingFunction: 'linear'
-                //}
-            }
-        );
-        
-        const networkCont =
-            container.current &&
-            network;
-
-        ws.current.send(ids.concat(i18n.language));*/
-
     }
 
     const end2 = () => {
@@ -566,9 +499,17 @@ export default function App() {
                 sx={{position:"absolute", left:"15%", bottom: "90px", width: "70%"}}>
                 <Stack
                 sx={{width: "30%"}}>
-                    <Typography>
-                        {t('Slider1')}
-                    </Typography>
+                    
+                    <Stack direction="row" alignItems="center">
+                        <Typography>
+                            {t('Slider1')}&nbsp;
+                        </Typography>
+                        <Tooltip title={t('Slider1Info')}>
+                            <InfoIcon />
+                        </Tooltip>
+                    </Stack>
+                    
+                    
                     <Slider
                     defaultValue={3}
                     min={1}
@@ -579,9 +520,16 @@ export default function App() {
                 </Stack>
                 <Stack
                 sx={{width: "70%"}}>
-                    <Typography>
-                        {t('Slider2')}
-                    </Typography>
+
+                    <Stack direction="row" alignItems="center">
+                        <Typography>
+                            {t('Slider2')}&nbsp;
+                        </Typography>
+                        <Tooltip title={t('Slider2Info')}>
+                            <InfoIcon />
+                        </Tooltip>
+                    </Stack>
+
                     <Slider
                     defaultValue={8}
                     min={1}
