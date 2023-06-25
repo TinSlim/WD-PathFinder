@@ -344,8 +344,8 @@ public class GraphWrapperServer {
 		// Envío de aristas
 		
 		ArrayList edges = graph.getEdges(v1, v2);
-		double spaceRound = 1.0 / (edges.size() + 1.0); // 2.0 /
-		double accRound = -0.5; // -1.0
+		double spaceRound = 0.8 / (edges.size() + 1.0); // 2.0 _ 1.0
+		double accRound = -0.4; // -1.0 _ -0.5
 		for (Object edge : edges) {
 			checkConn();
 			totalEdges+=1;
@@ -401,13 +401,19 @@ public class GraphWrapperServer {
     	
     	// Edge data
     	String[] edgeLabel;
-    	String edgeLabelSmall = "";
+    	String edgeLabelSmall = null;
+    	String edgeDescription = null;
 		try {
 			edgeLabel = Utils.getEntityName(graph.getPredicateEdge(e), lang, false);
 			edgeLabelSmall = edgeLabel[0];
+			edgeDescription = edgeLabel[1];
 		} catch (IOException e1) {
 		}
     	
+		String title = "P" + graph.getPredicateEdge(e);
+		if (edgeLabelSmall != null) {title += " - " + edgeLabelSmall;};
+		if (edgeDescription != null) {title += "\n" + edgeDescription;};
+		
     	// Arrow Config
     	JSONObject arrowInfo = new JSONObject();
     	arrowInfo.put("enabled", true);
@@ -457,7 +463,7 @@ public class GraphWrapperServer {
     	
     	edge.put("labelWiki", graph.getPredicateEdge(e));
     	edge.put("label", edgeLabelSmall);
-    	edge.put("title", edgeLabelSmall);
+    	edge.put("title", title);
     	edge.put("roadSize", roadSize);
 
     	
@@ -479,7 +485,6 @@ public class GraphWrapperServer {
     	
     	json.put("type", "edge");
     	json.put("data", edge);
-    	
     	return json.toString();
     }
 

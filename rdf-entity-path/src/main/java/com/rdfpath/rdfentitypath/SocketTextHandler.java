@@ -91,7 +91,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		logger.info("[ID:"+session.getId()+"] Consulta: " + response);
 		
 		String[] splitAns = response.split(",");
-		int[] nodesNumbers = Arrays.stream(Arrays.copyOfRange(splitAns,0,splitAns.length - 1)).mapToInt(Integer::parseInt).toArray();  
+		int[] nodesNumbers = Arrays.stream(Arrays.copyOfRange(splitAns,0,splitAns.length - 1)).mapToInt(Integer::parseInt).distinct().toArray();  
 		
 		GraphWrapperServer graphWrapper = new GraphWrapperServer(graph);
 		graphWrapper.setSession(session);
@@ -104,14 +104,13 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		
 		try {
 			graphWrapper.search(nodesNumbers, sizeSearch, 100000);
-			session.close();;
+			session.close();
 		}
 		catch (IOException ioE) {
 			// Session is closed
 		}
-
-		//graphWrapper = null;
 		
+		//graphWrapper = null;
 	}
 	
 	
