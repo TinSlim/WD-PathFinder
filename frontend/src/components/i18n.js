@@ -26,6 +26,8 @@ const resources = {
 
       "Slider1": "Max path size",
       "Slider2": "Max path grade",
+      "Slider1Info": "Filters the paths that have a length greater than this value.",
+      "Slider2Info": "Filters the paths that have a degree (number of edges) greater than this value. The value is on a logarithmic scale.",
 
       "Ayuda1": "Write in the search input the entity you want to search",
       "Ayuda2": "When the entities displays, select one",
@@ -56,6 +58,8 @@ const resources = {
 
       "Slider1": "Largo máximo caminos",
       "Slider2": "Grado máximo caminos",
+      "Slider1Info": "Filtra los caminos que poseen un largo mayor a este valor.",
+      "Slider2Info": "Filtra los caminos que poseen un grado (cantidad de aristas) mayor a este valor. El valor está en escala logarítmica.",
 
       "Ayuda1": "Escriba en el buscador la entidad la entidad que desea buscar",
       "Ayuda2": "Cuando se desplieguen entidades existentes, seleccione una",
