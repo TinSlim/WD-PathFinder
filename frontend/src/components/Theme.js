@@ -13,7 +13,12 @@ export const theme = createTheme({
             contrastText: '#fff',
         },
         error: {
-            main: '#c06c84',
+            main: '#cd3661',//'#c06c84',           cf003b       ca3521
+        },
+        success: {
+            main: '#1dc99a',
+            contrastText: '#fff',
         }
+
     },
 });

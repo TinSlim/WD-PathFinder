@@ -68,7 +68,7 @@ export default function Search(props) {
             
             <Stack spacing={1} direction="row" alignItems="center">
                 <Button fullWidth={true} onClick={clearWords} variant="contained" color="error" >{t('Clear')}</Button>
-                <Button fullWidth={true} onClick={launchGraph} variant="contained" color="primary">{t('Search')}</Button>
+                <Button fullWidth={true} onClick={launchGraph} variant="contained" color="success">{t('Search')}</Button>
             </Stack>
             
 
