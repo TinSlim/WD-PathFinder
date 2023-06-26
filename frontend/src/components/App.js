@@ -97,6 +97,9 @@ export default function App() {
                     //minimum : 200,
                     maximum : 200,
                 },
+                //font : {
+                //    multi: 'html',
+                //}
             },
             edges: {
                 widthConstraint: {// 200,   // Cantidad de letras X 10
@@ -106,6 +109,10 @@ export default function App() {
                 //smooth : {
                 //    type :"curvedCCW",
                 //}
+                
+                //font : {
+                //    multi: 'html',
+                //},
             },
             physics : {
                 maxVelocity: 8,
@@ -131,8 +138,15 @@ export default function App() {
     },[])
 
     function htmlTitle(html) {
+        let ans = html.split('\n');
+        const id = document.createElement("b");
+        id.innerHTML = ans[0];
+        const label = document.createElement("p");
+        label.innerHTML = ans[1];
+
         const container = document.createElement("div");
-        container.innerHTML = html;
+        container.appendChild(id);
+        container.appendChild(label);
         return container;
     }
 
@@ -172,7 +186,8 @@ export default function App() {
                 } else {
                     message.data.hidden = true;
                 }
-                message.data.title = message.data.title; //htmlTitle();
+                message.data.title = message.data.title;
+                //message.data.title = htmlTitle(message.data.title);
                 nodes.current.add(message.data);
             }
             else if (message.type == 'edge') {
@@ -185,7 +200,9 @@ export default function App() {
                     } else {
                         message.data.hidden = true;
                     }
+                    
                 }
+                //message.data.title = htmlTitle(message.data.title);
                 nodes.current.updateOnly(message.data);
             }
         };
@@ -222,6 +239,7 @@ export default function App() {
                     message.data.hidden = true;
                 }
                 message.data.title = message.data.title; //htmlTitle();
+                //message.data.title = htmlTitle(message.data.title);
                 nodes.current.add(message.data);
             }
             else if (message.type == 'edge') {
@@ -358,7 +376,6 @@ export default function App() {
     }
     
     useEffect( () => {
-        console.log(edges.current);
         handleSliderChange();
     }, [roadSize]);
 
@@ -446,22 +463,28 @@ export default function App() {
                 open={drawerState}
                 onClose={closeDrawer}>
                
-                <Stack className="has-background-primary" p={0.5} direction="row" alignItems="center" justifyContent="space-between">
+                <Stack className="has-background-primary mb-3" p={0.5} direction="row" alignItems="center" justifyContent="space-between">
                     <img className="ml-1" src={require('./../images/wool2.svg')}/>
                     <IconButton onClick={closeDrawer}>
                         <ChevronLeftIcon />
                     </IconButton>
                 </Stack>
-                
+                {/*
                 <Typography variant="body" p={1}>
                     {t("Description")}.                   
                 </Typography>
-                <Divider />
+                <Divider />*/
+                }
 
                 {!showingInfo &&
                 <Zoom  in={!showingInfo} >
                     <Stack
                         >
+                        <Stack className="ml-3 mr-3" spacing={1} direction="row" alignItems="center">
+                            <Button fullWidth={true} onClick={changeInfo} color="secondary">
+                                <InfoIcon/> &nbsp;{t('Help')}
+                            </Button>
+                        </Stack>
 
                         <Search 
                             initGraph = {startSearch}
@@ -472,14 +495,6 @@ export default function App() {
                             setValues={setValues}
                             closeDrawer={closeDrawer}>
                         </Search>
-
-                    
-
-                        <Stack className="ml-3 mr-3" spacing={1} direction="row" alignItems="center">
-                            <Button fullWidth={true} onClick={changeInfo} color="secondary">
-                                <InfoIcon/> &nbsp;{t('Help')}
-                            </Button>
-                        </Stack>
                     </Stack>
                 </Zoom>
                 }
@@ -505,7 +520,7 @@ export default function App() {
                             {t('Slider1')}&nbsp;
                         </Typography>
                         <Tooltip title={t('Slider1Info')}>
-                            <InfoIcon />
+                            <InfoIcon color="secondary"/>
                         </Tooltip>
                     </Stack>
                     
@@ -526,7 +541,7 @@ export default function App() {
                             {t('Slider2')}&nbsp;
                         </Typography>
                         <Tooltip title={t('Slider2Info')}>
-                            <InfoIcon />
+                            <InfoIcon color="secondary"/>
                         </Tooltip>
                     </Stack>
 
