@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 const ListT = ({ entities, deleteEntity }) => (
-    <div style={{overflowY: 'auto', height:"45vh"}}>
+    <div style={{overflowY: 'auto', height:"50vh"}}> {/*antes 45vh*/}
         {entities.map((ent, index) => (
             <Stack>
                 <Stack 
