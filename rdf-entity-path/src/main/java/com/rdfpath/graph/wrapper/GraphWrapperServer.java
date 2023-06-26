@@ -87,6 +87,7 @@ public class GraphWrapperServer {
     	font.put("align", "middle");
     	//font.put("strokeColor", "#f5f5f5"); // TODO color
     	font.put("size", 18);
+    	//font.put("multi", "html"); // TODO soporte HTML
     	newVertex.put("font", font);
 	    
 	    try {
@@ -476,6 +477,7 @@ public class GraphWrapperServer {
     	font.put("strokeColor", "#f5f5f5"); // TODO color
     	font.put("size", 18);
     	edge.put("font", font);
+    	
     	
     	edge.put("color", new JSONObject().put("color", "#848484")); // TODO color
     	edge.put("arrows", arrow);
