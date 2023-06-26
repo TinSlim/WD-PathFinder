@@ -12,13 +12,23 @@ return(
     <Zoom hidden={!props.showingInfo} in={props.showingInfo} >
         <Stack>
             <Stack className="ml-3 mr-3" spacing={1} direction="row" alignItems="center">
-                <Button fullWidth={true} className='mt-3' onClick={props.changeInfo} color="secondary">
+                <Button fullWidth={true} onClick={props.changeInfo} color="secondary">
                     <InfoIcon/>&nbsp; {t("Return")}
                 </Button>
             </Stack>
         
-            <Stack className='ml-3 mr-3'>
-                <Stack style={{display: 'flex',height: '500px', overflowY: 'auto'}}>
+            <Stack className='ml-3 mr-3 mt-1'>
+                <Stack style={{display: 'flex',height: '450px', overflowY: 'auto'}}>
+                    
+                    <Stack className='mb-2'>
+                        <Typography variant='h6'>
+                            WoolNet:
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                            WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikdata.
+                        </Typography>
+                    </Stack>
+                    
                     <Stack>
                         <Typography variant='h6'>
                             Uso:
@@ -48,15 +58,6 @@ return(
                             • {t('Ayuda6')}.
                         </Typography>
                         <img className="mt-1 mb-2" src={require('./../images/help/Paso6_edit.png')}/>
-                    </Stack>
-
-                    <Stack>
-                        <Typography variant='h6'>
-                            WoolNet:
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                            WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikdata.
-                        </Typography>
                     </Stack>
 
                 
