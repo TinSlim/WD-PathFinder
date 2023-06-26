@@ -57,9 +57,11 @@ all_data_SAC$memArista = all_data_SAC$Memoria / all_data_SAC$Aristas
 tiemposBusquedaCamino_limExc_SAC <- tiemposBusquedaCamino_limExc[!
     (tiemposBusquedaCamino_limExc$grupos_id %in% ids_aristas_cero), ]
 tiemposBusquedaCamino_limExc_SAC$memArista = tiemposBusquedaCamino_limExc_SAC$Memoria / tiemposBusquedaCamino_limExc_SAC$Aristas
+```
 
-
-
+```{r}
+# Valores Nuevos
+ids_aristas_cero[!(ids_aristas_cero %in% ids_aristas_cero_limExc)]
 
 ```
 
