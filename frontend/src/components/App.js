@@ -519,7 +519,7 @@ export default function App() {
                         <Typography>
                             {t('Slider1')}&nbsp;
                         </Typography>
-                        <Tooltip title={t('Slider1Info')}>
+                        <Tooltip placement="top" title={t('Slider1Info')}>
                             <InfoIcon color="secondary"/>
                         </Tooltip>
                     </Stack>
@@ -540,7 +540,7 @@ export default function App() {
                         <Typography>
                             {t('Slider2')}&nbsp;
                         </Typography>
-                        <Tooltip title={t('Slider2Info')}>
+                        <Tooltip placement="top" title={t('Slider2Info')}>
                             <InfoIcon color="secondary"/>
                         </Tooltip>
                     </Stack>
