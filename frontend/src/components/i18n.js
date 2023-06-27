@@ -29,12 +29,16 @@ const resources = {
       "Slider1Info": "Filters the paths that have a length greater than this value.",
       "Slider2Info": "Filters the paths that have a degree (number of edges) greater than this value. The value is on a logarithmic scale.",
 
+      "WoolNet": "WoolNet is the application that allows obtaining the paths that join Wikdata entities.",
+      "Instructions": "Instructions",
       "Ayuda1": "Write in the search input the entity you want to search",
       "Ayuda2": "When the entities displays, select one",
       "Ayuda3": "Repeat 1 and 2 with the entities that you want",
-      "Ayuda4": "Clicking SEARCH (BUSCAR in the image) will start the serch for roads, using CLEAR (LIMPIAR in the image) will delete the selected entities",
-      "Ayuda5": "You can stop the search using STOP button (DETENER in the image)",
-      "Ayuda6": "You can show less results using the bottom sliders"
+      "Ayuda4": "Clicking SEARCH will start the serch for roads, using CLEAR will delete the selected entities",
+      "Ayuda5": "You can stop the search using STOP button",
+      "Ayuda6": "You can show less results using the bottom sliders",
+
+      "HelpIMG1": './../images/help/Paso1_edit.png'
     }
   },
   es: {
@@ -61,12 +65,16 @@ const resources = {
       "Slider1Info": "Filtra los caminos que poseen un largo mayor a este valor.",
       "Slider2Info": "Filtra los caminos que poseen un grado (cantidad de aristas) mayor a este valor. El valor está en escala logarítmica.",
 
+      "WoolNet": "WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikdata.",
+      "Instructions": "Instrucciones",
       "Ayuda1": "Escriba en el buscador la entidad la entidad que desea buscar",
       "Ayuda2": "Cuando se desplieguen entidades existentes, seleccione una",
       "Ayuda3": "Repita el paso 1. y 2 con las entidades que desea",
       "Ayuda4": "Clickeando el botón BUSCAR iniciará las búsqueda de caminos, usando LIMPIAR eliminará las entidades seleccionadas",
       "Ayuda5": "Puede detener la búsqueda clickeando en DETENER",
       "Ayuda6": "Puede disminuir regular los resultados usando los SLIDERS inferiores",
+    
+      "HelpIMG1": './../images/help/Paso1_edit.png',
     }
   }
 };
