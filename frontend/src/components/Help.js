@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 
 export default function Hekp(props) {
     const { t, i18n } = useTranslation();
-
 return(
     <Zoom hidden={!props.showingInfo} in={props.showingInfo} >
         <Stack>
@@ -25,39 +24,70 @@ return(
                             WoolNet:
                         </Typography>
                         <Typography variant="body2" component="div">
-                            WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikdata.
+                            {t('WoolNet')}
                         </Typography>
                     </Stack>
                     
                     <Stack>
                         <Typography variant='h6'>
-                            Uso:
+                            {t('Instructions')}:
                         </Typography>
                         
                         <Typography variant="body2" component="div">
                             1. {t('Ayuda1')}.
                         </Typography>
-                        <img className="mt-1 mb-2" src={require('./../images/help/Paso1_edit.png')}/>
+                        
+                        {i18n.language == 'en' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso1_en.png')}/>
+                        }
+                        {i18n.language == 'es' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso1_edit.png')}/>
+                        }
                         <Typography variant="body2" component="div">
                             2. {t('Ayuda2')}.
                         </Typography>
-                        <img className="mt-1 mb-2" src={require('./../images/help/Paso2_edit.png')}/>
+                        {i18n.language == 'en' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso2_en.png')}/>
+                        }
+                        {i18n.language == 'es' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso2_edit.png')}/>
+                        }
                         <Typography variant="body2" component="div">
                             3. {t('Ayuda3')}.
                         </Typography>
-                        <img className="mt-1 mb-2" src={require('./../images/help/Paso3_edit.png')}/>
+                        {i18n.language == 'en' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso3_en.png')}/>
+                        }
+                        {i18n.language == 'es' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso3_edit.png')}/>
+                        }
                         <Typography variant="body2" component="div">
                             4. {t('Ayuda4')}.
                         </Typography>
-                        <img className="mt-1 mb-2" src={require('./../images/help/Paso4_edit.png')}/>
+                        {i18n.language == 'en' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso4_en.png')}/>
+                        }
+                        {i18n.language == 'es' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso4_edit.png')}/>
+                        }
                         <Typography variant="body2" component="div">
                             • {t('Ayuda5')}.
                         </Typography>
-                        <img className="mt-1 mb-2" src={require('./../images/help/Paso5_edit.png')}/>
+                        {i18n.language == 'en' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso5_en.png')}/>
+                        }
+                        {i18n.language == 'es' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso5_edit.png')}/>
+                        }
                         <Typography variant="body2" component="div">
                             • {t('Ayuda6')}.
                         </Typography>
-                        <img className="mt-1 mb-2" src={require('./../images/help/Paso6_edit.png')}/>
+                        {i18n.language == 'en' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso6_en.png')}/>
+                        }
+                        {i18n.language == 'es' &&
+                            <img className="mt-1 mb-2" src={require('./../images/help/Paso6_edit.png')}/>
+                        }
                     </Stack>
 
                 
