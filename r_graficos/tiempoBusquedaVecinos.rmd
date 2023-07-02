@@ -18,6 +18,17 @@ library(ggplot2)
 tiemposBusquedaVecino <- read.csv("datos/timeNano.csv", sep = ";")
 ```
 
+
+### Conteo de Datos
+
+```{r}
+table(tiemposBusquedaVecino['Estructura'])
+```
+```{r}
+table(tiemposBusquedaVecino['SetDatos'])
+```
+
+
 ### Trabajo datos
 
 ```{r}
