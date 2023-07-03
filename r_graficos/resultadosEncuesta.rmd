@@ -1,0 +1,47 @@
+
+
+
+```{r}
+library(ggplot2)
+encuesta = read.table(file = 'EncuestaWoolnet.tsv', sep = '\t', header = TRUE)
+```
+
+```{r}
+# 5 ->1
+resultado = length(encuesta[,1])
+preguntas = 5:14
+valores = encuesta[1:resultado,preguntas]
+
+ids = c()
+preguntas = c()
+resultados = c()
+colores = c()
+
+id = 1
+for (line in 1:resultado) {
+  for (q in 1:10) {
+    ids = c(ids,id)
+    preguntas = c(preguntas,as.character(q))
+    resultados = c(resultados,valores[line,q])
+    if (q%%2 != 0) {
+      colores = c(colores,'red')
+    }
+    else {
+      colores = c(colores,'cyan')
+    }
+  }
+  id = id +1
+}
+
+mi_df <- data.frame(
+  "id" = ids, 
+  "pregunta" = preguntas, 
+  "resultado" = resultados,
+  "colores" = colores
+)
+```
+
+```{r}
+ggplot(mi_df, aes(x=pregunta, y=resultado, color=colores)) + #fill=Estructura
+  geom_boxplot()
+```
