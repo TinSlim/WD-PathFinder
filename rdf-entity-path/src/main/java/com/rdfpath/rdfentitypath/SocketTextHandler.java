@@ -20,6 +20,7 @@ import com.rdfpath.graph.wrapper.GraphWrapperServer;
 public class SocketTextHandler extends TextWebSocketHandler {
 	public IGraph graph;
 	Logger logger = LoggerFactory.getLogger(SocketTextHandler.class);
+	public int timeLimit;
 	
 	public SocketTextHandler () throws IOException, ParseException {
 		super();
@@ -80,6 +81,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 				true,
 				maxNodeId[index]);
 		
+		timeLimit = (System.getProperty("timeLimit") != null) ? Integer.parseInt(System.getProperty("timeLimit")) : -1;
 		logger.info("[Carga Datos] Grafo Cargado");
 	}
 	
@@ -96,6 +98,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		GraphWrapperServer graphWrapper = new GraphWrapperServer(graph);
 		graphWrapper.setSession(session);
 		graphWrapper.setLang(splitAns[splitAns.length - 1]);
+		graphWrapper.setTimeLimit(timeLimit);
 		
 		int sizeSearch = 3;
 		if (nodesNumbers.length == 1) {

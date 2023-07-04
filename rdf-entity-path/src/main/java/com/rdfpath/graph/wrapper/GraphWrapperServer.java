@@ -39,7 +39,7 @@ public class GraphWrapperServer {
 	private int actualDistance;
 	private String lang;
 	
-	int secondsLimit = 120;
+	int secondsLimit;
 	
 	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperUpdateToJson (VertexWrapperServer vw) {
@@ -182,8 +182,9 @@ public class GraphWrapperServer {
 		}
 		
 		while (toSearch.size() > 0) {
-			checkConn();
-
+			//checkConn();
+			checkConnTimeout();
+			
 			VertexWrapperServer actualVW = toSearch.pop();
 			if (actualVW.sameColorDistance > (size/2) + size%2) {
 				continue;
@@ -321,7 +322,7 @@ public class GraphWrapperServer {
 		LinkedList<VertexBackTrackingServer> stack = new LinkedList<VertexBackTrackingServer>();
 		stack.push(new VertexBackTrackingServer(vw));
 		while (stack.size() > 0) {
-			checkConnTimeout();
+			//checkConnTimeout();
 			//checkConn();
 			VertexBackTrackingServer actualBT = stack.pop();
 			if (actualBT.colorDistance + actualBT.grade > maxSize) {
@@ -333,7 +334,7 @@ public class GraphWrapperServer {
 			}
 			
 			for (VertexWrapperServer vwFrom: actualBT.actVW.from) {
-				checkConn();
+				//checkConn();
 				if (! actualBT.nodes.contains(vwFrom.idVertex)) {
 					VertexBackTrackingServer vbtNew = new VertexBackTrackingServer(actualBT, vwFrom);
 					stack.push(vbtNew);
@@ -348,7 +349,7 @@ public class GraphWrapperServer {
 		}
 		int i = 0;
 		while (i < nodesList.size() - 1) {
-			checkConn();
+			//checkConn();
 			sendEdges(nodesList.get(i), nodesList.get(i + 1));
 			i++;
 		}
@@ -356,7 +357,7 @@ public class GraphWrapperServer {
 	}
 	
 	public void sendEdges (int v1, int v2) throws IOException {
-		checkConn();
+		//checkConn();
 		VertexWrapperServer vw1 = nodes.get(v1);
 		VertexWrapperServer vw2 = nodes.get(v2);
 		if (vw1.hasEdgeWith(v2) || vw2.hasEdgeWith(v1)) {
@@ -369,7 +370,7 @@ public class GraphWrapperServer {
 		double spaceRound = 0.8 / (edges.size() + 1.0); // 2.0 _ 1.0
 		double accRound = -0.4; // -1.0 _ -0.5
 		for (Object edge : edges) {
-			checkConn();
+			//checkConn();
 			totalEdges+=1;
 			
 			int edgeRoadSize = Math.max(vw1.sameColorDistance + vw1.otherColorDistance, vw2.sameColorDistance + vw2.otherColorDistance);
@@ -516,6 +517,11 @@ public class GraphWrapperServer {
 	 */
 	public void setLang(String language) {
 		this.lang = language;
+		
+	}
+
+	public void setTimeLimit(int timeLimit) {
+		secondsLimit = timeLimit;
 		
 	}
 }
