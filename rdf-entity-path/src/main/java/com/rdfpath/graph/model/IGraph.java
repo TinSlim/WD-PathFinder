@@ -135,6 +135,32 @@ public interface IGraph {
 	HashSet<Integer> getAdjacentVertexSessionLimited(int id, WebSocketSession session, int maxEdgeSize, boolean isInitial) throws IOException;
 	
 	/**
+	 * Obtiene los nodos adyacentes de un nodo. Si la sessión no sigue abierta o se agoto el tiempo lanza una interrupción. 
+	 * Si el nodo actual tiene más vecinos que límite máximo y no es inicial, no se retorna nodos vecinos.
+	 * @param id							id del nodo que se obtendrán sus vecinos
+	 * @param session						conexión actual
+	 * @param maxEdgeSize					límite de vecinos para el nodo
+	 * @param isInitial						si el nodo es inicial o no
+	 * @param initTime						tiempo en que inicia la búsqueda
+	 * @param limitTime						tiempo límite
+	 * @return								HashSet con los ids de nodos vecinos
+	 * @throws InterruptedException			Interrupción cuando se alcanza el tiempo límite
+	 * @throws IOException					Interrupción cuando no sigue la conexión
+	 */
+	HashSet<Integer> getAdjacentVertexSessionTimeoutLimited(int id, WebSocketSession session, int maxEdgeSize, boolean isInitial, long initTime, int limitTime) throws InterruptedException, IOException;
+
+	/**
+	 * Obtiene los nodos adyacentes de un nodo. Si la sessión no sigue abierta o se agoto el tiempo lanza una interrupción. 
+	 * @param id							id del nodo que se obtendrán sus vecinos
+	 * @param session						conexión actual
+	 * @param initTime						tiempo en que inicia la búsqueda
+	 * @param limitTime						tiempo límite
+	 * @return								HashSet con los ids de nodos vecinos
+	 * @throws InterruptedException			Interrupción cuando se alcanza el tiempo límite
+	 * @throws IOException					Interrupción cuando no sigue la conexión
+	 */
+	HashSet<Integer> getAdjacentVertexSessionTimeout(int id, WebSocketSession session, long initTime, int limitTime) throws InterruptedException, IOException;
+	/**
 	 * Obtiene el grado del nodo, es decir cantidad de nodos vecinos.
 	 * @param idVertex						nodo que se le obtendrá el grado
 	 * @return								grado del nodo

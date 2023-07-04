@@ -138,6 +138,27 @@ public class GraphCompDense extends AbstractGraph {
 		return answer;
 	}
 	
+	public HashSet<Integer> getAdjacentVertexSessionTimeout(int id, WebSocketSession session, long initTime, int limitTime) throws InterruptedException, IOException {
+		HashSet<Integer> answer = new HashSet<Integer>();
+		int index = searchVertexIndex(id);
+		if (index == -1) return answer;
+		
+		int i = 1;
+		int j = -1;
+
+		while (i < nodes[index].length) {
+			j = 1; 
+			while (j < nodes[index][i].length) {
+				checkConn(session);
+				checkTime(limitTime,initTime);
+				answer.add(nodes[index][i][j]);
+				j+=1;
+			}
+			i+=1;
+		}
+		return answer;
+	}
+	
 	@Override
 	public ArrayList<int[]> getEdges(int idVertex, int idVertex2) {
 		ArrayList<int[]> edges = new ArrayList<int[]>();

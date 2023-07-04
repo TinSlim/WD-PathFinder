@@ -79,6 +79,17 @@ public class Vertex {
     	}
     	return vertexSet;
 	}
+    
+    public HashSet<Integer> getAdjacentVertexSessionTimeout(WebSocketSession session, long initTime, int limitTime) throws InterruptedException, IOException {
+    	List<Edge> actEdges = getAdjacentEdges();
+    	HashSet<Integer> vertexSet = new HashSet<Integer>();
+    	for (Edge e : actEdges) {
+    		checkConn(session);
+    		checkTime(limitTime, initTime);
+    		vertexSet.add(e.getOppositeVertex(this).getId());
+    	}
+    	return vertexSet;
+	}
 
     public void setAdjacentEdges(List<Edge> adjacentEdges) {
         this.adjacentEdges = adjacentEdges;
@@ -110,6 +121,9 @@ public class Vertex {
     	}
     	return edges;
     }
+
+
+	
 
 	
 

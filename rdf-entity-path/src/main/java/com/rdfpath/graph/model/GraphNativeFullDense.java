@@ -116,6 +116,20 @@ public class GraphNativeFullDense extends AbstractGraph {
 		}
 		return adjVL;
 	}
+	
+	public HashSet<Integer> getAdjacentVertexSessionTimeout(int id, WebSocketSession session, long initTime, int limitTime) throws InterruptedException, IOException {
+		int index = searchVertexIndex(id);
+		int[] edgesOfV = nodes2[index];
+		HashSet<Integer> adjVL = new HashSet<Integer>();
+		for (int edgeNum=1;edgeNum<edgesOfV.length;edgeNum++) {
+			checkConn(session);
+			checkTime(limitTime, initTime);
+			int edgeID = edgesOfV[edgeNum];
+			int adjID = (edges[edgeID][0] == id) ? edges[edgeID][2] : edges[edgeID][0];
+			adjVL.add(adjID);
+		}
+		return adjVL;
+	}
 		
 	
 	/**

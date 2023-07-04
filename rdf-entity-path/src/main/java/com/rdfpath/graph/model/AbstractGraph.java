@@ -55,7 +55,10 @@ public abstract class AbstractGraph implements IGraph {
 			if (System.getProperty("debug") != null) {
 				System.out.println("GetAdjVertex");
 			}
+			System.out.println("done time");
+			System.out.println("done time");
 			throw new InterruptedException("Done Time");
+			
 		}
 	}
 	
@@ -127,6 +130,14 @@ public abstract class AbstractGraph implements IGraph {
 		return new HashSet<Integer>();
 	}
 	
+	public HashSet<Integer> getAdjacentVertexSessionTimeoutLimited(int id, WebSocketSession session, int maxEdgeSize, boolean isInitial, long initTime, int limitTime) throws InterruptedException, IOException {
+		HashSet<Integer> adjVertex = getAdjacentVertexSessionTimeout(id, session, initTime, limitTime);
+		if ( maxEdgeSize == -1 || adjVertex.size() < maxEdgeSize || isInitial ) {
+			return adjVertex;
+		}
+		return new HashSet<Integer>();
+	}
+
 	@Override
 	public HashSet<Integer> getAdjacentVertexTimeoutLimited(int id, int seconds, long startTime, int maxEdgeSize, boolean isInitial) throws InterruptedException {
 		HashSet<Integer> adjVertex = getAdjacentVertexTimeout(id, seconds, startTime);

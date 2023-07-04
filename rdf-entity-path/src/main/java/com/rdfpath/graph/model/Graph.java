@@ -100,6 +100,11 @@ public class Graph extends AbstractGraph {
 		HashSet<Integer> nList = nodes.get(id).getAdjacentVertexTimeout(seconds, startTime);
 		return nList;
 	}
+	
+	public HashSet<Integer> getAdjacentVertexSessionTimeout(int id, WebSocketSession session, long initTime, int limitTime) throws InterruptedException, IOException {
+		HashSet<Integer> nList = nodes.get(id).getAdjacentVertexSessionTimeout(session, initTime, limitTime);
+		return nList;
+	}
 
 	@Override
 	public ArrayList<Edge> getEdges(int idVertex, int idVertex2) {
