@@ -282,6 +282,9 @@ export default function App() {
     }
 
     const startSearch = (ids) => {
+        setRoadSize(3);
+        setGradeSize(9);
+        
         setIdsSearch(ids);
         setRunning(true);
         network.setOptions({
@@ -309,7 +312,6 @@ export default function App() {
         clearInterval(stopwatchInterval.current);
         setTime("00:00");
         let startTime = Date.now() - 0;
-        // animacion esfera
         const stopwatchIntervalC = setInterval ( () => {
             const runningTimeC = Date.now() - startTime;
             setTime(calculateTime(runningTimeC));
@@ -320,13 +322,9 @@ export default function App() {
     }
 
     const changeLanguage = (e) => {
-        //window.location.reload(false);
-        //console.log("reload");
         const url = new URL(window.location.href);
         url.searchParams.set('lang', e.target.value);
         window.location.href = url.href;
-        //setLang(e.target.value);
-        //i18n.changeLanguage(e.target.value);
     }
 
     const groupClusters = () => {
@@ -529,6 +527,7 @@ export default function App() {
                     defaultValue={3}
                     min={1}
                     max={3}
+                    value={roadSize}
                     onChange={(e) => setRoadSize(e.target.value)}
                     marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
                     />
@@ -549,6 +548,7 @@ export default function App() {
                     defaultValue={8}
                     min={1}
                     max={8}
+                    value={gradeSize}
                     onChange={(e) => setGradeSize(e.target.value)}
                     marks={[
                             {value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},
