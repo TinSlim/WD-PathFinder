@@ -25,9 +25,9 @@ const resources = {
       "NoResultSearch": "No results",
 
       "Slider1": "Max path size",
-      "Slider2": "Max path grade",
+      "Slider2": "Max degree of nodes",
       "Slider1Info": "Filters the paths that have a length greater than this value.",
-      "Slider2Info": "Filters the paths that have a degree (number of edges) greater than this value. The value is on a logarithmic scale.",
+      "Slider2Info": "Filters the paths that have nodes with a degree (number of edges) greater than this value. Value is on logarithmic scale.",
 
       "WoolNet": "WoolNet is the application that allows obtaining the paths that join Wikdata entities.",
       "Instructions": "Instructions",
@@ -61,9 +61,9 @@ const resources = {
       "NoResultSearch": "Sin resultados",
 
       "Slider1": "Largo máximo caminos",
-      "Slider2": "Grado máximo caminos",
+      "Slider2": "Grado máximo de los nodos",
       "Slider1Info": "Filtra los caminos que poseen un largo mayor a este valor.",
-      "Slider2Info": "Filtra los caminos que poseen un grado (cantidad de aristas) mayor a este valor. El valor está en escala logarítmica.",
+      "Slider2Info": "Filtra los caminos que poseen nodos con un grado (cantidad de aristas) mayor a este valor. El valor está en escala logarítmica.",
 
       "WoolNet": "WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikdata.",
       "Instructions": "Instrucciones",
