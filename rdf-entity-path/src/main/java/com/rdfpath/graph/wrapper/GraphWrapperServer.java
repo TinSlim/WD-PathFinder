@@ -28,6 +28,7 @@ public class GraphWrapperServer {
 		{173,247,182}, {160,206,217}, {252,245,199}, {255,238,147}, {255,192,159}
 		};
 	public long startTime;
+	public long initTime;
 	
 	private HashMap<Integer, VertexWrapperServer> nodes;
 	private IGraph graph;
@@ -37,6 +38,8 @@ public class GraphWrapperServer {
 	private int[] nodesNumbers;
 	private int actualDistance;
 	private String lang;
+	
+	int secondsLimit = 120;
 	
 	@SuppressWarnings("unchecked")
 	public CharSequence vertexWrapperUpdateToJson (VertexWrapperServer vw) {
@@ -117,7 +120,7 @@ public class GraphWrapperServer {
 	    return json.toString();
 	}
 	
-
+	@SuppressWarnings("unchecked")
 	private CharSequence ping() {
 		JSONObject json = new JSONObject();
 	    json.put("type","ping");
@@ -156,8 +159,9 @@ public class GraphWrapperServer {
 		this.session = session;
 	}
 
-	public void search (int [] nodesNumbers, int size, int maxEdgeSize) throws IOException {
+	public void search (int [] nodesNumbers, int size, int maxEdgeSize) throws InterruptedException, IOException {
 		startTime = System.currentTimeMillis();
+		initTime = startTime;
 		this.nodesNumbers = nodesNumbers;
 		
 		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
@@ -186,9 +190,11 @@ public class GraphWrapperServer {
 			}
 
 			// Revisa VÉRTICES adyacentes
-			for (Integer adjVertex : graph.getAdjacentVertexSessionLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.added == null)) {
-				checkConn();
-
+			for (Integer adjVertex : graph.getAdjacentVertexSessionTimeoutLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.added == null, initTime, secondsLimit)) {
+				//		graph.getAdjacentVertexSessionLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.added == null)
+				//checkConn();
+				checkConnTimeout();
+				
 				// Así no cicla en el mismo nodo
 				if (actualVW.idVertex == adjVertex) {
 					continue;
@@ -296,12 +302,27 @@ public class GraphWrapperServer {
 			startTime = System.currentTimeMillis();
 		}
 	}
+	
+	private void checkConnTimeout() throws InterruptedException, IOException {
+		if ( (System.currentTimeMillis() - startTime) > 1 * 500 ) { // 1 cada medio segundo
+			session.sendMessage(new TextMessage(ping()));
+			if (!session.isOpen() ) {
+				throw new IOException();
+			}
+			startTime = System.currentTimeMillis();
+		}
+		if ( (System.currentTimeMillis() - initTime) > secondsLimit * 1000) {
+			System.out.println("done time");
+			throw new InterruptedException();
+		}
+	}
 
-	public void backTracking(VertexWrapperServer vw, int maxSize, HashSet<Integer> nodesNumbers) throws IOException {
+	public void backTracking(VertexWrapperServer vw, int maxSize, HashSet<Integer> nodesNumbers) throws IOException, InterruptedException {
 		LinkedList<VertexBackTrackingServer> stack = new LinkedList<VertexBackTrackingServer>();
 		stack.push(new VertexBackTrackingServer(vw));
 		while (stack.size() > 0) {
-			checkConn();
+			checkConnTimeout();
+			//checkConn();
 			VertexBackTrackingServer actualBT = stack.pop();
 			if (actualBT.colorDistance + actualBT.grade > maxSize) {
 				continue;

@@ -107,6 +107,18 @@ public class GraphFullNative extends AbstractGraph {
 		return adjVL;
 	}
 	
+	public HashSet<Integer> getAdjacentVertexSessionTimeout(int id, WebSocketSession session, long initTime, int limitTime) throws InterruptedException, IOException {
+		int[] edgesOfV = nodes2[id];
+		HashSet<Integer> adjVL = new HashSet<Integer>();
+		for (int edgeId : edgesOfV) {
+			checkConn(session);
+			checkTime(limitTime,initTime);
+			int adjID = (edges[edgeId][0] == id) ? edges[edgeId][2] : edges[edgeId][0];
+			adjVL.add(adjID);
+		}
+		return adjVL;
+	}
+	
 	@Override
 	public ArrayList<Integer> getEdges(int idVertex, int idVertex2) {
 		ArrayList<Integer> result = new ArrayList<Integer>();

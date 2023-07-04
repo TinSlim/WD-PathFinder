@@ -103,13 +103,17 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		}
 		
 		try {
-			graphWrapper.search(nodesNumbers, sizeSearch, 100000);
+			graphWrapper.search(nodesNumbers, sizeSearch, 10000);// Valor del informe: 100000
 			session.close();
 		}
 		catch (IOException ioE) {
 			// Session is closed
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			session.close();
 		}
-		
+		System.out.println("salí");
 		//graphWrapper = null;
 	}
 	
