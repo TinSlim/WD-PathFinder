@@ -3,26 +3,63 @@
 
 ```{r}
 library(ggplot2)
-encuesta = read.table(file = 'EncuestaWoolnet.tsv', sep = '\t', header = TRUE)
+encuesta = read.table(file = 'WoolNetEncuesta.tsv', sep = '\t', header = TRUE)
 ```
 
 ```{r}
-# 5 ->1
-resultado = length(encuesta[,1])
-preguntas = 5:14
-valores = encuesta[1:resultado,preguntas]
+# Limpieza
+encuesta = encuesta[-1,]
 
+# Columnas:
+c_conocimiento = 2
+c_entidades = 4
+c_preguntas = 5:14
+```
+
+
+### Conocimiento y cantidad de entidades
+
+```{r}
+# Preguntas:
+ids = c()
+conocimiento = c()
+entidades = c()
+value = c()
+act_id = 1
+for (i_row in 1:nrow(encuesta)) {
+  ids = c(ids,act_id)
+  conocimiento = c(conocimiento,encuesta[i_row,c_conocimiento])
+  entidades = c(entidades,as.character(encuesta[i_row,c_entidades]))
+  value = c(value,1)
+  #preguntas = c(preguntas,as.character(q-c_preguntas[1]+1))
+  #resultados = c(resultados,encuesta[i_row,q])
+  act_id = act_id + 1
+}
+
+df_ConCan <- data.frame(
+  "id" = ids,
+  "conocimiento" = conocimiento, 
+  "entidades" = entidades,
+  "value" = value
+)
+```
+
+
+### DF preguntas
+
+```{r}
+# Preguntas:
 ids = c()
 preguntas = c()
 resultados = c()
 colores = c()
 
-id = 1
-for (line in 1:resultado) {
-  for (q in 1:10) {
-    ids = c(ids,id)
-    preguntas = c(preguntas,as.character(q))
-    resultados = c(resultados,valores[line,q])
+act_id = 1
+for (i_row in 1:nrow(encuesta)) {
+  for (q in c_preguntas) {
+    ids = c(ids,act_id)
+    preguntas = c(preguntas,as.character(q-c_preguntas[1]+1))
+    resultados = c(resultados,encuesta[i_row,q])
     if (q%%2 != 0) {
       colores = c(colores,'red')
     }
@@ -30,18 +67,37 @@ for (line in 1:resultado) {
       colores = c(colores,'cyan')
     }
   }
-  id = id +1
+  act_id = act_id + 1
 }
 
-mi_df <- data.frame(
-  "id" = ids, 
+df_preguntas <- data.frame(
+  "id" = ids,
   "pregunta" = preguntas, 
   "resultado" = resultados,
   "colores" = colores
 )
 ```
 
+
+
+
+
+
+
+
 ```{r}
-ggplot(mi_df, aes(x=pregunta, y=resultado, color=colores)) + #fill=Estructura
+ggplot(df_ConCan, aes(x=conocimiento, y=value, fill=conocimiento)) +
+  geom_bar(stat = "identity")
+```
+
+```{r}
+ggplot(df_ConCan, aes(x=entidades, y=value, fill=entidades)) +
+  geom_bar(stat = "identity")
+```
+
+
+
+```{r}
+ggplot(df_preguntas, aes(x=pregunta, y=resultado, color=colores)) + #fill=Estructura
   geom_boxplot()
 ```
