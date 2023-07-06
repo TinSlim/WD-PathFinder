@@ -165,8 +165,8 @@ export default function App() {
         network.moveTo(
             {
                 position: {x:0, y:0},
-                scale: 0.5,
-                offset: {x:0, y:0},
+                scale: 0.35,
+                offset: {x:0, y:-10},
                 animation: false
             }
         );
