@@ -509,7 +509,7 @@ export default function App() {
             <Stack
                 direction="row"
                 spacing={5}
-                sx={{position:"absolute", left:"15%", bottom: "90px", width: "70%"}}>
+                sx={{position:"absolute", left:"15%", bottom: "80px", width: "70%"}}>
                 <Stack
                 sx={{width: "30%"}}>
                     
