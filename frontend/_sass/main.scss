@@ -38,13 +38,13 @@ $primary: #8fbbaf;
 //#a788ab
 $footer-padding: 1rem 1rem 1rem;        // arriba, los lados, abajo
 html { overflow-y: auto !important; }   // Elimina scroll lateral
-a:visited {
-color: #8bcdf8;
+a.link:visited {
+color: #025841;
 background-color: transparent;
 text-decoration: none;
 }
-a:hover {
-color: #8bcdf8;
+a.link:hover {
+color: #037859;
 background-color: transparent;
 text-decoration: underline;
 }
