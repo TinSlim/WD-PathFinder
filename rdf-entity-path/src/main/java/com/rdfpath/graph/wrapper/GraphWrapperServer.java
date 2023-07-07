@@ -182,6 +182,7 @@ public class GraphWrapperServer {
 		}
 		
 		while (toSearch.size() > 0) {
+			System.out.println(toSearch.size());
 			//checkConn();
 			checkConnTimeout();
 			
@@ -222,7 +223,7 @@ public class GraphWrapperServer {
 					if (actualVW.colorNode == adjVW.colorNode) {
 
 						// Revisar si se agregó, ESTÁ EN PATH
-						if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
+						if (adjVW.otherColorDistance > -1 && adjVW.sameColorDistance > 0 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
 							LinkedList<Integer> unionNodes = new LinkedList<Integer>();
 							actualVW.otherColorDistance = adjVW.otherColorDistance + 1;
 							unionNodes.push(adjVW.idVertex);
@@ -236,7 +237,6 @@ public class GraphWrapperServer {
 							
 						    // TODO
 							// WB encuentra USA y usa su grado
-							
 							makeEdges(unionNodes);
 							backTracking(actualVW, size, nodesNumbersSet);
 						}
@@ -341,6 +341,7 @@ public class GraphWrapperServer {
 				}				
 			}
 		}
+		
 	}
 
 	public void makeEdges (LinkedList<Integer> nodesList) throws IOException {
