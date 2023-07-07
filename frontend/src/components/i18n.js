@@ -29,7 +29,7 @@ const resources = {
       "Slider1Info": "Filters the paths that have a length greater than this value.",
       "Slider2Info": "Filters the paths that have nodes with a degree (number of edges) greater than this value. Value is on logarithmic scale.",
 
-      "WoolNet": "WoolNet is the application that allows obtaining the paths that join Wikdata entities.",
+      "WoolNet": "WoolNet is the application that allows obtaining the paths that join Wikidata entities.",
       "Instructions": "Instructions",
       "Ayuda1": "Write in the search input the entity you want to search",
       "Ayuda2": "When the entities displays, select one",
@@ -65,7 +65,7 @@ const resources = {
       "Slider1Info": "Filtra los caminos que poseen un largo mayor a este valor.",
       "Slider2Info": "Filtra los caminos que poseen nodos con un grado (cantidad de aristas) mayor a este valor. El valor está en escala logarítmica.",
 
-      "WoolNet": "WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikdata.",
+      "WoolNet": "WoolNet es la aplicación que permite obtener los caminos que unen entidades de Wikidata.",
       "Instructions": "Instrucciones",
       "Ayuda1": "Escriba en el buscador la entidad la entidad que desea buscar",
       "Ayuda2": "Cuando se desplieguen entidades existentes, seleccione una",
