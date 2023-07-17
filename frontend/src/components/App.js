@@ -181,7 +181,7 @@ export default function App() {
 
             const message = JSON.parse(e.data);
             if (message.type == 'vertex') {
-                if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
+                if (message.data.initial || (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize)) {
                     message.data.hidden = false;
                 } else {
                     message.data.hidden = true;
@@ -195,7 +195,7 @@ export default function App() {
             }
             else if (message.type == "edit") {
                 if ('nodeGrade' in message.data) {
-                    if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
+                    if (message.data.initial || (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize)) {
                         message.data.hidden = false;
                     } else {
                         message.data.hidden = true;
@@ -233,7 +233,8 @@ export default function App() {
 
             const message = JSON.parse(e.data);
             if (message.type == 'vertex') {
-                if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
+
+                if (message.data.initial || (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize)) {
                     message.data.hidden = false;
                 } else {
                     message.data.hidden = true;
@@ -247,7 +248,7 @@ export default function App() {
             }
             else if (message.type == "edit") {
                 if ('nodeGrade' in message.data) {
-                    if (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize) {
+                    if (message.data.initial || (Math.log10(message.data.nodeGrade) <= gradeSize && message.data.roadSize <= roadSize)) {
                         message.data.hidden = false;
                     } else {
                         message.data.hidden = true;
@@ -369,7 +370,7 @@ export default function App() {
     const handleSliderChange = () => {
         let updates = nodes.current.map(
             (x) => {
-                let hidden = Math.log10(x.nodeGrade) <= gradeSize && x.roadSize <= roadSize ? false : true;
+                let hidden = x.initial || (Math.log10(x.nodeGrade) <= gradeSize && x.roadSize <= roadSize)  ? false : true;
                 return {id:x.id,hidden:hidden} 
         });
         nodes.current.updateOnly(updates);
