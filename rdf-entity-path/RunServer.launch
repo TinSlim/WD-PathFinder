@@ -16,5 +16,5 @@
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="rdf-entity-path"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="rdf-entity-path"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DtimeLimit=12"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DtimeLimit=120000"/>
 </launchConfiguration>
