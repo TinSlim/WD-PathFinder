@@ -28,7 +28,7 @@ return(
                         </Typography>
                     </Stack>
                     
-                    <Stack>
+                    <Stack className='mt-3'>
                         <Typography variant='h6'>
                             {t('Instructions')}:
                         </Typography>
@@ -43,7 +43,7 @@ return(
                         {i18n.language == 'es' &&
                             <img className="mt-1 mb-2" src={require('./../images/help/Paso1_edit.png')}/>
                         }
-                        <Typography variant="body2" component="div">
+                        <Typography className='mt-2' variant="body2" component="div">
                             2. {t('Ayuda2')}.
                         </Typography>
                         {i18n.language == 'en' &&
@@ -52,7 +52,7 @@ return(
                         {i18n.language == 'es' &&
                             <img className="mt-1 mb-2" src={require('./../images/help/Paso2_edit.png')}/>
                         }
-                        <Typography variant="body2" component="div">
+                        <Typography className='mt-2' variant="body2" component="div">
                             3. {t('Ayuda3')}.
                         </Typography>
                         {i18n.language == 'en' &&
@@ -61,7 +61,7 @@ return(
                         {i18n.language == 'es' &&
                             <img className="mt-1 mb-2" src={require('./../images/help/Paso3_edit.png')}/>
                         }
-                        <Typography variant="body2" component="div">
+                        <Typography className='mt-2' variant="body2" component="div">
                             4. {t('Ayuda4')}.
                         </Typography>
                         {i18n.language == 'en' &&
@@ -70,7 +70,7 @@ return(
                         {i18n.language == 'es' &&
                             <img className="mt-1 mb-2" src={require('./../images/help/Paso4_edit.png')}/>
                         }
-                        <Typography variant="body2" component="div">
+                        <Typography className='mt-2' variant="body2" component="div">
                             • {t('Ayuda5')}.
                         </Typography>
                         {i18n.language == 'en' &&
@@ -79,7 +79,7 @@ return(
                         {i18n.language == 'es' &&
                             <img className="mt-1 mb-2" src={require('./../images/help/Paso5_edit.png')}/>
                         }
-                        <Typography variant="body2" component="div">
+                        <Typography className='mt-2' variant="body2" component="div">
                             • {t('Ayuda6')}.
                         </Typography>
                         {i18n.language == 'en' &&

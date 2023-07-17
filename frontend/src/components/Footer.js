@@ -8,12 +8,12 @@ export default function Footer() {
             <Stack direction="row" justifyContent="space-around">
                 <Stack>
                     <p>
-                    <strong className="has-text-white">© 2023 WoolNet</strong> by <a href="https://ctorresg.cl">Cristóbal Torres</a>.
+                    <strong className="has-text-white">© 2023 WoolNet</strong> by <a className='link' href="https://ctorresg.cl">Cristóbal Torres</a>.
                     </p>
                 </Stack>
                 <Stack>
                 <img src={require('./../images/Wikidata_Stamp_Rec_Dark.svg')}
-                                width="150px"/>
+                                width="130px"/>
                 </Stack>
             </Stack>
             

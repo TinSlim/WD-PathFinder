@@ -165,8 +165,8 @@ export default function App() {
         network.moveTo(
             {
                 position: {x:0, y:0},
-                scale: 0.5,
-                offset: {x:0, y:0},
+                scale: 0.35,
+                offset: {x:0, y:-10},
                 animation: false
             }
         );
@@ -283,6 +283,9 @@ export default function App() {
     }
 
     const startSearch = (ids) => {
+        setRoadSize(3);
+        setGradeSize(9);
+        
         setIdsSearch(ids);
         setRunning(true);
         network.setOptions({
@@ -310,7 +313,6 @@ export default function App() {
         clearInterval(stopwatchInterval.current);
         setTime("00:00");
         let startTime = Date.now() - 0;
-        // animacion esfera
         const stopwatchIntervalC = setInterval ( () => {
             const runningTimeC = Date.now() - startTime;
             setTime(calculateTime(runningTimeC));
@@ -321,13 +323,9 @@ export default function App() {
     }
 
     const changeLanguage = (e) => {
-        //window.location.reload(false);
-        //console.log("reload");
         const url = new URL(window.location.href);
         url.searchParams.set('lang', e.target.value);
         window.location.href = url.href;
-        //setLang(e.target.value);
-        //i18n.changeLanguage(e.target.value);
     }
 
     const groupClusters = () => {
@@ -512,7 +510,7 @@ export default function App() {
             <Stack
                 direction="row"
                 spacing={5}
-                sx={{position:"absolute", left:"15%", bottom: "90px", width: "70%"}}>
+                sx={{position:"absolute", left:"15%", bottom: "80px", width: "70%"}}>
                 <Stack
                 sx={{width: "30%"}}>
                     
@@ -530,6 +528,7 @@ export default function App() {
                     defaultValue={3}
                     min={1}
                     max={3}
+                    value={roadSize}
                     onChange={(e) => setRoadSize(e.target.value)}
                     marks={[{value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"}]}
                     />
@@ -550,6 +549,7 @@ export default function App() {
                     defaultValue={8}
                     min={1}
                     max={8}
+                    value={gradeSize}
                     onChange={(e) => setGradeSize(e.target.value)}
                     marks={[
                             {value:1, label:"1"},{value:2, label:"2"},{value:3, label:"3"},

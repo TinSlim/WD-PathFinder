@@ -344,6 +344,7 @@ public class GraphWrapperServer {
 				}				
 			}
 		}
+		
 	}
 
 	public void makeEdges (LinkedList<Integer> nodesList) throws IOException {

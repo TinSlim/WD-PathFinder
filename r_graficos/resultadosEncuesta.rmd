@@ -3,45 +3,272 @@
 
 ```{r}
 library(ggplot2)
-encuesta = read.table(file = 'EncuestaWoolnet.tsv', sep = '\t', header = TRUE)
+encuestaInterna = read.table(file = 'encuestas/WoolNetInterna.tsv', sep = '\t', header = TRUE)
+encuesta2 = read.table(file = 'encuestas/WoolNet3.tsv', sep = '\t', header = TRUE)
 ```
 
 ```{r}
-# 5 ->1
-resultado = length(encuesta[,1])
-preguntas = 5:14
-valores = encuesta[1:resultado,preguntas]
+# Limpieza
+encuestaInterna = encuestaInterna[-1,]  # Borra línea vacía
 
+# Columnas:
+cI_conocimiento = 2
+cI_entidades = 4
+cI_preguntas = 5:14
+
+# Columnas:
+c2_conocimiento = 2
+c2_interesante = 3
+c2_entidades = 5
+c2_preguntas = 6:15
+```
+
+
+
+### Conocimiento y cantidad de entidades
+
+```{r}
+# Preguntas:
+ids = c()
+conocimiento = c()
+interesante = c()
+entidades = c()
+value = c()
+act_id = 1
+
+#for (i_row in 1:nrow(encuestaInterna)) {
+#  ids = c(ids,act_id)
+#  conocimiento = c(conocimiento,encuestaInterna[i_row,c_conocimiento])
+#  entidades = c(entidades,as.character(encuestaInterna[i_row,c_entidades]))
+#  value = c(value,1)
+#  act_id = act_id + 1
+#}
+
+for (i_row in 1:nrow(encuesta2)) {
+  ids = c(ids,act_id)
+  conocimiento = c(conocimiento,encuesta2[i_row,c2_conocimiento])
+  interesante = c(interesante,encuesta2[i_row,c2_interesante])
+  entidades = c(entidades,as.character(encuesta2[i_row,c2_entidades]))
+  value = c(value,1)
+  act_id = act_id + 1
+}
+
+
+
+df_ConCan <- data.frame(
+  "id" = ids,
+  "conocimiento" = conocimiento,
+  "interesante" = interesante,
+  "entidades" = entidades,
+  "value" = value
+)
+
+df_ConCan["interesante"][df_ConCan["interesante"] == 'No sÃ©'] <- 'No sé'
+```
+
+
+### DF preguntas
+
+```{r}
+# Preguntas:
 ids = c()
 preguntas = c()
 resultados = c()
 colores = c()
 
-id = 1
-for (line in 1:resultado) {
-  for (q in 1:10) {
-    ids = c(ids,id)
-    preguntas = c(preguntas,as.character(q))
-    resultados = c(resultados,valores[line,q])
-    if (q%%2 != 0) {
+
+act_id = 1
+
+#for (i_row in 1:nrow(encuestaInterna)) {
+#  for (q in cI_preguntas) {
+#    ids = c(ids,act_id)
+#    preguntas = c(preguntas,as.character(q-cI_preguntas[1]+1))
+#    resultados = c(resultados,encuestaInterna[i_row,q])
+#    if ((q - cI_preguntas[1] + 1)%%2 != 0) {
+#      colores = c(colores,'red')
+#    }
+#    else {
+#      colores = c(colores,'cyan')
+#    }
+#  }
+#  act_id = act_id + 1
+#}
+
+
+for (i_row in 1:nrow(encuesta2)) {
+  for (q in c2_preguntas) {
+    ids = c(ids,act_id)
+    preguntas = c(preguntas,as.character(q-c2_preguntas[1]+1))
+    resultados = c(resultados,encuesta2[i_row,q])
+    if ((q - c2_preguntas[1] + 1)%%2 != 0) {
       colores = c(colores,'red')
     }
     else {
       colores = c(colores,'cyan')
     }
   }
-  id = id +1
+  act_id = act_id + 1
 }
 
-mi_df <- data.frame(
-  "id" = ids, 
+df_preguntas <- data.frame(
+  "id" = ids,
   "pregunta" = preguntas, 
   "resultado" = resultados,
   "colores" = colores
 )
 ```
 
+
+## Puntajes SUS
+
 ```{r}
-ggplot(mi_df, aes(x=pregunta, y=resultado, color=colores)) + #fill=Estructura
+# Preguntas:
+ids = c()
+resultados = c()
+label = c()
+
+act_id = 1
+
+#for (i_row in 1:nrow(encuestaInterna)) {
+#  res = 0
+#  for (q in cI_preguntas) {
+#    a = encuestaInterna[i_row,q]
+#    if ((q - cI_preguntas[1] + 1)%%2 != 0) {
+#      res = res + (a - 1) 
+#    }
+#    else {
+#      res = res + (5 - a)
+#    }
+#  }
+#  ids = c(ids,act_id)
+#  resultados = c(resultados, res * 2.5)
+#  label = c(label, 'Encuestados')
+#  act_id = act_id + 1
+#}
+
+for (i_row in 1:nrow(encuesta2)) {
+  res = 0
+  for (q in c2_preguntas) {
+    a = encuesta2[i_row,q]
+    if ((q - c2_preguntas[1] + 1)%%2 != 0) {
+      res = res + (a - 1) 
+    }
+    else {
+      res = res + (5 - a)
+    }
+  }
+  ids = c(ids,act_id)
+  resultados = c(resultados, res * 2.5)
+  label = c(label, 'Encuestados')
+  act_id = act_id + 1
+}
+
+df_sus <- data.frame(
+  "id" = ids,
+  "resultado" = resultados,
+  "label" = label
+)
+```
+
+
+
+
+```{r}
+df_ConCan$conocimiento = factor(df_ConCan$conocimiento, levels = c("Si", "Un poco", "No"))
+
+ggplot(df_ConCan, aes(x=conocimiento, y=value)) + #, fill=conocimiento)) +
+  geom_bar(stat = "identity") + 
+  labs(title= "Conocimiento acerca de Wikidata de personas encuestadas",
+       #color = "Conoce Wikidata",
+       y = "Cantidad de personas",
+       x = "Conoce Wikidata") +
+  #
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  scale_y_continuous(breaks = c(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100))
+  #scale_y_continuous(trans='log10', breaks=c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10 ^9))
+
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_Conoce.png", width=7, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_Conoce.pdf", width=7, height=5, dpi=300)
+```
+
+
+```{r}
+df_ConCan$interesante = factor(df_ConCan$interesante, levels = c("Si", "No sé", "No"))
+
+ggplot(df_ConCan, aes(x=interesante, y=value)) + #, fill=conocimiento)) +
+  geom_bar(stat = "identity") + 
+  labs(title= "Encuentran algo interesante en la búsqueda las personas encuestadas",
+       #color = "Conoce Wikidata",
+       y = "Cantidad de personas",
+       x = "Encuentra algo interesante en la búsqueda") +
+  #
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  scale_y_continuous(breaks = c(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100))
+  #scale_y_continuous(trans='log10', breaks=c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10 ^9))
+
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_Interesante.png", width=7, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_Interesante.pdf", width=7, height=5, dpi=300)
+```
+
+
+
+```{r}
+ggplot(df_ConCan, aes(x=entidades, y=value)) + #, fill=entidades)) +
+  geom_bar(stat = "identity") + 
+  labs(title= "Entre cuantas entidades buscaron caminos las personas encuestadas",
+       #fill = "Cantidad de Entidades",
+       y = "Cantidad de personas",
+       x = "Cantidad de Entidades") +
+  #
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  scale_y_continuous(breaks = c(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100))
+  #scale_y_continuous(trans='log10', breaks=c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10 ^9))
+
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_Cantidad.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_Cantidad.pdf", width=8, height=5, dpi=300)
+```
+
+
+
+```{r}
+df_preguntas$pregunta = factor(df_preguntas$pregunta, levels = c("1","2","3","4","5","6","7","8","9","10"))
+ggplot(df_preguntas, aes(x=pregunta, y=resultado, color=colores)) + #fill=Estructura
   geom_boxplot()
+```
+
+```{r}
+ggplot(df_sus, aes(x=label, y=resultado)) + #fill=Estructura
+  geom_boxplot() +
+  
+  labs(title= "Puntajes SUS de personas encuestadas",
+       #color = "Estructura del Grafo",
+       y = "Puntaje",
+       x = "Grupo") +
+  #
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  scale_y_continuous(breaks = c(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100))
+  #scale_y_continuous(trans='log10', breaks=c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10 ^9))
+
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_SUS.png", width=4, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_SUS.pdf", width=4, height=5, dpi=300)
+```
+### Puntaje SUS
+
+```{r}
+mean(df_sus$resultado)
+```
+
+
+### Tabla
+
+```{r}
+one <- function (x) {
+  print(x)
+  return (1);
+}
+agg_df <- aggregate(df_preguntas$colores, by=list(df_preguntas$pregunta, df_preguntas$resultado), FUN=length)
 ```
