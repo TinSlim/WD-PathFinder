@@ -27,7 +27,7 @@ options(scipen = 999)
 tiemposBusquedaCamino$memArista = tiemposBusquedaCamino$Memoria / tiemposBusquedaCamino$Aristas
 
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphGt"] <- "Objetos de Java"
-tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Adyacencia no densa" #"Comprimido con índices"
+tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphComp"] <- "Adyacencia no Densa" #"Comprimido con índices"
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphCompDense"] <- "Adyacencia Densa"
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFull"] <- "Triples no Densos"
 tiemposBusquedaCamino$Estructura[tiemposBusquedaCamino$Estructura == "graphNativeFullDense"] <- "Triples Densos"
