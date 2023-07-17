@@ -13,15 +13,19 @@ public class VertexWrapperServer {
 	public int[] color;
 	public int idVertex;
 	public int colorNode;
+	public boolean initial;
+	
 	public int sameColorDistance;
-	public HashSet<VertexWrapperServer> from;
-	public LinkedList<Integer> added;
-	public Boolean inStack;
 	public int otherColorDistance;
+
+	public HashSet<VertexWrapperServer> from;
 	public HashSet<Integer> edgesWith;
+	
 	public int nodeGrade;
 	public int maxNodeGrade;
 	public int backTNodeGrade;
+	
+	public int queueTimes;
 	
 	/**
 	 * @param idSearch
@@ -29,14 +33,20 @@ public class VertexWrapperServer {
 	public VertexWrapperServer(int idSearch) {
 		this.idVertex = idSearch;
 		this.colorNode = idSearch;
+		initial = true;
+		
+		
 		this.sameColorDistance = 0;
-		this.from = new HashSet<VertexWrapperServer>();
 		this.otherColorDistance = -1;
-		edgesWith = null;
+		
+		this.from = new HashSet<VertexWrapperServer>();
+		this.edgesWith = null;
 		
 		nodeGrade = 0;
 		maxNodeGrade = 0;
 		backTNodeGrade = 1;
+		
+		queueTimes = 1;
 	}
 
 	/**
@@ -46,63 +56,33 @@ public class VertexWrapperServer {
 	public VertexWrapperServer(VertexWrapperServer actualVW, int adjVertex, int nodeGrade) {
 		this.idVertex = adjVertex;
 		this.colorNode = actualVW.colorNode;
+		int[] newColor = {actualVW.color[0] - 26,actualVW.color[1] - 24,actualVW.color[2] - 25};
+		this.color = newColor;
+		initial = false;
+		
 		this.sameColorDistance = actualVW.sameColorDistance + 1;
+		this.otherColorDistance = -1;
 		
 		this.from = new HashSet<VertexWrapperServer>();
 		this.from.add(actualVW);
-		
-		this.added = new LinkedList<Integer>();
-		added.add(actualVW.idVertex);
-		
-		this.otherColorDistance = -1;
-		
 		edgesWith = null;
-		this.nodeGrade = nodeGrade;
-		int[] newColor = {actualVW.color[0] - 26,actualVW.color[1] - 24,actualVW.color[2] - 25};
-		this.color = newColor;
 		
+		this.nodeGrade = nodeGrade;	
 		this.maxNodeGrade = Math.max(nodeGrade,actualVW.maxNodeGrade);
 		backTNodeGrade = -1;
-	}
-	
-	public void addVertexAdded (int idVertex) {
-		if (added == null) {
-			this.added = new LinkedList<Integer>();
-		}
-		added.add(idVertex);
-	}
-	
-	public void removeFather () {
-		added.pop();
-		if (added.size() == 0) {
-			this.added = null;
-		}
-	}
-	
-	public Boolean addFrom (VertexWrapperServer actVW) {
-		if (!from.contains(actVW)) {
-			addVertexAdded(actVW.idVertex);
-			this.from.add(actVW);
-			return true;
-		}
-		this.from.add(actVW);
-		return false;
 		
+		queueTimes = 1;
 	}
-
-	/**
-	 * @param adjVW
-	 * @return
-	 */
-	public boolean fromFather(VertexWrapperServer adjVW) {
-		if (added == null) {
-			return false;
-		}
-		else if (added.get(0) == adjVW.idVertex) {
+	
+	
+	public boolean onlyFather (VertexWrapperServer adjVW) {
+		if (from != null && from.size() == 1 && from.contains(adjVW)) {
 			return true;
 		}
 		return false;
 	}
+	
+
 
 	
 	/**

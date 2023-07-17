@@ -1,15 +1,12 @@
 package com.rdfpath.graph.wrapper;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import org.json.JSONException;
 import org.json.simple.JSONObject;
-import org.springframework.web.socket.PingMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -82,6 +79,7 @@ public class GraphWrapperServer {
 	    newVertex.put("id", vw.idVertex);
 	    newVertex.put("edgeSize", 0);
 	    newVertex.put("size", 18);
+	    newVertex.put("initial", vw.initial);
 	    
 	    newVertex.put("roadSize", vw.sameColorDistance + vw.otherColorDistance);
 	    newVertex.put("nodeGrade", vw.backTNodeGrade);
@@ -162,6 +160,7 @@ public class GraphWrapperServer {
 	public void search (int [] nodesNumbers, int size, int maxEdgeSize) throws InterruptedException, IOException {
 		startTime = System.currentTimeMillis();
 		initTime = startTime;
+		
 		this.nodesNumbers = nodesNumbers;
 		
 		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
@@ -182,19 +181,15 @@ public class GraphWrapperServer {
 		}
 		
 		while (toSearch.size() > 0) {
-			//checkConn();
-			checkConnTimeout();
-			
+			//checkConn();			
+			System.out.println(toSearch.size());
 			VertexWrapperServer actualVW = toSearch.pop();
-			if (actualVW.sameColorDistance > (size/2) + size%2) {
+ 			if (actualVW.sameColorDistance > (size/2) + size%2) {
 				continue;
 			}
 
 			// Revisa VÉRTICES adyacentes
-			for (Integer adjVertex : graph.getAdjacentVertexSessionTimeoutLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.added == null, initTime, secondsLimit)) {
-				//		graph.getAdjacentVertexSessionLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.added == null)
-				//checkConn();
-				checkConnTimeout();
+			for (Integer adjVertex : graph.getAdjacentVertexSessionTimeoutLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.from == null, initTime, secondsLimit)) {
 				
 				// Así no cicla en el mismo nodo
 				if (actualVW.idVertex == adjVertex) {
@@ -213,8 +208,7 @@ public class GraphWrapperServer {
 					VertexWrapperServer adjVW = nodes.get(adjVertex);
 					
 					// Si es el que lo agregó a la lista
-					if (actualVW.fromFather(adjVW)) {
-						actualVW.removeFather();
+					if (actualVW.onlyFather(adjVW)) {
 						continue;
 					}
 					
@@ -223,27 +217,28 @@ public class GraphWrapperServer {
 
 						// Revisar si se agregó, ESTÁ EN PATH
 						if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
+							
+							if (actualVW.otherColorDistance == -1) {
+								actualVW.otherColorDistance = adjVW.otherColorDistance + 1;
+								int bTGrade = Math.max(adjVW.backTNodeGrade, actualVW.maxNodeGrade);
+								if (actualVW.backTNodeGrade < 0) actualVW.backTNodeGrade =  bTGrade;
+								backTracking(actualVW, size, nodesNumbersSet);
+							}
+							
 							LinkedList<Integer> unionNodes = new LinkedList<Integer>();
-							actualVW.otherColorDistance = adjVW.otherColorDistance + 1;
 							unionNodes.push(adjVW.idVertex);
 							unionNodes.push(actualVW.idVertex);
-							
-							
-							
-							
-							int bTGrade = Math.max(adjVW.backTNodeGrade, actualVW.maxNodeGrade);
-							if (actualVW.backTNodeGrade < 0) actualVW.backTNodeGrade =  bTGrade;
-							
-						    // TODO
-							// WB encuentra USA y usa su grado
-							
 							makeEdges(unionNodes);
-							backTracking(actualVW, size, nodesNumbersSet);
+
 						}
 						
-						else if (adjVW.addFrom(actualVW)) {
+						if (adjVW.queueTimes < 2) {
 							toSearch.add(adjVW);
+							adjVW.queueTimes = adjVW.queueTimes += 1; 
 						}
+
+						adjVW.from.add(actualVW);
+						
 					}
 					
 					else {
@@ -263,28 +258,31 @@ public class GraphWrapperServer {
 								adjVW.color = newColor;
 							}
 							
-							if (adjVW.otherColorDistance != -1) {
-								adjVW.otherColorDistance = Math.min(adjVW.otherColorDistance,actualVW.sameColorDistance + 1);
-							} else {
-								adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
-							}
-							
-							if (actualVW.otherColorDistance != -1) {
-								actualVW.otherColorDistance = Math.min(actualVW.otherColorDistance,actualVW.sameColorDistance + 1);
-							} else {
-								actualVW.otherColorDistance = actualVW.sameColorDistance + 1;
-							}
 							int bTGrade = Math.max(adjVW.maxNodeGrade, actualVW.maxNodeGrade);
 							
 							adjVW.backTNodeGrade = (adjVW.backTNodeGrade < 0) ? bTGrade : Math.min(bTGrade,adjVW.backTNodeGrade);
 							actualVW.backTNodeGrade = (actualVW.backTNodeGrade < 0) ? bTGrade : Math.min(bTGrade,actualVW.backTNodeGrade);
 							
-							backTracking(adjVW, size, nodesNumbersSet);
+							
 							LinkedList<Integer> unionNodes = new LinkedList<Integer>();
 							unionNodes.push(adjVW.idVertex);
 							unionNodes.push(actualVW.idVertex);
 							makeEdges(unionNodes);
-							backTracking(actualVW, size, nodesNumbersSet);
+							
+							if (adjVW.otherColorDistance != -1) {
+								adjVW.otherColorDistance = Math.min(adjVW.otherColorDistance,actualVW.sameColorDistance + 1);
+							} else {
+								adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
+								backTracking(adjVW, size, nodesNumbersSet);
+							}
+							// 
+							if (actualVW.otherColorDistance != -1) {
+								actualVW.otherColorDistance = Math.min(actualVW.otherColorDistance,adjVW.sameColorDistance + 1);
+							} else {
+								actualVW.otherColorDistance = adjVW.sameColorDistance + 1;
+								backTracking(actualVW, size, nodesNumbersSet);
+							}
+							
 						}
 
 					}
@@ -292,7 +290,9 @@ public class GraphWrapperServer {
 				}
 			}
 		}
+		System.out.println(totalEdges);
 	}
+	
 	
 	private void checkConn() throws IOException {
 		if ( (System.currentTimeMillis() - startTime) > 1 * 500 ) { // 1 cada medio segundo
@@ -335,6 +335,9 @@ public class GraphWrapperServer {
 			
 			for (VertexWrapperServer vwFrom: actualBT.actVW.from) {
 				//checkConn();
+				if (vwFrom.otherColorDistance == -1) {
+					vwFrom.otherColorDistance = actualBT.actVW.otherColorDistance + 1;
+				}
 				if (! actualBT.nodes.contains(vwFrom.idVertex)) {
 					VertexBackTrackingServer vbtNew = new VertexBackTrackingServer(actualBT, vwFrom);
 					stack.push(vbtNew);
@@ -512,9 +515,6 @@ public class GraphWrapperServer {
     	return json.toString();
     }
 
-	/**
-	 * @param string
-	 */
 	public void setLang(String language) {
 		this.lang = language;
 		
