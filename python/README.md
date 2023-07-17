@@ -1,12 +1,9 @@
-# RDF-Path-server (python)
+# WD-PathFinder (python)
 
-## randomTestAdjTime
+## Generación de archivos (prearchivo)
+### Archivo inicial
 
-## prearchivo
-
-### ¿Qué es?
-
-Convierte archivos `.nt.gz`, es decir formato NTRIPLES comprimido:
+Se requiere un archivo en formato `.nt.gz`, es decir formato NTRIPLES comprimido:
 
 ```
 <https://wikidata.org/entity/Q9> <https://wikidata.org/porp/direct/P36> <https://wikidata.org/entity/Q3> .
@@ -14,7 +11,13 @@ Convierte archivos `.nt.gz`, es decir formato NTRIPLES comprimido:
 <https://wikidata.org/entity/Q3> <https://wikidata.org/porp/direct/P6> <https://wikidata.org/entity/Q9> .
 ```
 
-A un formato que que comprime esta información:
+Este se debe limpiar, eliminando aristas que no unan entidades. Para esto se usa `make_subset.py`.
+
+### Caché Adyacente
+
+Este caché se obtiene usando el archivo `make_pre_compressed.py`, se debe reemplazar el nombre del archivo que se lee según el que desee. Se genera un archivo que indica el ID del nodo y las aristas con las que conecta con otros nodos.
+
+A partir del ejemplo anterior se obtendría el siguiente formato en una versión comprimida:
 
 ```
 3 -36.9 6.9
@@ -22,15 +25,25 @@ A un formato que que comprime esta información:
 9 36.3.8 -6.3
 ```
 
-### Uso
+### Caché Triple
 
-1. Cambiar variables de `vars.py`.
-    - `INPUT`: Es el archivo de entrada, que se va a comprimir.
-    - `MAX_LINES_PER_FILE`: Líneas que va a leer cada Batch almacenado en Disco.
-    - `FOLDER_PARTS`: Carpeta donde se va a almacenar cada Batch, debe existir.
-    - `OUTPUT`: Nombre del archivo de salida.
-    - `TOTAL_LINES_FILE` = Líneas totales del archivo `INPUT`, se usa para saber como avanza el programa.
-    - `TOTAL_NODES` = Nodos totales del archivo `INPUT`, se usa para saber como avanza el programa.
+Este caché se obtiene usando el archivo `make_pre_native.py`, se debe reemplazar el nombre del archivo que se lee según el que desee. Se genera un archivo que une el ID del nodo con los índices de las aristas en las que participa.
+
+A partir del ejemplo anterior se obtendría el siguiente formato en una versión comprimida:
+
+```
+3 0 2
+8 1
+9 0 1 2
+```
 
 
-## combinationsTest
+## Generación valores aleatorios (randomTestAdjTime)
+
+El archivo `mainRTAT.py` recibe un archivo en formato caché adyacente. A partir de este genera un archivo con nodos aleatorios con probabilidad según el número de aristas de cada uno.
+
+## Generación grupos (randomTestPathTime)
+
+El archivo `mainRTPT.py` recibe los valores aleatorios obtenidos con `mainRTAT.py` y genera grupos de nodos (2, 3, 4 y 5).
+
+

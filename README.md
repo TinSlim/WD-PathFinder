@@ -1,4 +1,6 @@
-# RDF-Path-server
+# WD-PathFinder
+
+Este proyecto desarrolla WoolNet, el sistema visual para explorar subgrafos temáticos en Wikidata.
 
 ## Requisitos
 
@@ -8,13 +10,10 @@
 ## Preparación
 
 - En `/frontend` usar `npm i`, para instalar dependencias.
-- Cargar `/rdf-entity-path` a **Eclipse IDE**. 
+- Cargar `/rdf-entity-path` a **Eclipse IDE**.
+- Crear datos para poblar grafo, se describe en carpeta `python`.
+- Crear datos para pruebas, se describe en carpeta `python`.
 
-## Trabajo de Datos
-
-- Tener un archivo en formato `.nt`.
-
-## Lanzamiento
 
 ### Lanzamiento, Producción
 
@@ -37,7 +36,7 @@ Ejemplo a continuación:
 java -jar -Xmx59g -Dgraph-data="latest-truthy_small" rdf-entity-path-0.0.1-SNAPSHOT.jar
 ```
 
-> Considere que el formato debe ser Adyacente, de modo que si sus datos no han sido transformados debe llevarlo a cabo antes de usarlos.
+> Considere que el formato de datos debe ser Adyacente, de modo que si sus datos no han sido transformados debe llevarlo a cabo antes de usarlos.
 
 ### Lanzamiento, Desarrollo - Frontend
 
@@ -75,18 +74,12 @@ npm run build
 
 - Usar `RunServer.launch` en Eclipse IDE.
 
+### Tests
+
+Los archivos ubicados en `rdf-entity-path/src/main/experiments` se deben convertir en `.jar`. Se usan para ejecutar los tests.
+
+- `NeighborsTest.java`: Pobla un grafo con datos midiendo uso de memoria y tiempo que demora la carga. Luego mide tiempo de obtención de vecinos para un archivo que posee ID de nodos. `NodesNeighborsTest.launch` posee los parámetros.
+- `PathFindTest.java`: Pobla un grafo con datos mide el tiempo y uso de memoria de la búsqueda de caminos para grupos de nodos. `PathFindTest.launch` posee los parámetros.
 
 
-## Ejecución Tests
 
-### Armar conjuntos
-
-En la carpeta `python` crear archivo `items.csv` que tenga id de entidades y su agrupación.
-
-Ejecutar `python combinations.py`.
-
-Con esto almacenará combinaciones en `rdf-entity-path/src/main/resuorces/test`.
-
-### Ejecutar tests de tiempo
-
-Con los archivos creados ejecutar `TimeTest.java`. Creara resultados en la carpeta `rdf-entity-path/src/main/resuorces/results`.
