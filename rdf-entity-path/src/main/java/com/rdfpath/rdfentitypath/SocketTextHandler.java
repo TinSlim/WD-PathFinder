@@ -34,13 +34,13 @@ public class SocketTextHandler extends TextWebSocketHandler {
 		System.out.println(heapFreeSize);
 		
 		String path = "subsets/";
-		String[] files = {"subset100000", "subset1000000", "subset10000000", "subset100000000","latest-truthy_small"};//{"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
+		String[] files = {"subset100000", "subset1000000", "subset10000000", "subset100000000","latest-truthy_small", "testSS"};//{"subset10000000"};//{"subset100000", "subset1000000", "subset10000000"};
 		String end = ".nt.gz";
 		String endComp = "_compressed.gz";
 		String endNative = "_native.gz";
 		
 		//int [] nodesSize = {92654, 829794, 8159611, 87110322, 99609308};
-		int [] maxNodeId = {100000, 1000000, 10000000, 99999996, 117288116};
+		int [] maxNodeId = {100000, 1000000, 10000000, 99999996, 117288116, 129287};
 		//int [] edgesSize = {600493, 5977585, 42682387, 652319619, 715906922};
 		
 
