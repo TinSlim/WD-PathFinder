@@ -26,4 +26,4 @@ java -jar -Xmx59g -Dsubset="latest-truthy_small" -Dgraph="graphNativeFullDense" 
 java -jar -Xmx59g -Dsubset="latest-truthy_small" -Dgraph="graphNativeFullDense" -Dgroup="cuadra" -DmaxEdgeSize="-1" testPathFindOptMem.jar > lastResults/structs/gNFD_cuadra_latest-truthy.csv && sh sendTg.sh &&
 java -jar -Xmx59g -Dsubset="latest-truthy_small" -Dgraph="graphNativeFullDense" -Dgroup="penta" -DmaxEdgeSize="-1" testPathFindOptMem.jar > lastResults/structs/gNFD_penta_latest-truthy.csv && sh sendTg.sh &&
 
-&& sh sendTg.sh && sh sendTg.sh && sh sendTg.sh && sh sendTg.sh 
+sh sendTg.sh && sh sendTg.sh && sh sendTg.sh && sh sendTg.sh 
