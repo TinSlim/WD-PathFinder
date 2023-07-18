@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import org.json.simple.parser.ParseException;
 import org.springframework.web.socket.WebSocketSession;
 
 /**
