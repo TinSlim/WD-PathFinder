@@ -20,27 +20,16 @@ public class GraphWrapperTimeTestOptMem {
 	private HashMap<Integer, VertexWrapperTimeTestOptMem> nodes;
 	private IGraph graph;
 	private HashSet<Integer> addedNodes;
-	private WebSocketSession session;
 	public int totalEdges;
 	public long startTime;
 	public int seconds;
-	//public int[] nodesNumbers;
-	//public int size;
 	
 	public GraphWrapperTimeTestOptMem (IGraph graph2, int seconds){
 		this.graph = (IGraph) graph2;
 		this.nodes = new HashMap<Integer, VertexWrapperTimeTestOptMem>();
 		this.addedNodes = new HashSet<Integer>();
-		this.session = null;
 		this.totalEdges = 0;
 		this.seconds = seconds;
-		//this.nodesNumbers = nums;
-		//this.size = maxSize;
-	}
-
-	
-	public void setSession (WebSocketSession session) {
-		this.session = session;
 	}
 
 	public void checkTime (String message) throws InterruptedException {
@@ -56,9 +45,7 @@ public class GraphWrapperTimeTestOptMem {
 		}
 		 */
 	}
-	
-	//@Override
-    //public void run() {
+
 	public void search (int [] nodesNumbers, int size, int maxEdgeSize) {
 		startTime = System.currentTimeMillis();
 		try {
@@ -73,7 +60,7 @@ public class GraphWrapperTimeTestOptMem {
 				toSearch.push(actVW);
 			}
 	
-			while ( toSearch.size() > 0) {
+			while ( toSearch.size() > 0 ) {
 				checkTime("Before pop");													// Revisa tiempo
 				
 				VertexWrapperTimeTestOptMem actualVW = toSearch.pop();
@@ -82,7 +69,7 @@ public class GraphWrapperTimeTestOptMem {
 				}
 				
 				// Revisa VÉRTICES adyacentes
-				for (Integer adjVertex : graph.getAdjacentVertexTimeoutLimited(actualVW.idVertex, seconds, startTime, maxEdgeSize, actualVW.added == null)) {
+				for (Integer adjVertex : graph.getAdjacentVertexTimeoutLimited(actualVW.idVertex, seconds, startTime, maxEdgeSize, actualVW.initial)) {
 					checkTime("Checking adj vertexes");									// Revisa tiempo
 					
 					// Así no cicla en el mismo nodo
@@ -102,8 +89,7 @@ public class GraphWrapperTimeTestOptMem {
 						VertexWrapperTimeTestOptMem adjVW = nodes.get(adjVertex);
 						
 						// Si es el que lo agregó a la lista
-						if (actualVW.fromFather(adjVW)) {
-							actualVW.removeFather();
+						if (actualVW.onlyFather(adjVW)) {
 							continue;
 						}
 						
@@ -111,33 +97,50 @@ public class GraphWrapperTimeTestOptMem {
 						if (actualVW.colorNode == adjVW.colorNode) {
 	
 							// Revisar si se agregó, ESTÁ EN PATH
-							if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance <= size) {
+							if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
+								
+								if (actualVW.otherColorDistance == -1) {
+									actualVW.otherColorDistance = adjVW.otherColorDistance + 1;
+									backTracking(actualVW, size, nodesNumbersSet);
+								}
+								
+								
 								LinkedList<Integer> unionNodes = new LinkedList<Integer>();
 								unionNodes.push(adjVW.idVertex);
 								unionNodes.push(actualVW.idVertex);
 								makeEdges(unionNodes);
-								backTracking(actualVW, size, nodesNumbersSet);
 							}
 							
-							else if (adjVW.addFrom(actualVW)) {
+							if (adjVW.queueTimes < 2) {
 								toSearch.add(adjVW);
+								adjVW.queueTimes = adjVW.queueTimes += 1; 
 							}
+							
+							adjVW.from.add(actualVW);
 						}
 						
 						else {
 							if (adjVW.sameColorDistance + actualVW.sameColorDistance + 1 <= size) {
-								adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
-								actualVW.otherColorDistance = adjVW.sameColorDistance + 1;
-								backTracking(adjVW, size, nodesNumbersSet);
+								
 								LinkedList<Integer> unionNodes = new LinkedList<Integer>();
 								unionNodes.push(adjVW.idVertex);
 								unionNodes.push(actualVW.idVertex);
 								makeEdges(unionNodes);
-								backTracking(actualVW, size, nodesNumbersSet);
+								
+								if (adjVW.otherColorDistance != -1) {
+									adjVW.otherColorDistance = Math.min(adjVW.otherColorDistance,actualVW.sameColorDistance + 1);
+								} else {
+									adjVW.otherColorDistance = actualVW.sameColorDistance + 1;
+									backTracking(adjVW, size, nodesNumbersSet);
+								}
+								if (actualVW.otherColorDistance != -1) {
+									actualVW.otherColorDistance = Math.min(actualVW.otherColorDistance,adjVW.sameColorDistance + 1);
+								} else {
+									actualVW.otherColorDistance = adjVW.sameColorDistance + 1;
+									backTracking(actualVW, size, nodesNumbersSet);
+								}
 							}
-						
 						}
-						
 					}
 				}
 			}
@@ -167,6 +170,9 @@ public class GraphWrapperTimeTestOptMem {
 			
 			for (VertexWrapperTimeTestOptMem vwFrom: actualBT.actVW.from) {
 				checkTime("For vertex in BT");
+				if (vwFrom.otherColorDistance == -1) {
+					vwFrom.otherColorDistance = actualBT.actVW.otherColorDistance + 1;
+				}
 				if (! actualBT.nodes.contains(vwFrom.idVertex)) {
 					VertexBackTrackingTimeTestOptMem vbtNew = new VertexBackTrackingTimeTestOptMem(actualBT, vwFrom);
 					stack.push(vbtNew);
@@ -202,18 +208,14 @@ public class GraphWrapperTimeTestOptMem {
 		else {
 			vw2.addEdgeWith(v1);
 		}
-		//nodes.get(v1).addEdgeWith(v2);
-		//nodes.get(v2).addEdgeWith(v1);
-		
+
 		ArrayList edges = graph.getEdges(v1, v2);
-		ArrayList<Integer> vList = new ArrayList<Integer>();
+				
 		if (!addedNodes.contains(v1)) {
-			vList.add(v1);
 			addedNodes.add(v1);
 		}
 		
 		if (!addedNodes.contains(v2)) {
-			vList.add(v2);
 			addedNodes.add(v2);
 		}
 		

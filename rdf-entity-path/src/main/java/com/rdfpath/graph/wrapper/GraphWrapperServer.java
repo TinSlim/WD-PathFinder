@@ -160,7 +160,6 @@ public class GraphWrapperServer {
 	public void search (int [] nodesNumbers, int size, int maxEdgeSize) throws InterruptedException, IOException {
 		startTime = System.currentTimeMillis();
 		initTime = startTime;
-		
 		this.nodesNumbers = nodesNumbers;
 		
 		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
@@ -181,15 +180,16 @@ public class GraphWrapperServer {
 		}
 		
 		while (toSearch.size() > 0) {
-			//checkConn();			
-			System.out.println(toSearch.size());
+			checkConnTimeout();
+
 			VertexWrapperServer actualVW = toSearch.pop();
  			if (actualVW.sameColorDistance > (size/2) + size%2) {
 				continue;
 			}
 
 			// Revisa VÉRTICES adyacentes
-			for (Integer adjVertex : graph.getAdjacentVertexSessionTimeoutLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.from == null, initTime, secondsLimit)) {
+			for (Integer adjVertex : graph.getAdjacentVertexSessionTimeoutLimited(actualVW.idVertex, session, maxEdgeSize, actualVW.initial, initTime, secondsLimit)) {
+				checkConnTimeout();
 				
 				// Así no cicla en el mismo nodo
 				if (actualVW.idVertex == adjVertex) {

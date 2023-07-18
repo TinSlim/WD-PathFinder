@@ -12,12 +12,16 @@ import java.util.LinkedList;
 public class VertexWrapperTimeTestOptMem {
 	public int idVertex;
 	public int colorNode;
+	public boolean initial;
+	
 	public int sameColorDistance;
-	public HashSet<VertexWrapperTimeTestOptMem> from;
-	public LinkedList<Integer> added;
-	public Boolean inStack;
 	public int otherColorDistance;
+	
+	public HashSet<VertexWrapperTimeTestOptMem> from;
 	public HashSet<Integer> edgesWith;
+	
+	public int queueTimes;
+
 	
 	/**
 	 * @param idSearch
@@ -25,16 +29,15 @@ public class VertexWrapperTimeTestOptMem {
 	public VertexWrapperTimeTestOptMem(int idSearch) {
 		this.idVertex = idSearch;
 		this.colorNode = idSearch;
-		this.sameColorDistance = 0;
-
-		this.from = new HashSet<VertexWrapperTimeTestOptMem>();
-		//this.added = new LinkedList<Integer>();
+		initial = true;
 		
+		this.sameColorDistance = 0;
 		this.otherColorDistance = -1;
-
+		
+		this.from = new HashSet<VertexWrapperTimeTestOptMem>();
 		edgesWith = null;
-		//edgesWith = new HashSet<Integer>();
-		//this.father = -1;
+		
+		queueTimes = 1;
 	}
 
 	/**
@@ -44,58 +47,25 @@ public class VertexWrapperTimeTestOptMem {
 	public VertexWrapperTimeTestOptMem(VertexWrapperTimeTestOptMem actualVW, int adjVertex) {
 		this.idVertex = adjVertex;
 		this.colorNode = actualVW.colorNode;
+		
 		this.sameColorDistance = actualVW.sameColorDistance + 1;
+		this.otherColorDistance = -1;
 		
 		this.from = new HashSet<VertexWrapperTimeTestOptMem>();
 		this.from.add(actualVW);
-		
-		this.added = new LinkedList<Integer>();
-		added.add(actualVW.idVertex);
-		
-		this.otherColorDistance = -1;
-		
 		edgesWith = null;
-		//edgesWith = new HashSet<Integer>();
+		
+		queueTimes = 1;
 	}
 	
-	public void addVertexAdded (int idVertex) {
-		if (added == null) {
-			this.added = new LinkedList<Integer>();
-		}
-		added.add(idVertex);
-	}
-	
-	public void removeFather () {
-		added.pop();
-		if (added.size() == 0) {
-			this.added = null;
-		}
-	}
-	
-	public Boolean addFrom (VertexWrapperTimeTestOptMem actVW) {
-		if (!from.contains(actVW)) {
-			addVertexAdded(actVW.idVertex);
-			this.from.add(actVW);
+
+	public boolean onlyFather (VertexWrapperTimeTestOptMem adjVW) {
+		if (from != null && from.size() == 1 && from.contains(adjVW)) {
 			return true;
 		}
-		this.from.add(actVW);
 		return false;
-		
 	}
 
-	/**
-	 * @param adjVW
-	 * @return
-	 */
-	public boolean fromFather(VertexWrapperTimeTestOptMem adjVW) {
-		if (added == null) {
-			return false;
-		}
-		else if (added.get(0) == adjVW.idVertex) {
-			return true;
-		}
-		return false;
-	}
 
 	/**
 	 * @param v1
