@@ -55,8 +55,6 @@ public abstract class AbstractGraph implements IGraph {
 			if (System.getProperty("debug") != null) {
 				System.out.println("GetAdjVertex");
 			}
-			System.out.println("done time");
-			System.out.println("done time");
 			throw new InterruptedException("Done Time");
 			
 		}
