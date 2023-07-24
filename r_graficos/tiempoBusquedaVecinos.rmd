@@ -34,7 +34,7 @@ table(tiemposBusquedaVecino['SetDatos'])
 ```{r}
 options(scipen = 999)
 tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphGt"] <- "Objetos de Java"
-tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphComp"] <- "Adyacencia no densa"
+tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphComp"] <- "Adyacencia no Densa"
 tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphCompDense"] <- "Adyacencia Densa"
 tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFull"] <- "Triples no Densos"
 tiemposBusquedaVecino$Estructura[tiemposBusquedaVecino$Estructura == "graphNativeFullDense"] <- "Triples Densos"

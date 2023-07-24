@@ -64,6 +64,8 @@ df_ConCan <- data.frame(
 )
 
 df_ConCan["interesante"][df_ConCan["interesante"] == 'No sÃ©'] <- 'No sé'
+df_ConCan["interesante"][df_ConCan["interesante"] == 'Si'] <- 'Sí'
+df_ConCan["conocimiento"][df_ConCan["conocimiento"] == 'Si'] <- 'Sí'
 ```
 
 
@@ -174,7 +176,7 @@ df_sus <- data.frame(
 
 
 ```{r}
-df_ConCan$conocimiento = factor(df_ConCan$conocimiento, levels = c("Si", "Un poco", "No"))
+df_ConCan$conocimiento = factor(df_ConCan$conocimiento, levels = c("Sí", "Un poco", "No"))
 
 ggplot(df_ConCan, aes(x=conocimiento, y=value)) + #, fill=conocimiento)) +
   geom_bar(stat = "identity") + 
@@ -194,7 +196,7 @@ ggsave(plot = last_plot(), filename = "export/4_Encuestados_Conoce.pdf", width=7
 
 
 ```{r}
-df_ConCan$interesante = factor(df_ConCan$interesante, levels = c("Si", "No sé", "No"))
+df_ConCan$interesante = factor(df_ConCan$interesante, levels = c("Sí", "No sé", "No"))
 
 ggplot(df_ConCan, aes(x=interesante, y=value)) + #, fill=conocimiento)) +
   geom_bar(stat = "identity") + 

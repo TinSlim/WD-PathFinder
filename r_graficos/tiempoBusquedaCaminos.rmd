@@ -15,8 +15,8 @@ library(ggplot2)
 ### Importe Datos
 
 ```{r}
-tiemposBusquedaCamino <- read.csv("datos/TPF_OptMem.csv", sep = ";")
-#tiemposBusquedaCamino <- read.csv("datos/comparacion.csv", sep = ";")
+#tiemposBusquedaCamino <- read.csv("datos/TPF_OptMem.csv", sep = ";") # 20/07/2023
+tiemposBusquedaCamino <- read.csv("datos/lastResults/structs.csv",sep = ";")
 ```
 
 ### Trabajo datos

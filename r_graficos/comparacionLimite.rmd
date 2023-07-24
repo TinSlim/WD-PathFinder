@@ -21,7 +21,8 @@ tiemposBusquedaCamino_10000 <- read.csv("datos/TPF_OptMem_lim10000.csv", sep = "
 tiemposBusquedaCamino_100000 <- read.csv("datos/TPF_OptMem_lim100000.csv", sep = ";")
 tiemposBusquedaCamino_1000000 <- read.csv("datos/TPF_OptMem_lim1000000.csv", sep = ";")
 
-tiemposBusquedaCamino_limExc <- read.csv("datos/OptMemLimExc/out.csv", sep = ";")
+#tiemposBusquedaCamino_limExc <- read.csv("datos/OptMemLimExc/out.csv", sep = ";") # Datos sin opti
+tiemposBusquedaCamino_limExc <- read.csv("datos/lastResults/lim.csv", sep = ";")
 ```
 
 ### Edita datos
@@ -70,7 +71,7 @@ ids_aristas_cero[!(ids_aristas_cero %in% ids_aristas_cero_limExc)]
 ```{r}
 ggplot(all_data, aes(x=Grupos, y=Aristas,color = Limite)) + 
   geom_boxplot() + 
-  labs(title= "Aristas encontradas 60 segundos",
+  labs(title= "Aristas encontradas en búsquedas de 60 segundos",
        color = "Límite de Aristas",
        y = "Aristas encontradas (log10)",
        x = "Cantidad de Entidades") +
@@ -84,7 +85,7 @@ ggsave(plot = last_plot(), filename = "export/4_LimitesAristas.pdf", width=8, he
 ```{r}
 ggplot(tiemposBusquedaCamino_limExc, aes(x=Grupos, y=Aristas,color = Limite)) + 
   geom_boxplot() + 
-  labs(title= "Aristas encontradas 60 segundos",
+  labs(title= "Aristas encontradas en búsquedas de 60 segundos",
        color = "Límite de Aristas",
        y = "Aristas encontradas (log10)",
        x = "Cantidad de Entidades") +
@@ -98,9 +99,9 @@ ggsave(plot = last_plot(), filename = "export/4_LimitesAristasExc.pdf", width=8,
 ```{r}
 ggplot(all_data, aes(x=Grupos, y=Memoria,color = Limite)) + 
   geom_boxplot() +
-  labs(title= "Uso de memoria búsqueda 60 segundos",
+  labs(title= "Uso de memoria en búsquedas de 60 segundos",
        color = "Límite de Aristas",
-       y = "Memoria [bytes]",
+       y = "Memoria [bytes] (log10)",
        x = "Cantidad de Entidades") +
   theme(plot.title = element_text(hjust = 0.5)) +
   #facet_grid(vars(Limite))  + 
@@ -113,9 +114,9 @@ ggsave(plot = last_plot(), filename = "export/4_LimitesMemoria.pdf", width=8, he
 ```{r}
 ggplot(tiemposBusquedaCamino_limExc, aes(x=Grupos, y=Memoria,color = Limite)) + 
   geom_boxplot() +
-  labs(title= "Uso de memoria búsqueda 60 segundos",
+  labs(title= "Uso de memoria en búsquedas de 60 segundos",
        color = "Límite de Aristas",
-       y = "Memoria [bytes]",
+       y = "Memoria [bytes] (log10)",
        x = "Cantidad de Entidades") +
   theme(plot.title = element_text(hjust = 0.5)) +
   #facet_grid(vars(Limite))  + 
@@ -128,9 +129,9 @@ ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaExc.pdf", width=8,
 ```{r}
 ggplot(all_data_SAC, aes(x=Grupos, y=memArista,color = Limite)) + 
   geom_boxplot() +
-  labs(title= "Proporción memoria/cantidad de aristas, en búsqueda 60 segundos",
+  labs(title= "Memoria/AristasEncontradas en búsquedas de 60 segundo",
        color = "Límite de Aristas",
-       y = "Memoria/Cantidad de Aristas [bytes]",
+       y = "Memoria/AristasEncontradas [bytes] (log10)",
        x = "Cantidad de Entidades") +
   theme(plot.title = element_text(hjust = 0.5)) +
   #facet_grid(vars(Limite))  + 
@@ -144,9 +145,9 @@ ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaAristas.pdf", widt
 ```{r}
 ggplot(tiemposBusquedaCamino_limExc_SAC, aes(x=Grupos, y=memArista,color = Limite)) + 
   geom_boxplot() +
-  labs(title= "Proporción memoria/cantidad de aristas, en búsqueda 60 segundos",
+  labs(title= "Memoria/AristasEncontradas en búsquedas de 60 segundo",
        color = "Límite de Aristas",
-       y = "Memoria/Cantidad de Aristas [bytes]",
+       y = "Memoria/AristasEncontradas [bytes] (log10)",
        x = "Cantidad de Entidades") +
   theme(plot.title = element_text(hjust = 0.5)) +
   #facet_grid(vars(Limite))  + 

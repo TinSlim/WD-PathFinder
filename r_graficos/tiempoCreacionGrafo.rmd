@@ -23,7 +23,7 @@ dataCreacion <- read.csv("datos/sizeNano.csv", sep = ";")
 ```{r}
 options(scipen = 999)
 dataCreacion$Estructura[dataCreacion$Estructura == "graphGt"] <- "Objetos de Java"
-dataCreacion$Estructura[dataCreacion$Estructura == "graphComp"] <- "Adyacencia no densa"
+dataCreacion$Estructura[dataCreacion$Estructura == "graphComp"] <- "Adyacencia no Densa"
 dataCreacion$Estructura[dataCreacion$Estructura == "graphCompDense"] <- "Adyacencia Densa"
 dataCreacion$Estructura[dataCreacion$Estructura == "graphNativeFull"] <- "Triples no Densos"
 dataCreacion$Estructura[dataCreacion$Estructura == "graphNativeFullDense"] <- "Triples Densos"
@@ -39,7 +39,7 @@ ggplot(dataCreacion, aes(x=SetDatos, y=TiempoCreacion, color=Estructura,group=Es
 
   geom_line(size=0.5) + geom_point() +
 
-  labs(title= "Tiempo de creación grafo",
+  labs(title= "Tiempo de creación del grafo",
        color = "Estructura del Grafo",
        y = "Tiempo [ms]",
        x = "Conjunto") +
@@ -57,7 +57,7 @@ ggsave(plot = last_plot(), filename = "export/4_TiempoCreacion.pdf", width=8, he
 ggplot(dataCreacion, aes(x=SetDatos, y=TiempoCreacion, fill=Estructura, group=Estructura)) +
 
   geom_bar(stat="identity", position=position_dodge()) + # ,color="black"
-  labs(title= "Tiempo de creación grafo",
+  labs(title= "Tiempo de creación del grafo",
        fill = "Estructura del Grafo",
        y = "Tiempo [ms]",
        x = "Conjunto") +
@@ -150,9 +150,9 @@ ggsave(plot = last_plot(), filename = "export/4_UsoMemoria.pdf", width=8, height
 ggplot(dataCreacion, aes(x=SetDatos, y=UsoMemoria, fill=Estructura, group=Estructura)) +
 
   geom_bar(stat="identity", position=position_dodge()) + # ,color="black"
-  labs(title= "Uso de memoria",
+  labs(title= "Uso de memoria del grafo",
        fill = "Estructura del Grafo",
-       y = "Memoria usada [Bytes]",
+       y = "Memoria [bytes]",
        x = "Conjunto") +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_y_continuous(breaks = c(0,5000000000,10000000000,15000000000,20000000000,25000000000,30000000000,35000000000,40000000000,45000000000))
