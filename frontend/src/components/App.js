@@ -45,7 +45,7 @@ const { socketUrl } = require('config');
   
 export default function App() {
     const queryParameters = new URLSearchParams(window.location.search);
-    const langParam = queryParameters.get("lang") ? queryParameters.get("lang") : 'es';
+    const langParam = queryParameters.get("lang") ? queryParameters.get("lang") : 'en';
     const name = queryParameters.get("name");
 
     const [words, setWords] = useState([]);
