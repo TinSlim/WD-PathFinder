@@ -32,11 +32,11 @@ const resources = {
       "WoolNet": "WoolNet is the application that allows obtaining the paths that join Wikidata entities.",
       "Instructions": "Instructions",
       "Ayuda1": "Write in the search input the entity you want to search",
-      "Ayuda2": "When the entities displays, select one",
+      "Ayuda2": "When the entities display, select one",
       "Ayuda3": "Repeat 1 and 2 with the entities that you want",
-      "Ayuda4": "Clicking SEARCH will start the serch for roads, using CLEAR will delete the selected entities",
-      "Ayuda5": "You can stop the search using STOP button",
-      "Ayuda6": "You can show less results using the bottom sliders",
+      "Ayuda4": "Clicking SEARCH will start the search for paths, using CLEAR will delete the selected entities",
+      "Ayuda5": "You can stop the search using the STOP button. The search will run for maximum of two minutes",
+      "Ayuda6": "You can show fewer results using the bottom sliders",
 
       "HelpIMG1": './../images/help/Paso1_edit.png'
     }
@@ -71,7 +71,7 @@ const resources = {
       "Ayuda2": "Cuando se desplieguen entidades existentes, seleccione una",
       "Ayuda3": "Repita el paso 1. y 2 con las entidades que desea",
       "Ayuda4": "Clickeando el botón BUSCAR iniciará las búsqueda de caminos, usando LIMPIAR eliminará las entidades seleccionadas",
-      "Ayuda5": "Puede detener la búsqueda clickeando en DETENER",
+      "Ayuda5": "Puede detener la búsqueda clickeando en DETENER. La búsqueda se ejecutará durante un máximo de dos minutos",
       "Ayuda6": "Puede disminuir regular los resultados usando los SLIDERS inferiores",
     
       "HelpIMG1": './../images/help/Paso1_edit.png',
