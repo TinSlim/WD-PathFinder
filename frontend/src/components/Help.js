@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Stack, Zoom, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import InfoIcon from '@mui/icons-material/Info';
 import  './i18n';
 import { useTranslation } from 'react-i18next';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 export default function Hekp(props) {
     const { t, i18n } = useTranslation();
@@ -12,7 +12,7 @@ return(
         <Stack>
             <Stack className="ml-3 mr-3" spacing={1} direction="row" alignItems="center">
                 <Button fullWidth={true} onClick={props.changeInfo} color="secondary">
-                    <InfoIcon/>&nbsp; {t("Return")}
+                    <KeyboardReturnIcon/> &nbsp;{t("Return")}
                 </Button>
             </Stack>
         
