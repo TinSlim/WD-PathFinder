@@ -50,7 +50,7 @@ export default function App() {
 
     const [words, setWords] = useState([]);
     const [values, setValues] = useState([]);
-    const [time, setTime] = useState("00:00");
+    const [time, setTime] = useState("02:00");
 
     const [showingInfo, setShowingInfo] = useState(false);
     const [drawerState, setDrawerState] = useState(false);
@@ -273,12 +273,16 @@ export default function App() {
     }
 
     const calculateTime = runningTime => {
-        const total_seconds = Math.floor(runningTime / 1000);
+        const total_seconds = 120 - Math.floor(runningTime / 1000);
         const total_minutes = Math.floor(total_seconds / 60);
     
+        if (total_seconds == 0 && total_minutes == 0) {
+            end2();
+        }
+
         const display_seconds = (total_seconds % 60).toString().padStart(2, "0");
         const display_minutes = total_minutes.toString().padStart(2, "0");
-    
+        
         return `${display_minutes}:${display_seconds}`
     }
 
@@ -311,7 +315,7 @@ export default function App() {
     const start = () => {
         setRunning(true);
         clearInterval(stopwatchInterval.current);
-        setTime("00:00");
+        setTime("02:00");
         let startTime = Date.now() - 0;
         const stopwatchIntervalC = setInterval ( () => {
             const runningTimeC = Date.now() - startTime;
