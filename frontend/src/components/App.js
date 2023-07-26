@@ -27,7 +27,6 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
 
 import TimerIcon from '@mui/icons-material/Timer';
-import CompressIcon from '@mui/icons-material/Compress';
 
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
@@ -512,9 +511,13 @@ export default function App() {
             </SwipeableDrawer>
             
             <Stack
+                id="sliders"
                 direction="row"
                 spacing={5}
-                sx={{position:"absolute", left:"15%", bottom: "80px", width: "70%"}}>
+                
+                sx={{position:"absolute", left:"15%", bottom: {xs:"calc(15% + 25px)",sm:"80px"}, width: "70%"}}>
+                {/*sx={{position:"absolute", left:"15%", bottom: "80px", width: "70%"}}>*/}
+
                 <Stack
                 sx={{width: "30%"}}>
                     
