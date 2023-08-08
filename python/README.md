@@ -1,9 +1,11 @@
 # WD-PathFinder (python)
 
-## Generación de archivos (prearchivo)
-### Archivo inicial
+In this package we prepare data for loading and further processing. We assume data from a Wikidata truthy dump. We first filter triples that are not used. We then build different types of caches, which are files that transform the graph into formats that are more efficient to load later into the path-finding algorithm. There are different types of cache, but the one that we will mainly use is the Adjacency Cache (which was shown to be the most efficient alternative in time and space for finding paths).
 
-Se requiere un archivo en formato `.nt.gz`, es decir formato NTRIPLES comprimido:
+## Generating data
+### Initial file
+
+We expect as input a Wikidata truthy dump file in format `.nt.gz`, i.e., a GZipped N-Triples file containing lines like:
 
 ```
 <https://wikidata.org/entity/Q9> <https://wikidata.org/porp/direct/P36> <https://wikidata.org/entity/Q3> .
@@ -11,13 +13,13 @@ Se requiere un archivo en formato `.nt.gz`, es decir formato NTRIPLES comprimido
 <https://wikidata.org/entity/Q3> <https://wikidata.org/porp/direct/P6> <https://wikidata.org/entity/Q9> .
 ```
 
-Este se debe limpiar, eliminando aristas que no unan entidades. Para esto se usa `make_subset.py`.
+WoolNet only works with edges between entities with Q ids. To eliminate edges that Woolnet does not use, run the script `make_subset.py`.
 
-### Caché Adyacente
+### Adjacency Cache
 
-Este caché se obtiene usando el archivo `make_pre_compressed.py`, se debe reemplazar el nombre del archivo que se lee según el que desee. Se genera un archivo que indica el ID del nodo y las aristas con las que conecta con otros nodos.
+This cache can be obtained by running the script `make_pre_compressed.py`, in which you should replace the filename to point to the filtered Wikidata truthy dump produced previously. The cache indicates, for each node ID, the edges that connect it to other nodes.
 
-A partir del ejemplo anterior se obtendría el siguiente formato en una versión comprimida:
+Based on the previous example of N-triples, the adjacency cache would contain:
 
 ```
 3 -36.9 6.9
@@ -25,11 +27,13 @@ A partir del ejemplo anterior se obtendría el siguiente formato en una versión
 9 36.3.8 -6.3
 ```
 
-### Caché Triple
+The first line indicates that node (Q)3 has an inward edge (-) from node (Q)9 via property (P)36 and an outward edge (+) to node (Q)6 via property (P)9.
 
-Este caché se obtiene usando el archivo `make_pre_native.py`, se debe reemplazar el nombre del archivo que se lee según el que desee. Se genera un archivo que une el ID del nodo con los índices de las aristas en las que participa.
+### Triple Cache
 
-A partir del ejemplo anterior se obtendría el siguiente formato en una versión comprimida:
+This cache is obtained by running the script `make_pre_native.py`, in which you should replace the filename to point to the filtered Wikidata truthy dump produced prevoiusly. The cache indicates, for each node ID, the IDs of its incident edges.
+
+Based on the previous example of N-triples, the triple cache would contain in a first table:
 
 ```
 3 0 2
@@ -37,13 +41,23 @@ A partir del ejemplo anterior se obtendría el siguiente formato en una versión
 9 0 1 2
 ```
 
+and in a second table:
 
-## Generación valores aleatorios (randomTestAdjTime)
+```
+9 36 3
+9 36 8
+3 6 9
+```
 
-El archivo `mainRTAT.py` recibe un archivo en formato caché adyacente. A partir de este genera un archivo con nodos aleatorios con probabilidad según el número de aristas de cada uno.
+where the first file indicates that node 3 participates in the 0th (first) and 2nd (third) triple per the order indicated in the second table.
 
-## Generación grupos (randomTestPathTime)
 
-El archivo `mainRTPT.py` recibe los valores aleatorios obtenidos con `mainRTAT.py` y genera grupos de nodos (2, 3, 4 y 5).
+## Random weighted sample of nodes for testing (randomTestAdjTime)
+
+The script `mainRTAT.py` receives a file in the adjacency format, from which it generates a file with random nodes where the probability of selecting a node is proportional to the number of incident edges it has.
+
+## Generating sets of nodes for testing (randomTestPathTime)
+
+The script `mainRTPT.py` receives the random nodes from `mainRTAT.py` and generates random sets of nodes (of cardinality 2, 3, 4 and 5).
 
 
