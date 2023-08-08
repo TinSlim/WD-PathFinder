@@ -11,8 +11,8 @@ This project provides the source code for WoolNet (see [demo](https://woolnet.dc
 
 - In `/frontend` call `npm i` to install dependenciaes.
 - Load `/rdf-entity-path` into **Eclipse IDE**.
-- To create data to populate the graph, see the folder `python`.
-- To create test data, see the folder `python`.
+- To create data to populate the graph, see the README in the `python` folder.
+- To create test data, see the README in the `python` folder.
 
 ### Launch Production
 
@@ -35,7 +35,7 @@ For example:
 java -jar -Xmx59g -Dgraph-data="latest-truthy_small" rdf-entity-path-0.0.1-SNAPSHOT.jar
 ```
 
-> The data format used should be adjacency (Adyacente); if not, you must prepare the data in this format.
+> The data format used should be Adjacency Cache format (see the `python` folder).
 
 ### Launch Locally for Development
 
