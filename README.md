@@ -1,85 +1,74 @@
 # WD-PathFinder
 
-Este proyecto desarrolla WoolNet, el sistema visual para explorar subgrafos temáticos en Wikidata.
+This project provides the source code for WoolNet (see [demo](https://woolnet.dcc.uchile.cl/)): a visual system to help explore connections and thematic sub-graphs for Wikidata.
 
-## Requisitos
+## Requirements
 
 - Node: v16.17.1
 - Java: openjdk 11
 
-## Preparación
+## Preparation
 
-- En `/frontend` usar `npm i`, para instalar dependencias.
-- Cargar `/rdf-entity-path` a **Eclipse IDE**.
-- Crear datos para poblar grafo, se describe en carpeta `python`.
-- Crear datos para pruebas, se describe en carpeta `python`.
+- In `/frontend` call `npm i` to install dependenciaes.
+- Load `/rdf-entity-path` into **Eclipse IDE**.
+- To create data to populate the graph, see the folder `python`.
+- To create test data, see the folder `python`.
 
+### Launch Production
 
-### Lanzamiento, Producción
-
-- Escribir en `/frontend/.env` variables de entorno.
+- Set in `/frontend/.env` the following environment variables as correspond to your setting.
 
 ```
-BASE_URL = "https://urldeejemplo.ejemplo"		# Url de la app
-WEB_SOCKET_URL = "wss://urldeejemplo.ejemplo"	# Url del WebSocket
+BASE_URL = "https://urldeejemplo.ejemplo"		# Url of the application
+WEB_SOCKET_URL = "wss://urldeejemplo.ejemplo"	# Url of the WebSocket
 ```
 
-- Ejecutar `build.ps1`.
-- El archivo que ejecuta la aplicación se exportará en `/export`.
-- Ejecutar el archivo con los parámetros:
-	- `-Xmx59g` : Memoria disponible.
-	- `-Dgraph-data=` : Archivo con datos para poblar el grafo.
+- Run `build.ps1`.
+- The file that runs the application exports to `/export`.
+- Run the file with the following parameters:
+	- `-Xmx59g` : RAM available.
+	- `-Dgraph-data=` : Pass the parameter the path to the file with graph data.
 
-Ejemplo a continuación:
+For example:
 
 ```
 java -jar -Xmx59g -Dgraph-data="latest-truthy_small" rdf-entity-path-0.0.1-SNAPSHOT.jar
 ```
 
-> Considere que el formato de datos debe ser Adyacente, de modo que si sus datos no han sido transformados debe llevarlo a cabo antes de usarlos.
+> The data format used should be adjacency (Adyacente); if not, you must prepare the data in this format.
 
-### Lanzamiento, Desarrollo - Frontend
+### Launch Locally for Development
 
-- Escribir en `/frontend/.env` variables de entorno.
+- Set in `/frontend/.env` the following environment variables.
 
 ```
 BASE_URL = "http://localhost:8080"
 WEB_SOCKET_URL = "ws://localhost:8080"
 ```
 
-- Ejecutar los siguientes comandos:
+- Run the following commands:
 
 ```
 cd frontend
 npm run dev
 ```
 
-- El archivo `frontend/public/index.html` mostrará los cambios en vivo.
+- The file `frontend/public/index.html` will show the live changes.
 
-### Lanzamiento, Desarrollo - Backend
-
-- Escribir en `/frontend/.env` variables de entorno.
+- Run the following commands:
 
 ```
-BASE_URL = "http://localhost:8080"
-WEB_SOCKET_URL = "ws://localhost:8080"
-```
-
-- Ejecutar los siguientes comandos:
-
-```
-cd frontend
 npm run build
 ```
 
-- Usar `RunServer.launch` en Eclipse IDE.
+- Use `RunServer.launch` to launch 
 
 ### Tests
 
-Los archivos ubicados en `rdf-entity-path/src/main/experiments` se deben convertir en `.jar`. Se usan para ejecutar los tests.
+The classes found in `rdf-entity-path/src/main/experiments` can be used for experiments/testing and should be compiled to a `.jar`.
 
-- `NeighborsTest.java`: Pobla un grafo con datos midiendo uso de memoria y tiempo que demora la carga. Luego mide tiempo de obtención de vecinos para un archivo que posee ID de nodos. `NodesNeighborsTest.launch` posee los parámetros.
-- `PathFindTest.java`: Pobla un grafo con datos mide el tiempo y uso de memoria de la búsqueda de caminos para grupos de nodos. `PathFindTest.launch` posee los parámetros.
+- `NeighborsTest.java`: Loads a graph measuring memory and time usage. Later it measures the time needed to obtain the neighbours of a particular node. `NodesNeighborsTest.launch` contains the parameters.
+- `PathFindTest.java`: Loads a graph and measures the memory and time usage for finding paths that connect two or more nodes. `PathFindTest.launch` contains the parameters.
 
 
 
