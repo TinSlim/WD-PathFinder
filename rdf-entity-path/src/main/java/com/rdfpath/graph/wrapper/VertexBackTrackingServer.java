@@ -52,7 +52,7 @@ public class VertexBackTrackingServer {
 			if (vwFrom.backTNodeGrade < 0) {
 				vwFrom.backTNodeGrade = actualBT.actVW.backTNodeGrade;
 			}
-			else {
+			else if (actualBT.actVW.backTNodeGrade > vwFrom.nodeGrade) {
 				vwFrom.backTNodeGrade = Math.min(actualBT.actVW.backTNodeGrade, vwFrom.backTNodeGrade);
 			}
 			
