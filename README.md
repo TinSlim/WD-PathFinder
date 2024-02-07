@@ -11,7 +11,7 @@ This project provides the source code for WoolNet (see [demo](https://woolnet.dc
 
 - In `/frontend` call `npm i` to install dependenciaes.
 - Load `/rdf-entity-path` into **Eclipse IDE**.
-- To create data to populate the graph, see the README in the `python` folder.
+- To create data to populate the graph, use [graph-compress library](https://github.com/TinSlim/graph-compress), the data must be in **Compressed Graph** format.
 - To create test data, see the README in the `python` folder.
 
 ### Launch Production
