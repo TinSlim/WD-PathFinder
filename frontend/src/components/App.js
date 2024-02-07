@@ -3,6 +3,8 @@ import { render } from "react-dom"
 import { Network } from "vis-network";
 import { DataSet} from "vis-data";
 
+import Favicon from "react-favicon";
+
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { theme } from './Theme';
 
@@ -43,6 +45,8 @@ const { socketUrl } = require('config');
 
   
 export default function App() {
+    //const [faviconUrl, setFaviconUrl] = useState("https://media.geeksforgeeks.org/wp-content/cdn-uploads/gfg_favicon.png");
+    
     const queryParameters = new URLSearchParams(window.location.search);
     const langParam = queryParameters.get("lang") ? queryParameters.get("lang") : 'en';
     const name = queryParameters.get("name");
@@ -388,7 +392,7 @@ export default function App() {
     return (
         <ThemeProvider theme={theme}>
         <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
-            
+        <Favicon url={require('./../images/wool.svg')} />
             <div className='has-background-white-ter' ref={container}/>
 
             <Stack
