@@ -19,9 +19,9 @@ const resources = {
       "Return": "Return",
       "Clear": "CLEAR",
       "Entity": "Entity",
-      "EntityWrite": "Write an entity",
+      "EntityWrite": "Search for an entity",
       "LoadingSearch": "Searching",
-      "WaitingSearch": "Waiting an entry",
+      "WaitingSearch": "Waiting for keywords",
       "NoResultSearch": "No results",
 
       "Slider1": "Max path size",
@@ -55,9 +55,9 @@ const resources = {
       "Return": "Volver",
       "Clear": "LIMPIAR",
       "Entity": "Entidad",
-      "EntityWrite": "Escriba una entidad",
+      "EntityWrite": "Buscar una entidad",
       "LoadingSearch": "Buscando",
-      "WaitingSearch": "Esperando una entrada",
+      "WaitingSearch": "Esperando texto",
       "NoResultSearch": "Sin resultados",
 
       "Slider1": "Largo máximo caminos",
