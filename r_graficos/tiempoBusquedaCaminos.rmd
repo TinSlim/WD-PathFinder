@@ -58,7 +58,7 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Aristas, color=Estructura)) + #fil
 
   geom_boxplot() +
 
-  labs(title= "Aristas encontradas 60 segundos",
+  labs(title= "Aristas encontradas en búsquedas de 60 segundos",
        color = "Estructura del Grafo",
        y = "Aristas encontradas (log10)",
        x = "Cantidad de Entidades") +
@@ -71,6 +71,7 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Aristas, color=Estructura)) + #fil
 
 ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_TiempoBusquedaCaminos.svg", width=8, height=5, dpi=300)
 
 
 
@@ -85,7 +86,7 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Memoria, color=Estructura)) + #fil
 
   geom_boxplot() +
 
-  labs(title= "Uso de memoria búsqueda 60 segundos",
+  labs(title= "Uso de memoria en búsquedas de 60 segundos",
        color = "Estructura del Grafo",
        y = "Memoria [bytes]",
        x = "Cantidad de Entidades") +
@@ -98,6 +99,7 @@ ggplot(tiemposBusquedaCamino, aes(x=Grupos, y=Memoria, color=Estructura)) + #fil
 
 ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_MemoriaBusquedaCaminos.svg", width=8, height=5, dpi=300)
 
 # width=4, height=4, dpi=300
 
@@ -110,9 +112,9 @@ ggplot(tiemposBusquedaCamino_conAristas, aes(x=Grupos, y=memArista, color=Estruc
 
   geom_boxplot() +
 
-  labs(title= "Proporción memoria/cantidad de aristas, en búsqueda 60 segundos",
+  labs(title= "Memoria/AristasEncontradas en búsquedas de 60 segundos",
        color = "Estructura del Grafo",
-       y = "Memoria/Cantidad de Aristas [bytes]",
+       y = "Memoria/AristasEncontradas [bytes] (log10)",
        x = "Cantidad de Entidades") +
   #
   theme(plot.title = element_text(hjust = 0.5)) +
@@ -122,6 +124,7 @@ ggplot(tiemposBusquedaCamino_conAristas, aes(x=Grupos, y=memArista, color=Estruc
 
 ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_MemoriaAristasBusquedaCaminos.svg", width=8, height=5, dpi=300)
 
 # width=4, height=4, dpi=300
 

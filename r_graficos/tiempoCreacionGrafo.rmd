@@ -162,6 +162,21 @@ ggsave(plot = last_plot(), filename = "export/4_UsoMemoria_bar.pdf", width=8, he
 
 ```
 
+```{r}
+ggplot(dataCreacion, aes(x=SetDatos, y=UsoMemoria, fill=Estructura, group=Estructura)) +
+
+  geom_bar(stat="identity", position=position_dodge()) + # ,color="black"
+  labs(title= "Uso de memoria del grafo",
+       fill = "Estructura del Grafo",
+       y = "Memoria [gigabytes]",
+       x = "Conjunto") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(breaks = c(0,5,10,15,20,25,30,35,40,45))
+
+ggsave(plot = last_plot(), filename = "export/4_UsoMemoria_bar_gb.png", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_UsoMemoria_bar_gb.pdf", width=8, height=5, dpi=300)
+
+```
 
 
 ```{r}

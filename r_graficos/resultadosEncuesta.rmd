@@ -5,6 +5,8 @@
 library(ggplot2)
 encuestaInterna = read.table(file = 'encuestas/WoolNetInterna.tsv', sep = '\t', header = TRUE)
 encuesta2 = read.table(file = 'encuestas/WoolNet3.tsv', sep = '\t', header = TRUE)
+encuesta3 = read.table(file = 'encuestas/WoolNetSurvey.tsv', sep = '\t', header = TRUE)
+
 ```
 
 ```{r}
@@ -21,6 +23,12 @@ c2_conocimiento = 2
 c2_interesante = 3
 c2_entidades = 5
 c2_preguntas = 6:15
+
+# Columnas:
+c3_conocimiento = 2
+#c3_interesante = 3
+#c3_entidades = 5
+c3_preguntas = 6:15
 ```
 
 
@@ -151,7 +159,9 @@ act_id = 1
 for (i_row in 1:nrow(encuesta2)) {
   res = 0
   for (q in c2_preguntas) {
+    
     a = encuesta2[i_row,q]
+    
     if ((q - c2_preguntas[1] + 1)%%2 != 0) {
       res = res + (a - 1) 
     }
@@ -166,6 +176,37 @@ for (i_row in 1:nrow(encuesta2)) {
 }
 
 df_sus <- data.frame(
+  "id" = ids,
+  "resultado" = resultados,
+  "label" = label
+)
+
+
+# Preguntas:
+ids = c()
+resultados = c()
+label = c()
+
+act_id = 1
+
+for (i_row in 1:nrow(encuesta3)) {
+  res = 0
+  for (q in c3_preguntas) {
+    a = encuesta2[i_row,q]
+    if ((q - c3_preguntas[1] + 1)%%2 != 0) {
+      res = res + (a - 1) 
+    }
+    else {
+      res = res + (5 - a)
+    }
+  }
+  ids = c(ids,act_id)
+  resultados = c(resultados, res * 2.5)
+  label = c(label, 'Encuestados')
+  act_id = act_id + 1
+}
+
+df_sus_c3 <- data.frame(
   "id" = ids,
   "resultado" = resultados,
   "label" = label
@@ -192,6 +233,7 @@ ggplot(df_ConCan, aes(x=conocimiento, y=value)) + #, fill=conocimiento)) +
 
 ggsave(plot = last_plot(), filename = "export/4_Encuestados_Conoce.png", width=7, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_Encuestados_Conoce.pdf", width=7, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_Conoce.svg", width=7, height=5, dpi=300)
 ```
 
 
@@ -252,16 +294,26 @@ ggplot(df_sus, aes(x=label, y=resultado)) + #fill=Estructura
   #
   theme(plot.title = element_text(hjust = 0.5)) +
   #+ theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
-  scale_y_continuous(breaks = c(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100))
+  #ylim(0,100) +
+  scale_y_continuous(
+    breaks = c(0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100),
+    limits = c(4,96) )
+  
   #scale_y_continuous(trans='log10', breaks=c(10^0,10^1,10^2,10^3,10^4,10^5,10^6,10^7,10^8,10 ^9))
 
 ggsave(plot = last_plot(), filename = "export/4_Encuestados_SUS.png", width=4, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_Encuestados_SUS.pdf", width=4, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_Encuestados_SUS.svg", width=4, height=5, dpi=300)
 ```
 ### Puntaje SUS
 
 ```{r}
 mean(df_sus$resultado)
+```
+
+```{r}
+(table(df_ConCan$conocimiento) * 100) / sum(table(df_ConCan$conocimiento))
+#table(df_ConCan$conocimiento)
 ```
 
 

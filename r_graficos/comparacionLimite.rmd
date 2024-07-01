@@ -82,6 +82,8 @@ ggsave(plot = last_plot(), filename = "export/4_LimitesAristas.png", width=8, he
 ggsave(plot = last_plot(), filename = "export/4_LimitesAristas.pdf", width=8, height=5, dpi=300)
 ```
 
+
+
 ```{r}
 ggplot(tiemposBusquedaCamino_limExc, aes(x=Grupos, y=Aristas,color = Limite)) + 
   geom_boxplot() + 
@@ -94,6 +96,7 @@ ggplot(tiemposBusquedaCamino_limExc, aes(x=Grupos, y=Aristas,color = Limite)) +
 
 ggsave(plot = last_plot(), filename = "export/4_LimitesAristasExc.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_LimitesAristasExc.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesAristasExc.svg", width=8, height=5, dpi=300)
 ```
 
 ```{r}
@@ -124,6 +127,7 @@ ggplot(tiemposBusquedaCamino_limExc, aes(x=Grupos, y=Memoria,color = Limite)) +
 
 ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaExc.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaExc.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaExc.svg", width=8, height=5, dpi=300)
 ```
 
 ```{r}
@@ -155,4 +159,5 @@ ggplot(tiemposBusquedaCamino_limExc_SAC, aes(x=Grupos, y=memArista,color = Limit
 
 ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaAristasExc.png", width=8, height=5, dpi=300)
 ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaAristasExc.pdf", width=8, height=5, dpi=300)
+ggsave(plot = last_plot(), filename = "export/4_LimitesMemoriaAristasExc.svg", width=8, height=5, dpi=300)
 ```
