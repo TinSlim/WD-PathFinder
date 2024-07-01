@@ -392,7 +392,7 @@ export default function App() {
     return (
         <ThemeProvider theme={theme}>
         <div onLoad={openDrawer} className='hero is-fullheight has-background-white-ter'> 
-        <Favicon url={require('./../images/wool.svg')} />
+        <Favicon url={require('./../images/favicon.ico')} />
             <div className='has-background-white-ter' ref={container}/>
 
             <Stack
