@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.springframework.web.socket.TextMessage;
@@ -162,7 +163,10 @@ public class GraphWrapperServer {
 		initTime = startTime;
 		this.nodesNumbers = nodesNumbers;
 		
-		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
+		//LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
+		ArrayList<VertexWrapperServer> toSearch = new ArrayList<VertexWrapperServer>();
+		Random random = new Random();
+		
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
 		
 		actualDistance = 600;
@@ -172,7 +176,7 @@ public class GraphWrapperServer {
 			actVW.color = paletteRGB[index % paletteRGB.length];
 			nodes.put(idSearch, actVW);
 			nodesNumbersSet.add(idSearch);
-			toSearch.push(actVW);
+			toSearch.add(actVW);
 			addedNodes.add(idSearch);
 			session.sendMessage(new TextMessage(
 					vertexWrapperToJson (actVW, (360/nodesNumbers.length)*index)));
@@ -181,9 +185,12 @@ public class GraphWrapperServer {
 		
 		while (toSearch.size() > 0) {
 			checkConnTimeout();
-
-			VertexWrapperServer actualVW = toSearch.pop();
- 			if (actualVW.sameColorDistance > (size/2) + size%2) {
+			
+			int randomIndex = random.nextInt(toSearch.size());
+			VertexWrapperServer actualVW = toSearch.remove(randomIndex);
+			//VertexWrapperServer actualVW = toSearch.pop();
+ 			
+			if (actualVW.sameColorDistance > (size/2) + size%2) {
 				continue;
 			}
 
