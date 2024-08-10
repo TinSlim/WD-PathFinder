@@ -166,9 +166,9 @@ public class GraphWrapperServer {
 		//LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
 		ArrayList<VertexWrapperServer> toSearch = new ArrayList<VertexWrapperServer>();
 		Random random = new Random();
-		
+
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
-		
+
 		actualDistance = 600;
 		int index = 0;
 		for (int idSearch : nodesNumbers) {
@@ -223,8 +223,8 @@ public class GraphWrapperServer {
 					if (actualVW.colorNode == adjVW.colorNode) {
 
 						// Revisar si se agregó, ESTÁ EN PATH
-						if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
-							
+						if (adjVW.sameColorDistance != 0 && adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
+
 							if (actualVW.otherColorDistance == -1) {
 								actualVW.otherColorDistance = adjVW.otherColorDistance + 1;
 								int bTGrade = Math.max(adjVW.backTNodeGrade, actualVW.maxNodeGrade);
@@ -249,7 +249,7 @@ public class GraphWrapperServer {
 					}
 					
 					else {
-						if (adjVW.sameColorDistance + actualVW.sameColorDistance + 1 <= size) { //
+						if (adjVW.sameColorDistance + actualVW.sameColorDistance + 1 <= size) { //						
 							// Configuración de color TODO quitar o mantener
 							int[] newColor = {
 									(adjVW.color[0] + actualVW.color[0]) / 2,
@@ -423,8 +423,6 @@ public class GraphWrapperServer {
 		else {
 			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw2)));
 		}
-		
-		
 		
 		
 	}
