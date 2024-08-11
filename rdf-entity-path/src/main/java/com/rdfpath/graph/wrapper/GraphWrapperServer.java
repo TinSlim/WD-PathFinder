@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Random;
 
 import org.json.simple.JSONObject;
 import org.springframework.web.socket.TextMessage;
@@ -162,9 +163,12 @@ public class GraphWrapperServer {
 		initTime = startTime;
 		this.nodesNumbers = nodesNumbers;
 		
-		LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
+		//LinkedList<VertexWrapperServer> toSearch = new LinkedList<VertexWrapperServer>();
+		ArrayList<VertexWrapperServer> toSearch = new ArrayList<VertexWrapperServer>();
+		Random random = new Random();
+
 		HashSet<Integer> nodesNumbersSet = new HashSet<Integer>();
-		
+
 		actualDistance = 600;
 		int index = 0;
 		for (int idSearch : nodesNumbers) {
@@ -172,7 +176,7 @@ public class GraphWrapperServer {
 			actVW.color = paletteRGB[index % paletteRGB.length];
 			nodes.put(idSearch, actVW);
 			nodesNumbersSet.add(idSearch);
-			toSearch.push(actVW);
+			toSearch.add(actVW);
 			addedNodes.add(idSearch);
 			session.sendMessage(new TextMessage(
 					vertexWrapperToJson (actVW, (360/nodesNumbers.length)*index)));
@@ -181,9 +185,12 @@ public class GraphWrapperServer {
 		
 		while (toSearch.size() > 0) {
 			checkConnTimeout();
-
-			VertexWrapperServer actualVW = toSearch.pop();
- 			if (actualVW.sameColorDistance > (size/2) + size%2) {
+			
+			int randomIndex = random.nextInt(toSearch.size());
+			VertexWrapperServer actualVW = toSearch.remove(randomIndex);
+			//VertexWrapperServer actualVW = toSearch.pop();
+ 			
+			if (actualVW.sameColorDistance > (size/2) + size%2) {
 				continue;
 			}
 
@@ -216,8 +223,8 @@ public class GraphWrapperServer {
 					if (actualVW.colorNode == adjVW.colorNode) {
 
 						// Revisar si se agregó, ESTÁ EN PATH
-						if (adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
-							
+						if (adjVW.sameColorDistance != 0 && adjVW.otherColorDistance > -1 && adjVW.otherColorDistance + actualVW.sameColorDistance + 1 <= size) {
+
 							if (actualVW.otherColorDistance == -1) {
 								actualVW.otherColorDistance = adjVW.otherColorDistance + 1;
 								int bTGrade = Math.max(adjVW.backTNodeGrade, actualVW.maxNodeGrade);
@@ -242,7 +249,7 @@ public class GraphWrapperServer {
 					}
 					
 					else {
-						if (adjVW.sameColorDistance + actualVW.sameColorDistance + 1 <= size) { //
+						if (adjVW.sameColorDistance + actualVW.sameColorDistance + 1 <= size) { //						
 							// Configuración de color TODO quitar o mantener
 							int[] newColor = {
 									(adjVW.color[0] + actualVW.color[0]) / 2,
@@ -416,8 +423,6 @@ public class GraphWrapperServer {
 		else {
 			session.sendMessage(new TextMessage(vertexWrapperUpdateToJson(vw2)));
 		}
-		
-		
 		
 		
 	}
