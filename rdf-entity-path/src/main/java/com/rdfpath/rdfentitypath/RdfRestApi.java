@@ -19,10 +19,6 @@ import com.rdfpath.graph.utils.Utils;
 public class RdfRestApi {
 	Graph graph = null;
 
-	@RequestMapping("/querylol") // borrar
-	public String home() throws IOException {//throws IOException {
-	    return "---beser--";
-	}
 	
 	@RequestMapping("/json")
 	public ResponseEntity<String> json (@RequestParam String entity) {
@@ -62,7 +58,9 @@ public class RdfRestApi {
 		String respuesta = "";
 		try {
 			// Petición y creación de respuesta (JSON)
-			respuesta = Utils.peticionHttpGet(url);
+			String userAgent = "WoolNet/1.0 (contacto: ctorresg@dcc.uchile.cl)";
+			respuesta = Utils.peticionHttpGetUserAgent(url, userAgent);
+			
 			JSONObject resp = new JSONObject();
 			JSONArray search = new JSONArray();
 			JSONObject ans = new JSONObject(respuesta);
