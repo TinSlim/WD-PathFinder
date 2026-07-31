@@ -19,8 +19,8 @@ This project provides the source code for WoolNet (see [demo](https://woolnet.dc
 - Set in `/frontend/.env` the following environment variables as correspond to your setting.
 
 ```
-BASE_URL = "https://urldeejemplo.ejemplo"		# Url of the application
-WEB_SOCKET_URL = "wss://urldeejemplo.ejemplo"	# Url of the WebSocket
+BASE_URL = https://urldeejemplo.ejemplo
+WEB_SOCKET_URL = wss://urldeejemplo.ejemplo
 ```
 
 - Run `build.ps1`.
@@ -42,8 +42,8 @@ java -jar -Xmx59g -Dgraph-data="latest-truthy_small" rdf-entity-path-0.0.1-SNAPS
 - Set in `/frontend/.env` the following environment variables.
 
 ```
-BASE_URL = "http://localhost:8080"
-WEB_SOCKET_URL = "ws://localhost:8080"
+BASE_URL = http://localhost:8080
+WEB_SOCKET_URL = ws://localhost:8080
 ```
 
 - Run the following commands:
@@ -69,6 +69,3 @@ The classes found in `rdf-entity-path/src/main/experiments` can be used for expe
 
 - `NeighborsTest.java`: Loads a graph measuring memory and time usage. Later it measures the time needed to obtain the neighbours of a particular node. `NodesNeighborsTest.launch` contains the parameters.
 - `PathFindTest.java`: Loads a graph and measures the memory and time usage for finding paths that connect two or more nodes. `PathFindTest.launch` contains the parameters.
-
-
-
