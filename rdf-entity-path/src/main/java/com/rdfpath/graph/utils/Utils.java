@@ -124,7 +124,7 @@ public class Utils {
 					String newUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/"
 							+ imageHash.charAt(0) + "/"
 							+ imageHash.charAt(0) + imageHash.charAt(1) + "/"
-							+ imageUrl + "/300px-Sample.png";
+							+ imageUrl + "/120px-Sample.png";
 					return newUrl;
 				}
 				
