@@ -124,7 +124,7 @@ public class Utils {
 					String newUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/"
 							+ imageHash.charAt(0) + "/"
 							+ imageHash.charAt(0) + imageHash.charAt(1) + "/"
-							+ imageUrl + "/300px-Sample.png";
+							+ imageUrl + "/120px-Sample.png";
 					return newUrl;
 				}
 				
@@ -143,6 +143,9 @@ public class Utils {
 		// Abrir la conexión e indicar que será de tipo GET
 		HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
 		conexion.setRequestMethod("GET");
+		// Wikimedia exige un User-Agent descriptivo; sin él responde 403 (rompe imágenes y autocomplete).
+		conexion.setRequestProperty("User-Agent",
+				"WoolNet/1.0 (https://woolnet.dcc.uchile.cl/; contacto@dcc.uchile.cl)");
 		// Búferes para leer
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
 		String linea;
